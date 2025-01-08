@@ -7,8 +7,3 @@ class Voertuig():
 
     def bewegen(self, positie, lengte, orientatie):
         self.positie = positie + 3
-
-    def niksdoen(self, positie, lengte, orientatie):
-        self.positie = positie
-        self.lengte = lengte
-        self.orientatie = orientatie
