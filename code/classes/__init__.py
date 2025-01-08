@@ -6,6 +6,6 @@ class Voertuig():
         self.breedte = breedte
 
     def bewegen(self, positie, lengte, orientatie):
-        pass
+        self.positie = positie + 3
 
 
