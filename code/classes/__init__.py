@@ -17,32 +17,49 @@ boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
 
 print(boardposition1)
 
-positie = list(zip(boardposition1.col, boardposition1.row))
+positions = list(zip(boardposition1.col, boardposition1.row))
+lengths = list(boardposition1.length)
+orientations = list(boardposition1.orientation)
 
-print(positie)
+class Vehicle():
+    def __init__(self, position, length, orientation):
+        self.position = position
+        self.length = length
+        self.orientation = orientation
+
+#Class for the red car
+class RedCar(Vehicle):
+    def __init__(self, position, length, orientation):
+        super().__init__(self, position, length, orientation)
+
+#Class for the 2 lengths vehicles which we label as cars
+class Car(Vehicle):
+    def __init__(self, position, length, orientation):
+        super().__init__(self, position, length, orientation)
+
+#Class for the 3 length vehicles which we label as trucks
+class Truck(Vehicle):
+    def __init__(self, position, length, orientation):
+        super().__init__(self, position, length, orientation)
 
 
-class Voertuig():
-    def __init__(self, positie, lengte, orientatie):
-        self.positie = positie
-        self.lengte = lengte
-        self.orientatie = orientatie
+class LoadBoard():
+    def __init__(self, )
 
-    def bewegen(self, positie, lengte, orientatie, stapgrootte):
-        """" Deze functie zorgt voor de beweging van de voertuig op basis van een gegeven stapgrootte, het zorgt ervoor dat de orientatie en lengte
-        van de voertuig worden megenomen in de beweging
-    
-    Args:
-        positie = De huidige positie van de voertuig
-        lengte = De lengte van de voertuig
-        orientatie = de orientatie van de voertuig
-        stap = de grootte van de stap van de voertuig
-        
-    Returns:
-        De nieuwe positie van de voertuig"""
 
-        self.lengte = lengte
-        self.orientatie = orientatie
 
-        # Dit wordt een berekening, misschien chill om positie een lijst te maken in een dict zodat we bepalde indexs van de lijst kunnen pakken op basis van orientatie?
-        self.positie = positie + stapgrootte
+
+# class UpdateBoard():
+#     """Class that updates the positions of the cars"""
+#     def __init__(self, position, length, orientation, stepsize):
+#         self.stepsize = stepsize
+#         self.position = position
+#         self.length = length
+#         self.orientation = orientation
+
+#     def move(self):
+#         stepsize = self.stepsize
+#         if self.orientation == 'H':
+#             self.position[0] = self.position[0] + stepsize
+#         else:
+#             self.position[1] = self.position[1] + stepsize
