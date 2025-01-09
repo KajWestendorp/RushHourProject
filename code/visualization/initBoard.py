@@ -7,8 +7,9 @@ import matplotlib.pyplot as plt
 
 
 # Transform car info into pd dataframe
-board_file = 'Rushhour6x6_1.csv'
+board_file = '/users/pieterwassink/minor/ah/rushhourproject-1/code/gameboards/Rushhour6x6_1.csv'
 boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
+print(boardposition1)
 
 board_size = 6
 
@@ -27,9 +28,24 @@ def visualize_board(boardposition1):
     axes.set_title(f"Rush Hour {board_size}x{board_size} Board")
     
     # Flip the y-axis to match the board's natural orientation
-    axes.invert_yaxis()  
+    axes.invert_yaxis()
+
+    # Format grid to fit axes and figure
+    axes.set_xlim(0, board_size)
+    axes.set_ylim(0, board_size)
+    axes.set_yticks(range(board_size))
+    axes.set_xticks(range(board_size))
+
+    # Remove tick numbers
+    axes.set_xticklabels([])
+    axes.set_yticklabels([])
+    axes.set_aspect('equal')
 
     plt.show()
+
+    # Draw Cars
+    for _, car in boardposition1.iterrows():
+        print(car)
 
     """
     TODO:
@@ -37,4 +53,5 @@ def visualize_board(boardposition1):
     - auto instanties aanmaken door middel van __init__.py functies
     """
 
-visualize_board(boardposition1)
+board = visualize_board(boardposition1)
+print(board)
