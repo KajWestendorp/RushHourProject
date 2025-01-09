@@ -5,6 +5,23 @@
     # positie
 
 
+#Pandas df uit initBoard importeren als board_df
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+#Temporary second import of file
+board_file = 'C:/Users/Weste/Documents/MinorAI/Algos/RushHourProject/code/gameboards/Rushhour6x6_1.csv'
+boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
+
+print(boardposition1)
+
+positie = list(zip(boardposition1.col, boardposition1.row))
+
+print(positie)
+
+
 class Voertuig():
     def __init__(self, positie, lengte, orientatie):
         self.positie = positie
