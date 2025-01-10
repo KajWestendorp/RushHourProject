@@ -9,8 +9,6 @@ relative_path = os.path.join("..", "gameboards", "Rushhour6x6_1.csv")
 board_file = os.path.normpath(os.path.join(script_dir, relative_path))
 
 boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
-print(boardposition1)
-
 
 def update_positions(boardposition, stepsize, car_index):
     """

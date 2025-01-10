@@ -73,8 +73,9 @@ def visualize_board(boardposition1):
         # Place the car name
         axes.text(x + 0.5, y + 0.5, car['car'], color='black', ha='center', va='center', fontsize=8, weight='bold')
 
-    plt.show()
+    #Added block = False to allow us to display multiple moves without having to close previous ones
+    plt.show(block=False)
 
-
-board = visualize_board(boardposition1)
-print(board)
+# i commented this out ebcause it caused the function in main to run xd
+# board = visualize_board(boardposition1)
+# print(board)
