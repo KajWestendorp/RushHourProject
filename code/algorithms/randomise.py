@@ -41,7 +41,7 @@ def random_car(boarddf):
 
 def finish_check(boarddf):
     if boarddf.loc[boarddf['car'] == 'X', 'col'].iloc[0] == 5:
-        return True
-    return False
+        return False
+    return True
 
 

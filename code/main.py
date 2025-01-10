@@ -8,6 +8,7 @@ from visualization.initBoard import visualize_board
 from algorithms.randomise import create_coords
 from algorithms.randomise import random_car
 from algorithms.randomise import is_valid
+from algorithms.randomise import finish_check
 import os
 
 
@@ -23,15 +24,20 @@ if __name__ == "__main__":
     visualize_board(boardposition1)
 
 
-    #Pick a random car to move
-    chosen_car = random_car(boardposition1)
-    print(chosen_car)
 
-    newboarddf = update_positions(boardposition1.copy(), 1, chosen_car)
-
-    # while is_valid(create_coords(newboarddf)):
-    #     chosen_car = random_move(boardposition1)
-    #     newboarddf = update_positions(boardposition1.copy(), 1, 'chosen_car')
+    # TODO: Fix the while loops so it runs until the finish is found
+    # #Pick a random car to move
+    # chosen_car = random_car(boardposition1)
+    # newboarddf = update_positions(boardposition1.copy(), 1, chosen_car)
+    # # Check if the game is over
+    # while finish_check(newboarddf):
+        
+    #     # Check if the move was valid
+    #     print(newboarddf)
+    #     while not is_valid(create_coords(newboarddf)):
+            
+    #         chosen_car = random_car(boardposition1)
+    #         newboarddf = update_positions(boardposition1.copy(), 1, chosen_car)
 
 
     visualize_board(newboarddf)
