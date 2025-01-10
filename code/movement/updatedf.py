@@ -24,7 +24,7 @@ def update_positions(boardposition, stepsize, car_index):
         if car['car'] == car_index:
             if car['orientation'] == 'H':
                 boardposition.loc[boardposition['car'] == car_index, 'col'] += stepsize
-            elif:
+            else:
                 boardposition.loc[boardposition['car'] == car_index, 'row'] += stepsize
     return boardposition
 
