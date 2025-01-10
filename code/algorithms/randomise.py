@@ -3,9 +3,6 @@
 import random
 import pandas as pd
 
-def random_move(boarddf, stepsize, car_index):
-    pass
-
 
 def is_valid(coords):
     """
@@ -13,6 +10,14 @@ def is_valid(coords):
     dictionary
 
     """
+    coord_set = set()
+
+    for car, coordinates in coords.items():
+        for coordinate in coordinates:
+            if coordinate in coord_set:
+                return False
+            coord_set.add(tuple(coordinate))
+    return True
 
 
 def create_coords(boarddf):
@@ -30,3 +35,8 @@ def create_coords(boarddf):
             coords[car['car']] = ((car['col'], car['row']), (car['col'], car['row'] + 1))
 
     return coords
+
+def random_car(boarddf):
+    return boarddf['car'].sample(1).iloc[0]
+
+

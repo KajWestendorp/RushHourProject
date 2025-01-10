@@ -6,12 +6,14 @@ import matplotlib.pyplot as plt
 from movement.updatedf import update_positions
 from visualization.initBoard import visualize_board
 from algorithms.randomise import create_coords
+from algorithms.randomise import random_car
+from algorithms.randomise import is_valid
 import os
 
 
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    relative_path = os.path.join("gameboards", "Rushhour6x6_1.csv")
+    relative_path = os.path.join("gameboards", "Rushhour6x6_test.csv")
 
     # Construct the path to the gameboard file
     board_file = os.path.normpath(os.path.join(script_dir, relative_path))
@@ -20,7 +22,17 @@ if __name__ == "__main__":
 
     visualize_board(boardposition1)
 
-    newboarddf = update_positions(boardposition1.copy(), 2, 'X')
+
+    #Pick a random car to move
+    chosen_car = random_car(boardposition1)
+    print(chosen_car)
+
+    newboarddf = update_positions(boardposition1.copy(), 1, chosen_car)
+
+    # while is_valid(create_coords(newboarddf)):
+    #     chosen_car = random_move(boardposition1)
+    #     newboarddf = update_positions(boardposition1.copy(), 1, 'chosen_car')
+
 
     visualize_board(newboarddf)
 
