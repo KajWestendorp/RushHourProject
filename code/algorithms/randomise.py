@@ -39,4 +39,9 @@ def create_coords(boarddf):
 def random_car(boarddf):
     return boarddf['car'].sample(1).iloc[0]
 
+def finish_check(boarddf):
+    if boarddf.loc[boarddf['car'] == 'X', 'col'].iloc[0] == 5:
+        return True
+    return False
+
 
