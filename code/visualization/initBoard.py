@@ -14,7 +14,6 @@ relative_path = os.path.join("..", "gameboards", "Rushhour6x6_1.csv")
 board_file = os.path.normpath(os.path.join(script_dir, relative_path))
 
 boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
-print(boardposition1)
 
 board_size = 6
 
@@ -73,7 +72,7 @@ def visualize_board(boardposition1):
         # Place the car name
         axes.text(x + 0.5, y + 0.5, car['car'], color='black', ha='center', va='center', fontsize=8, weight='bold')
     #adding block = FAlse did not work cuz plots closed immediately
-    plt.show()
+    return figure
 
 # i commented this out ebcause it caused the function in main to run xd
 # board = visualize_board(boardposition1)

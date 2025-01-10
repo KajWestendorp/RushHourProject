@@ -1,6 +1,8 @@
 #Implement script that takes a board starting position and can keep updating it
 import pandas as pd
-import os
+import random
+import matplotlib.patches as patches
+import matplotlib.pyplot as plt
 from movement.updatedf import update_positions
 from visualization.initBoard import visualize_board
 
@@ -15,13 +17,19 @@ if __name__ == "__main__":
     #for now boardfile hardcoded cuz errors 
     board_file = "C:/Users/Weste/Documents/MinorAI/Algos/RushHourProject/code/gameboards/Rushhour6x6_1.csv"
     
-    
     boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
 
-    board = visualize_board(boardposition1)
+    visualize_board(boardposition1)
 
     newboarddf = update_positions(boardposition1, -1, 'A')
 
-    newboard = visualize_board(newboarddf)
+    visualize_board(newboarddf)
+
+    #Made it so that the plots show 2 seconds after eachother making a sort of stop motion
+    plt.show(block = False)
+    plt.pause(2)
+    plt.close()
+    plt.show()
+
 
 
