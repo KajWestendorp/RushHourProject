@@ -5,6 +5,7 @@ import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 from movement.updatedf import update_positions
 from visualization.initBoard import visualize_board
+from algorithms.randomise import create_coords
 import os
 
 
@@ -17,16 +18,23 @@ if __name__ == "__main__":
     
     boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
 
-    figure1 = visualize_board(boardposition1)
+    visualize_board(boardposition1)
 
-    newboarddf = update_positions(boardposition1, -1, 'A')
+    newboarddf = update_positions(boardposition1.copy(), 2, 'X')
 
-    figure2 = visualize_board(newboarddf)
+    visualize_board(newboarddf)
+
+    print(boardposition1)
+    print(newboarddf)
+
+    create_coords(newboarddf)
+    print(newboarddf)
 
     #Made it so that the plots show 2 seconds after eachother making a sort of stop motion
     plt.show(block = False)
     plt.pause(2)
     plt.show()
 
+    
 
 
