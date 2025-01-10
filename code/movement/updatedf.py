@@ -17,16 +17,13 @@ def update_positions(boardposition, stepsize, car_index):
     The function returns the updated dataframe
     
     """
-    print(car_index)
     #Iterate through the rows of the df
     for _, car in boardposition1.iterrows(): 
         #Checks for the corerct car_index and orientation, then updates the position based on the given stepsize and orientation
         if car['car'] == car_index:
             if boardposition.loc[boardposition['car'] == car_index, 'orientation'].iloc[0] == 'H':
                 boardposition.loc[boardposition['car'] == car_index, 'col'] += stepsize
-                print("yes1")
             if boardposition.loc[boardposition['car'] == car_index, 'orientation'].iloc[0] == 'V':
-                print("yes2")
                 boardposition.loc[boardposition['car'] == car_index, 'row'] += stepsize
     return boardposition
 
