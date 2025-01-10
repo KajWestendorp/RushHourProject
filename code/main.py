@@ -5,14 +5,15 @@ import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 from movement.updatedf import update_positions
 from visualization.initBoard import visualize_board
+import os
 
 
 if __name__ == "__main__":
-    # script_dir = os.path.dirname(os.path.abspath(__file__))
-    # relative_path = os.path.join("..", "gameboards", "Rushhour6x6_1.csv")
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    relative_path = os.path.join("gameboards", "Rushhour6x6_1.csv")
 
-    # # Construct the path to the gameboard file
-    # board_file = os.path.normpath(os.path.join(script_dir, relative_path))
+    # Construct the path to the gameboard file
+    board_file = os.path.normpath(os.path.join(script_dir, relative_path))
 
     #for now boardfile hardcoded cuz errors 
     board_file = "./gameboards/Rushhour6x6_1.csv"
