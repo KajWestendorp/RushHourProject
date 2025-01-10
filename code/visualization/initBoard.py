@@ -56,7 +56,7 @@ def visualize_board(boardposition1):
         return random.choice(['orange', 'blue', 'teal', 'cyan', 'aqua'])
 
     # Draw cars with borders
-    for _, car in boardposition1.iterrows():
+    for index, car in boardposition1.iterrows():
         color = get_car_color(car['car'], car['length'])
 
         # Convert to 0-based grid
