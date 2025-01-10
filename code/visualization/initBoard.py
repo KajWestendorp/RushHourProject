@@ -72,9 +72,8 @@ def visualize_board(boardposition1):
 
         # Place the car name
         axes.text(x + 0.5, y + 0.5, car['car'], color='black', ha='center', va='center', fontsize=8, weight='bold')
-
-    #Added block = False to allow us to display multiple moves without having to close previous ones
-    plt.show(block=False)
+    #adding block = FAlse did not work cuz plots closed immediately
+    plt.show()
 
 # i commented this out ebcause it caused the function in main to run xd
 # board = visualize_board(boardposition1)
