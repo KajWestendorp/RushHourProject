@@ -30,7 +30,4 @@ def update_positions(boardposition, stepsize, car_index):
                 boardposition.loc[boardposition['car'] == car_index, 'row'] += stepsize
     return boardposition
 
-newdf = update_positions(boardposition1, 2, 'X')
-print(newdf)
-
     
