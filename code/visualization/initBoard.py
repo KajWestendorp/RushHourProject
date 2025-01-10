@@ -1,13 +1,18 @@
 # This script reads in a csv board file and visualizes the board's car positions and orientations
 
 import pandas as pd
+import random
+import matplotlib.patches as patches
 import matplotlib.pyplot as plt
+import os
 
-# Functies uit /code/classes/__init__.py importeren
+# Get the directory of the current script and defin epath
+script_dir = os.path.dirname(os.path.abspath(__file__))
+relative_path = os.path.join("..", "gameboards", "Rushhour6x6_1.csv")
 
+# Construct the path to the gameboard file
+board_file = os.path.normpath(os.path.join(script_dir, relative_path))
 
-# Transform car info into pd dataframe
-board_file = 'C:/Users/Weste/Documents/MinorAI/Algos/RushHourProject/code/gameboards/Rushhour6x6_1.csv'
 boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
 print(boardposition1)
 
@@ -41,17 +46,35 @@ def visualize_board(boardposition1):
     axes.set_yticklabels([])
     axes.set_aspect('equal')
 
+    # Function to assign colors
+    def get_car_color(name, length):
+
+        # Colour player's car red
+        if name == 'X': return 'red'
+
+        # Trucks are either yellow or purple, cars have several other colours
+        if length == 3: return random.choice(['yellow', 'purple'])
+        return random.choice(['orange', 'blue', 'teal', 'cyan', 'aqua'])
+
+    # Draw cars with borders
+    for _, car in boardposition1.iterrows():
+        color = get_car_color(car['car'], car['length'])
+
+        # Convert to 0-based grid
+        x, y = car['col'] - 1, board_size - car['row']  
+        width, height = (car['length'], 1) if car['orientation'] == 'H' else (1, car['length'])
+
+        # Add car patch with a thicker border
+        rect = patches.Rectangle(
+            (x, y - height + 1), width, height,
+            facecolor=color, edgecolor='black', lw=3)
+        axes.add_patch(rect)
+
+        # Place the car name
+        axes.text(x + 0.5, y + 0.5, car['car'], color='black', ha='center', va='center', fontsize=8, weight='bold')
+
     plt.show()
 
-    # Draw Cars
-    for _, car in boardposition1.iterrows():
-        print(car)
-
-    """
-    TODO:
-    - auto posities lezen + plotten
-    - auto instanties aanmaken door middel van __init__.py functies
-    """
 
 board = visualize_board(boardposition1)
 print(board)
