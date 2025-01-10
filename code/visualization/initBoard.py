@@ -20,7 +20,9 @@ board_size = 6
 def visualize_board(boardposition1):
     """
     This function creates a visualization of the boards positions
+    https://matplotlib.org/stable/gallery/subplots_axes_and_figures/subplots_demo.html
     """
+
     figure, axes = plt.subplots(figsize=(board_size, board_size))
 
     # Draw the grid
@@ -61,8 +63,10 @@ def visualize_board(boardposition1):
 
         # Convert to 0-based grid
         x, y = car['col'] - 1, board_size - car['row']  
+
         width, height = (car['length'], 1) if car['orientation'] == 'H' else (1, car['length'])
 
+        # https://matplotlib.org/stable/api/_as_gen/matplotlib.patches.Rectangle.html
         # Add car patch with a thicker border
         rect = patches.Rectangle(
             (x, y - height + 1), width, height,
