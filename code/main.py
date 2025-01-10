@@ -25,19 +25,18 @@ if __name__ == "__main__":
 
 
 
-    # TODO: Fix the while loops so it runs until the finish is found
-    # #Pick a random car to move
-    # chosen_car = random_car(boardposition1)
-    # newboarddf = update_positions(boardposition1.copy(), 1, chosen_car)
-    # # Check if the game is over
-    # while finish_check(newboarddf):
+    #Pick a random car to move
+    chosen_car = random_car(boardposition1)
+    newboarddf = update_positions(boardposition1.copy(), 1, chosen_car)
+    # Check if the game is over
+    while finish_check(newboarddf):
         
-    #     # Check if the move was valid
-    #     print(newboarddf)
-    #     while not is_valid(create_coords(newboarddf)):
-            
-    #         chosen_car = random_car(boardposition1)
-    #         newboarddf = update_positions(boardposition1.copy(), 1, chosen_car)
+        # Check if the move was valid
+        chosen_car = random_car(newboarddf)
+        newboarddf = update_positions(newboarddf, 1, chosen_car)
+        while not is_valid(create_coords(newboarddf)):
+            chosen_car = random_car(newboarddf)
+            newboarddf = update_positions(newboarddf, 1, chosen_car)
 
 
     visualize_board(newboarddf)
