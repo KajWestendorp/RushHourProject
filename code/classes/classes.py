@@ -43,30 +43,33 @@ class Truck(Vehicle):
         super().__init__(self, position, length, orientation)
 
 
-class LoadBoard():
+class Board():
     def __init__(self, boardsize, boardposition):
         self.boardsize = boardsize
         self.boardposition = boardposition
     
-    def addVehicles(self):
+    def DrawBoard(self):
+        pass
+
+    def DrawVehicles(self):
         boardposition = self.boardposition
         positions = list(zip(boardposition.col, boardposition.row))
         lengths = list(boardposition.length)
         orientations = list(boardposition.orientation)
 
-        
 
-class UpdateBoard():
-    """Class that updates the positions of the cars"""
-    def __init__(self, position, length, orientation, stepsize):
-        self.stepsize = stepsize
-        self.position = position
-        self.length = length
-        self.orientation = orientation
 
-    def move(self):
-        stepsize = self.stepsize
-        if self.orientation == 'H':
-            self.position[0] = self.position[0] + stepsize
-        else:
-            self.position[1] = self.position[1] + stepsize
+# class UpdateBoard():
+#     """Class that updates the positions of the cars"""
+#     def __init__(self, position, length, orientation, stepsize):
+#         self.stepsize = stepsize
+#         self.position = position
+#         self.length = length
+#         self.orientation = orientation
+
+#     def move(self):
+#         stepsize = self.stepsize
+#         if self.orientation == 'H':
+#             self.position[0] = self.position[0] + stepsize
+#         else:
+#             self.position[1] = self.position[1] + stepsize

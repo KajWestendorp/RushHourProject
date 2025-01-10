@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 
 # Transform car info into pd dataframe
-board_file = '/users/pieterwassink/minor/ah/rushhourproject-1/code/gameboards/Rushhour6x6_1.csv'
+board_file = 'C:/Users/Weste/Documents/MinorAI/Algos/RushHourProject/code/gameboards/Rushhour6x6_1.csv'
 boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
 print(boardposition1)
 
