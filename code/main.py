@@ -10,6 +10,7 @@ from algorithms.randomise import random_car
 from algorithms.randomise import is_valid
 from algorithms.randomise import finish_check
 import os
+import copy
 
 
 if __name__ == "__main__":
@@ -32,17 +33,16 @@ if __name__ == "__main__":
     # Check if the game is over
     while finish_check(newboarddf):
         valid_move = False
-
-        previousboard = newboarddf.copy()
+        previousboard = copy.copy(newboarddf)
 
         while not valid_move:
-
             chosen_car = random_car(newboarddf)
+            previousboard = copy.copy(newboarddf)
             newboarddf = update_positions(previousboard, 1, chosen_car)
             if is_valid(create_coords(newboarddf)):
                 valid_move = True
             else:
-                previousboard = newboarddf.copy()
+                newboarddf = copy.copy(previousboard)
         visualize_board(newboarddf)
         plt.show(block = False)
         plt.pause(2)
