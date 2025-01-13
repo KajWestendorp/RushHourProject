@@ -28,6 +28,7 @@ if __name__ == "__main__":
     #Pick a random car to move
     chosen_car = random_car(boardposition1)
     newboarddf = update_positions(boardposition1.copy(), 1, chosen_car)
+    print(newboarddf)
     # Check if the game is over
     while finish_check(newboarddf):
         
@@ -37,7 +38,9 @@ if __name__ == "__main__":
         while not is_valid(create_coords(newboarddf)):
             chosen_car = random_car(newboarddf)
             newboarddf = update_positions(newboarddf, 1, chosen_car)
-
+        visualize_board(newboarddf)
+        plt.show(block = False)
+        plt.pause(2)
 
     visualize_board(newboarddf)
 

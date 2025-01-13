@@ -20,7 +20,10 @@ def is_valid(coords):
         for coordinate in coordinates:
             if coordinate in coord_set:
                 return False
-            coord_set.add(tuple(coordinate))
+            row, col = coordinate
+            if not (0 <= row <= 6 and 0 <= col <= 6):
+                return False
+            coord_set.add(coordinate)
     return True
 
 
@@ -43,7 +46,7 @@ def create_coords(boarddf):
             coords[car['car']] = ((car['col'], car['row']), (car['col'] + 1, car['row']))
         else:
             coords[car['car']] = ((car['col'], car['row']), (car['col'], car['row'] + 1))
-
+    print(coords)
     return coords
 
 def random_car(boarddf):
