@@ -15,7 +15,7 @@ import copy
 
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    relative_path = os.path.join("gameboards", "Rushhour6x6_test.csv")
+    relative_path = os.path.join("gameboards", "Rushhour6x6_1.csv")
 
     # Construct the path to the gameboard file
     board_file = os.path.normpath(os.path.join(script_dir, relative_path))
@@ -28,11 +28,12 @@ if __name__ == "__main__":
 
     #Pick a random car to move
     chosen_car = random_car(boardposition1)
-    newboarddf = update_positions(boardposition1.copy(), 1, chosen_car)
-
+    steps = random.choice([-1, 1])
+    newboarddf = update_positions(boardposition1.copy(), steps, chosen_car)
+    attempts = 0
     # Check if the game is over
     while finish_check(newboarddf):
-
+        steps = random.choice([-1, 1])
         #Set valid move to false to start off
         valid_move = False
 
@@ -40,7 +41,7 @@ if __name__ == "__main__":
         previousboard = copy.copy(newboarddf)
         
         while not valid_move:
-
+            steps = random.choice([-1, 1])
             #Get random car
             chosen_car = random_car(newboarddf)
 
@@ -48,7 +49,7 @@ if __name__ == "__main__":
             previousboard = copy.copy(newboarddf)
 
             #Update the newboarddf with new positions
-            newboarddf = update_positions(newboarddf, 1, chosen_car)
+            newboarddf = update_positions(newboarddf, steps, chosen_car)
 
             #Check to see if these dont collide with other cars and are within boundaries
             if is_valid(create_coords(newboarddf)):
@@ -56,17 +57,19 @@ if __name__ == "__main__":
                 #If yes then break out the loop
                 valid_move = True
             else:
-
+                
                 #If not we stay in the loop and the newboarddf goes back to being the previousboard so that the move gets undone
                 newboarddf = copy.copy(previousboard)
-        visualize_board(newboarddf)
-        plt.show(block = False)
-        plt.pause(2)
+            attempts += 1
+            print(attempts)
+        # visualize_board(newboarddf)
+        # plt.show(block = False)
+        # plt.pause(2)
 
 
     
-    # visualize_board(newboarddf)
-
+    visualize_board(newboarddf)
+    print(f"done this is how many tries it took {attempts}")
     print(boardposition1)
     print(newboarddf)
 
@@ -74,9 +77,9 @@ if __name__ == "__main__":
     print(newboarddf)
 
     #Made it so that the plots show 2 seconds after eachother making a sort of stop motion
-    # plt.show(block = False)
-    # plt.pause(2)
-    # plt.show()
+    plt.show(block = False)
+    plt.pause(2)
+    plt.show()
 
     
 
