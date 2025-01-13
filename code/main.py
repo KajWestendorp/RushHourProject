@@ -47,9 +47,8 @@ if __name__ == "__main__":
         plt.show(block = False)
         plt.pause(2)
 
-#test from home pc
-    
 
+    
     visualize_board(newboarddf)
 
     print(boardposition1)
