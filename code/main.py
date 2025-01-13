@@ -32,16 +32,32 @@ if __name__ == "__main__":
 
     # Check if the game is over
     while finish_check(newboarddf):
-        valid_move = False
-        previousboard = copy.copy(newboarddf)
 
+        #Set valid move to false to start off
+        valid_move = False
+
+        #Copy the board so that I can go back onto it if the move is not valid
+        previousboard = copy.copy(newboarddf)
+        
         while not valid_move:
+
+            #Get random car
             chosen_car = random_car(newboarddf)
+
+            #Copy board
             previousboard = copy.copy(newboarddf)
-            newboarddf = update_positions(previousboard, 1, chosen_car)
+
+            #Update the newboarddf with new positions
+            newboarddf = update_positions(newboarddf, 1, chosen_car)
+
+            #Check to see if these dont collide with other cars and are within boundaries
             if is_valid(create_coords(newboarddf)):
+
+                #If yes then break out the loop
                 valid_move = True
             else:
+
+                #If not we stay in the loop and the newboarddf goes back to being the previousboard so that the move gets undone
                 newboarddf = copy.copy(previousboard)
         visualize_board(newboarddf)
         plt.show(block = False)
@@ -49,7 +65,7 @@ if __name__ == "__main__":
 
 
     
-    visualize_board(newboarddf)
+    # visualize_board(newboarddf)
 
     print(boardposition1)
     print(newboarddf)
@@ -58,9 +74,9 @@ if __name__ == "__main__":
     print(newboarddf)
 
     #Made it so that the plots show 2 seconds after eachother making a sort of stop motion
-    plt.show(block = False)
-    plt.pause(2)
-    plt.show()
+    # plt.show(block = False)
+    # plt.pause(2)
+    # plt.show()
 
     
 
