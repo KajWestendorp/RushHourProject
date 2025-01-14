@@ -1,29 +1,27 @@
 import pandas as pd
 import os
+from car import*
 
 class Cars():
-    def __init__(self, name, orientation, col, row, length):
-        self.col = col
-        self.row = row
-        self.orientation = orientation
-        self.name = name
-        self.length = length
+    def __init__(self, boardposition):
+        self.boardposition = boardposition
 
 
-    def add_cars(self, boardposition):
+    def add_cars(self):
         self.cars = {}
 
-        for car in boardposition:
-            name = car['name']
+        for car in self.boardposition:
+            name = car['car']
             orientation = car['orientation']
             col = car['col']
             row = car['row']
             length = car['length']
 
-            new_car = Cars(name, orientation, col, row, length)
+            new_car = Car(name, orientation, col, row, length)
             self.cars[name] = new_car
-
+        print(self.cars)
         return self.cars
+    
 
     def add_cars_to_board(self, grid):
 
@@ -51,6 +49,7 @@ class Cars():
         
 
         return self.grid
+
     
 """main """
 
@@ -63,4 +62,7 @@ board_file = os.path.normpath(os.path.join(script_dir, relative_path))
 boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
 
 print(boardposition1)
+
+test = Cars(boardposition1)
+print(Cars.add_cars(test))
 
