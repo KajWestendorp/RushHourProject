@@ -49,7 +49,6 @@ def random_car(boarddf):
 
     # Takes a random sample from the cars that are available
     car = boarddf['car'].sample(1).iloc[0]
-    carlength = 
     return car
 
 def finish_check(boarddf):

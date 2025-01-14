@@ -1,48 +1,68 @@
-class Node():
-    def __init__(self, uid, coords):
+import os
+import pandas as pd
 
-        # id will be the car
-        self.id = uid
+class Grid():
+    def __init__(self, boardsize):
 
-        # Coords are the current position of the car
-        self.coords = coords
+        #col and row
+        self.boardsize = boardsize
 
-        #Neighbours should be the positions surrounding the car that are taken
-        self.neighbours = {}
+    def create_grid(self):
+        self.grid = []
 
-        #value will be the coords where the car is
-        self.value = None
+        for _ in range(self.boardsize + 2):
+            row = []
+            for _ in range(self.boardsize + 2):
+                row.append(0)
+            self.grid.append(row)
 
-    def add_neighbour(self, node):
-        # TODO: add the coordinates of the other cars
-        self.neighbours[node.id] = node
+        return self.grid
 
-    def get_positions(self, options):
-        """Return all possible coordinates that this car can take based on its position and the car around it. Options should be a list of the
-        coords that this car could travel to"""
 
-        available_options = set(options)
-        unavailable_options = set()
+    def add_borders(self):
+        for _ in range(self.boardsize + 2):
+            self.grid[0][_] = 1
+            self.grid[self.boardsize + 1][_] = 1
+            self.grid[_][0] = 1
+            self.grid[_][self.boardsize + 1] = 1
 
-        for neighbour in self.neighbours.value():
-            unavailable_options.add(neighbour.value)
-
-        return list(available_options - unavailable_options)
+        return self.grid
     
-    def is_node_valid(self):
-        """
-        Returns whether the node is valid. A node is valid when there are no
-        neighbours with the same value, and it's value is not None.
-        """
-        if not self.has_value():
-            return False
+    def add_cars(self, source_file):
+        coords = {}
+        for _, car in source_file.iterrows():
+        # Checks the orientation of the car and adjusts the column by 1 to include the space above it and row plus 1 for vertical cars
+        # TODO: WIll need to add a check for car length later on to ensure the corret amount is being added to the coords for trucks
+            if car['orientation'] == 'V':
+                coords[car['car']] = ((car['col'], car['row']), (car['col'] + 1, car['row']))
+            else:
+                coords[car['car']] = ((car['col'], car['row']), (car['col'], car['row'] + 1))
 
-        #TODO: Fix as this might not work
-        for neighbour in self.neighbours.values():
-            if neighbour.value == self.value:
-                return False
-            
-        return True
-    
-    def has_value(self):
-        return self.value is not None
+        for car in coords:
+            coordinates = coords[car]
+            for row, col in coordinates:
+                self.grid[row][col] = (car)
+        return self.grid
+
+
+
+
+
+
+
+test = Grid(6)
+print(Grid.create_grid(test))
+print(Grid.add_borders(test))
+
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+relative_path = os.path.join("..", "gameboards", "Rushhour6x6_test.csv")
+
+# Construct the path to the gameboard file
+board_file = os.path.normpath(os.path.join(script_dir, relative_path))
+
+boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
+
+print(boardposition1)
+
+print(Grid.add_cars(test, boardposition1))
