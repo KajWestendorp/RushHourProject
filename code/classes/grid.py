@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+from cars import *
 
 class Grid():
     def __init__(self, boardsize):
@@ -27,6 +28,8 @@ class Grid():
             self.grid[_][self.boardsize + 1] = 1
 
         return self.grid
+    
+    def update_board(self):
 
     
 
