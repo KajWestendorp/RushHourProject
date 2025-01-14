@@ -8,7 +8,7 @@ class Cars():
 
 
     def add_cars(self):
-        self.cars = {}
+        car_info = []
 
         for _, car in boardposition1.iterrows():
             name = car['car']
@@ -18,7 +18,9 @@ class Cars():
             length = car['length']
 
             new_car = Car(name, orientation, col, row, length)
-            self.cars[new_car.name] = new_car.orientation, new_car.col, new_car.row, new_car.length
+            car_info.append({'car': new_car.name,'orientation': new_car.orientation, 'col': new_car.col, 'row': new_car.row, 'length': new_car.length})
+
+            self.cars = pd.DataFrame(car_info)
         return self.cars
     
     def move_cars(self):
