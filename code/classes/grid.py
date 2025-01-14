@@ -31,12 +31,18 @@ class Grid():
     
     def update_board(self):
 
+
+
+
+        return self.grid
+
     
 
 test = Grid(6)
 print(Grid.create_grid(test))
 print(Grid.add_borders(test))
-
+Cars.add_cars(test, boardposition1)
+Grid.update_board(test)
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 relative_path = os.path.join("..", "gameboards", "Rushhour6x6_test.csv")
