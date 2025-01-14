@@ -35,12 +35,9 @@ def create_coords(boarddf):
 
     #initialize the dict
     coords = {}
-    
     # https://stackoverflow.com/questions/16031056/how-to-form-tuple-column-from-two-columns-in-pandas
     for _, car in boarddf.iterrows():
-
         # Checks the orientation of the car and adjusts the column by 1 to include the space above it and row plus 1 for vertical cars
-
         # TODO: WIll need to add a check for car length later on to ensure the corret amount is being added to the coords for trucks
         if car['orientation'] == 'H':
             coords[car['car']] = ((car['col'], car['row']), (car['col'] + 1, car['row']))
@@ -52,6 +49,7 @@ def random_car(boarddf):
 
     # Takes a random sample from the cars that are available
     car = boarddf['car'].sample(1).iloc[0]
+    carlength = 
     return car
 
 def finish_check(boarddf):
