@@ -25,7 +25,9 @@ class Cars():
 
         return self.cars
 
-    def add_cars_to_board(self):
+    def add_cars_to_board(self, grid):
+
+        self.grid = grid
 
         coords = {}
         for _, car in self.cars.iterrows():
