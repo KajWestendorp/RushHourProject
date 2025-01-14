@@ -27,28 +27,8 @@ class Grid():
             self.grid[_][self.boardsize + 1] = 1
 
         return self.grid
+
     
-    def add_cars(self, source_file):
-        coords = {}
-        for _, car in source_file.iterrows():
-        # Checks the orientation of the car and adjusts the column by 1 to include the space above it and row plus 1 for vertical cars
-        # TODO: WIll need to add a check for car length later on to ensure the corret amount is being added to the coords for trucks
-            if car['orientation'] == 'V':
-                coords[car['car']] = ((car['col'], car['row']), (car['col'] + 1, car['row']))
-            else:
-                coords[car['car']] = ((car['col'], car['row']), (car['col'], car['row'] + 1))
-
-        for car in coords:
-            coordinates = coords[car]
-            for row, col in coordinates:
-                self.grid[row][col] = (car)
-        return self.grid
-
-
-
-
-
-
 
 test = Grid(6)
 print(Grid.create_grid(test))
