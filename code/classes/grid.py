@@ -4,16 +4,22 @@ from cars import *
 import copy
 
 class Grid():
+
+    """ This class is a current grid which we want to have as the nodes for our graph"""
     def __init__(self, boardsize):
 
-        #col and row
+        #Initializing Grid attributes
         self.boardsize = boardsize
         self.redcargoal = 5
         self.cars = []
 
     def create_grid(self):
+        """This method creates a grid full of 0s that is 2 bigger than the boardsize allowing us to add 1s to the edge for detection"""
+        
+        #Initialize the grid list
         self.grid = []
 
+        # append 0s into the list by creating lists for each row, that way we have each row as a list
         for _ in range(self.boardsize + 2):
             row = []
             for _ in range(self.boardsize + 2):
@@ -24,6 +30,7 @@ class Grid():
 
 
     def add_borders(self):
+        """This method adds the border around the inner boardsize grid"""
         for _ in range(self.boardsize + 2):
             self.grid[0][_] = 1
             self.grid[self.boardsize + 1][_] = 1
@@ -33,11 +40,15 @@ class Grid():
         return self.grid
     
     def add_cars_to_board(self, cars):
+        """This method adds cars to the board and adds them to the list of car objects in the class Grid that we can later use"""
+
+        #Create a dict to store coordinates in (might not be best way but was how i originally did it so for now keeping it)
         coords = {}
+
+        #loop through the dataframe
         for _, car in cars.iterrows():
             self.cars.append(Car(car['car'],car['orientation'],car['col'], car['row'], car['length']))
-        # Checks the orientation of the car and adjusts the column by 1 to include the space above it and row plus 1 for vertical cars
-        # TODO: WIll need to add a check for car length later on to ensure the corret amount is being added to the coords for trucks
+        # Checks the orientation of the car and abjusts the coordinates depending on length of the car to ensure all coords are kept
             if car['orientation'] == 'H' and car['length'] == 2:
                 coords[car['car']] = ((car['col'], car['row']), (car['col'] + 1, car['row']))
             elif car['orientation'] == 'H' and car['length'] == 3:
@@ -47,28 +58,47 @@ class Grid():
             elif car['orientation'] == 'V' and car['length'] == 3:
                 coords[car['car']] = ((car['col'], car['row']), (car['col'], car['row'] + 1), (car['col'], car['row'] + 2))
 
+        # Assign the name of the current car as the value of the list in the grid
+
+        #First loop through the cars
         for car in coords:
             coordinates = coords[car]
+
+            #Then loop through the cars coordinates and add them to the grid by making that list index the label for that car
             for row, col in coordinates:
                 self.grid[col][row] = (car)
-
-        print(coords)
         return self.grid
     
     def get_moves(self):
+        """This method finds the possible moves 1 step further from the current board position and stores them in a list as well"""
+
+        #list of possible moves and a initiliazation of the grid because it saves space
         possible_moves = []
         current_grid = self.grid
 
+        # Go through the cars list and check orientation
         for car in self.cars:
             if car.orientation == 'H':
+
+                #Check if the cars position is within the space of the grid and if the position 1 step away is free
                 if car.col + car.length < self.boardsize + 2 and current_grid[car.row][car.col + car.length] == 0:
+
+                    #We create a deepcopy so that we can edit it
                     new_grid = copy.deepcopy(current_grid)
+
+                    #Make the old position 0
                     new_grid[car.row][car.col] = 0
+
+                    #Move 1 step forward
                     car.col += 1
+
+                    #Assign the car name to the new index in the new grid that was deepcopied
                     new_grid[car.row][car.col + car.length - 1] = car.name
+
+                    #Append it to the list of possible moves that were made
                     possible_moves.append(new_grid)
 
-
+                #Same comments as above but in this case its for vetical cars
             elif car.orientation == 'V':
                 if car.row + car.length < self.boardsize + 2 and current_grid[car.row + car.length][car.col] == 0:
                     new_grid = copy.deepcopy(current_grid)
@@ -90,9 +120,14 @@ test = Grid(6)
 # Cars(boardposition1)
 # cardf = Cars.add_cars(test)
 
+#Create a test grid
 gridtesting = Grid.add_cars_to_board(test, boardposition1)
+
+#Create next moves list of grids
 next_move = Grid.get_moves(test)
 
+
+#Print loops to visualize them
 for row in gridtesting:
     #ADD SOURCE THAT SHOWED HOW TO REMOVE  '' from letter
     print(" ".join(str(cell) for cell in row))
@@ -101,8 +136,6 @@ for move in next_move:
     for row in move:
         print(" ".join(str(cell) for cell in row))
     print()
-
-
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 relative_path = os.path.join("..", "gameboards", "Rushhour6x6_test.csv")
