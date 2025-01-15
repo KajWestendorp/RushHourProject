@@ -178,32 +178,6 @@ class Grid():
 
         output_df = pd.DataFrame(moves_per_car, index= index_list)
         return output_df
-    
-
-test = Grid(6)
-(Grid.create_grid(test))
-(Grid.add_borders(test))
-
-
-#Create a test grid
-gridtesting = Grid.add_cars_to_board(test, boardposition1)
-
-#Create next moves list of grids
-next_move = Grid.get_moves(test)
-moves_per_car = Grid.get_move_diff(test)
-print(moves_per_car)
-
-
-
-#Print loops to visualize them
-for row in gridtesting:
-    #ADD SOURCE THAT SHOWED HOW TO REMOVE  '' from letter
-    print(" ".join(str(cell) for cell in row))
-print()
-for move in next_move:
-    for row in move:
-        print(" ".join(str(cell) for cell in row))
-    print()
 
 
 
