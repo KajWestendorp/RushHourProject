@@ -95,9 +95,7 @@ class Grid():
         current_grid = self.grid
         # Go through the cars list and check orientation
         for car in self.cars:
-            travel_complete = False
             if car.orientation == 'H':
-                while not travel_complete:
                 #Check if the cars position is within the space of the grid and if the position 1 step away is free
                     if car.col + car.length < self.boardsize + 2 and current_grid[car.row][car.col + car.length] == 0:
 
@@ -116,13 +114,9 @@ class Grid():
                         #Append it to the list of possible moves that were made
                         possible_moves.append(new_grid)
 
-                        #TODO
-                        if car.col + car.length < self.boardsize + 2 and current_grid[car.row][car.col + car.length] != 0:
-                            travel_complete = True
                         car.col -= 1
                     
             elif car.orientation == 'V':
-                while not travel_complete:
                     if car.row + car.length < self.boardsize + 2 and current_grid[car.row + car.length][car.col] == 0:
                         new_grid = copy.deepcopy(current_grid)
                         new_grid[car.row][car.col] = 0
@@ -130,14 +124,9 @@ class Grid():
                         new_grid[car.row + car.length - 1][car.col] = car.name
                         possible_moves.append(new_grid)
 
-                        #TODO
-                        if car.row + car.length < self.boardsize + 2 and current_grid[car.row + car.length][car.col] != 0:
-                            travel_complete = True
                         car.row -= 1
-        travel_complete = False
         for car in self.cars:
             if car.orientation == 'H':
-                while not travel_complete:
                 #Check if the cars position is within the space of the grid and if the position 1 step away is free
                     if car.col - car.length < self.boardsize + 2 and current_grid[car.row][car.col - 1] == 0:
 
@@ -156,13 +145,10 @@ class Grid():
                         #Append it to the list of possible moves that were made
                         possible_moves.append(new_grid)
 
-                        if car.col - car.length < self.boardsize + 2 and current_grid[car.row][car.col - 1] != 0:
-                            travel_complete = True
                         car.col += 1
             
             #Same comments as above but in this case its for vetical cars
             elif car.orientation == 'V':
-                while not travel_complete:
                     if car.row - car.length < self.boardsize + 2 and current_grid[car.row - 1][car.col] == 0:
                         new_grid = copy.deepcopy(current_grid)
                         new_grid[car.row + 1][car.col] = 0
@@ -172,8 +158,6 @@ class Grid():
                         possible_moves.append(new_grid) 
 
                         #TODO: Fix check for travel completion
-                        if car.row - car.length < self.boardsize + 2 and current_grid[car.row - 1][car.col] != 0:
-                            travel_complete = True
                         car.row += 1
         return possible_moves
     
