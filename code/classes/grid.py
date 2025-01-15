@@ -163,22 +163,22 @@ class Grid():
     
 
 
-    #TODO: FIX this function to work this current get moves system, right now the car.col is always reset to what it was last 
-    def get_move_diff(self):
-        moves_per_car = []
-        index_list = []
+    #TODO: FIX this function to work and record the order of the moves
+    # def get_move_diff(self):
+    #     moves_per_car = []
+    #     index_list = []
 
-        for car, startcar in zip(self.cars, self.startcars):
-            if car.orientation == 'H':
-                car_move = car.col - startcar.col
-            else:
-                car_move = car.row - startcar.row
+    #     for car, startcar in zip(self.cars, self.startcars):
+    #         if car.orientation == 'H':
+    #             car_move = car.col - startcar.col
+    #         else:
+    #             car_move = car.row - startcar.row
 
-            moves_per_car.append(car_move)
-            index_list.append(car.name)
+    #         moves_per_car.append(car_move)
+    #         index_list.append(car.name)
 
-        output_df = pd.DataFrame(moves_per_car, index= index_list)
-        return output_df
+    #     output_df = pd.DataFrame(moves_per_car, index= index_list)
+    #     return output_df
     
     def grid_solved(self):
         for car in self.cars:
