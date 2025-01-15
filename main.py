@@ -103,17 +103,24 @@ if __name__ == "__main__":
     total_moves = 0
 
     new_boardposition = copy.copy(boardposition1)
-  
+    print(new_boardposition)
+    
     while is_solution(player_car) is False:
         random_car_to_move = random_car(test_cars)
-        random_step = random_move(random_car_to_move, 1)
+        random_move(random_car_to_move, 1)
         total_moves += 1
         print(f"Move {total_moves}, moving car '{random_car_to_move.name}'")
 
-        for car in test_cars:
-            new_boardposition['col'] = car.col
-            new_boardposition['row'] = car.row
+        #Iterate through the rows of the df
+        for index, car in new_boardposition.iterrows(): 
+            #Checks for the corerct car_index and orientation, then updates the position based on the given stepsize and orientation
+            if car['car'] == random_car_to_move.name:
+                if new_boardposition.loc[new_boardposition['car'] == random_car_to_move.name, 'orientation'].iloc[0] == 'H':
+                    new_boardposition.loc[new_boardposition['car'] == random_car_to_move.name, 'col'] += 1
+                if new_boardposition.loc[new_boardposition['car'] == random_car_to_move.name, 'orientation'].iloc[0] == 'V':
+                    new_boardposition.loc[new_boardposition['car'] == random_car_to_move.name, 'row'] += 1
 
+        print(new_boardposition)
 
         solved_grid = Grid(6)
         solved_grid.create_grid()
