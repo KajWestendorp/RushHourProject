@@ -161,6 +161,52 @@ class Grid():
                         car.row += 1
         return possible_moves
     
+    def is_valid_move(self, car, new_row, new_col):
+        """
+        Checks if a car can move to a new location. The function takes a car object,
+        and the new column a nd row the car wants to move to. 
+        If the move is valid, the function returns True
+        """
+        # Controleer of de nieuwe locatie binnen de grenzen van het bord valt
+        if not (1 <= new_row <= self.boardsize and 1 <= new_col <= self.boardsize):
+            return False
+
+        # Controleer of de nieuwe locatie leeg is
+        for i in range(car.length):
+            if car.orientation == 'H':
+                # Controleer de nieuwe kolommen van de auto
+                if self.grid[car.row][new_col + i] not in [0, car.name]:
+                    return False
+            elif car.orientation == 'V':
+                # Controleer de nieuwe rijen van de auto
+                if self.grid[new_row + i][car.col] not in [0, car.name]:
+                    return False
+
+        return True
+
+    def move_car(self, car, direction):
+        """
+        Move a car in the specified direction
+        """
+        # Delete the car from its current location
+        for i in range(car.length):
+            if car.orientation == 'H':
+                self.grid[car.row][car.col + i] = 0
+            elif car.orientation == 'V':
+                self.grid[car.row + i][car.col] = 0
+
+        # Update the car's position
+        if car.orientation == 'H':
+            car.col += direction
+        elif car.orientation == 'V':
+            car.row += direction
+
+        # Put car in new location
+        for i in range(car.length):
+            if car.orientation == 'H':
+                self.grid[car.row][car.col + i] = car.name
+            elif car.orientation == 'V':
+                self.grid[car.row + i][car.col] = car.name
 
 
     #TODO: FIX this function to work and record the order of the moves
