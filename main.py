@@ -91,10 +91,22 @@ if __name__ == "__main__":
     test_grid.add_cars_to_board(boardposition1)
     possible_moves = test_grid.get_moves()
 
-    # Visualize grid 
-    for row in gridtesting:
-        print(" ".join(str(cell) for cell in row))
-    print()
+    # Assign cars to list
+    test_cars = test_grid.cars
+    for car in test_cars:
+        print(car.name)
+        if car.name == 'X':
+            player_car = car
+
+    # Pick a random car to move
+    random_step = random.choice([-1, 1])
+    total_moves = 0
 
 
+    while is_solution(player_car) is False:
+        random_car_to_move = random_car(test_cars)
+        random_step = random_move(random_car_to_move, 1)
+        total_moves += 1
+
+    print(f"Board solved, it took {total_moves} moves")
     
