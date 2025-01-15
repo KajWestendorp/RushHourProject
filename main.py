@@ -84,115 +84,124 @@ if __name__ == "__main__":
     """--------- New Random_Algorithm ---------"""
 
     # # Initialize a testing grid
-    # test_grid = Grid(6)
-    # test_grid.create_grid()
-    # test_grid.add_borders()
+    test_grid = Grid(6)
+    test_grid.create_grid()
+    test_grid.add_borders()
 
     # # Add cars to grid
-    # test_grid.add_cars_to_board(boardposition1)
-    # possible_moves = test_grid.get_moves()
+    test_grid.add_cars_to_board(boardposition1)
+    possible_moves = test_grid.get_moves()
 
-    # # Assign cars to list
-    # test_cars = test_grid.cars
-    # for car in test_cars:
-    #     print(car.name)
-    #     if car.name == 'X':
-    #         player_car = car
+    # Assign cars to list
+    test_cars = test_grid.cars
+    for car in test_cars:
+        print(car.name)
+        if car.name == 'X':
+            player_car = car
 
-    # # Pick a random car to move
-    # random_step = random.choice([-1, 1])
-    # total_moves = 0
+    total_moves = 0
 
-    # new_boardposition = copy.copy(boardposition1)
-    # print(new_boardposition)
-    
-    # while is_solution(player_car) is False:
-    #     random_car_to_move = random_car(test_cars)
-    #     random_move(random_car_to_move, 1)
-    #     total_moves += 1
-    #     print(f"Move {total_moves}, moving car '{random_car_to_move.name}'")
+    """------ Random Solution ------"""
+    # Move until solution is reached
+    while is_solution(player_car) is False:
 
-    #     #Iterate through the rows of the df
-    #     for index, car in new_boardposition.iterrows(): 
-    #         #Checks for the corerct car_index and orientation, then updates the position based on the given stepsize and orientation
-    #         if car['car'] == random_car_to_move.name:
-    #             if new_boardposition.loc[new_boardposition['car'] == random_car_to_move.name, 'orientation'].iloc[0] == 'H':
-    #                 new_boardposition.loc[new_boardposition['car'] == random_car_to_move.name, 'col'] += 1
-    #             if new_boardposition.loc[new_boardposition['car'] == random_car_to_move.name, 'orientation'].iloc[0] == 'V':
-    #                 new_boardposition.loc[new_boardposition['car'] == random_car_to_move.name, 'row'] += 1
+        # Create copy of previous board position
+        previous_boardposition = copy.copy(boardposition1)
 
-    #     print(new_boardposition)
+        # Set valid move to False
+        valid_move = False
+        total_moves += 1
 
-    #     solved_grid = Grid(6)
-    #     solved_grid.create_grid()
-    #     solved_grid.add_borders()
+        while not valid_move:
+            # Move a random car
+            random_car_to_move = random_car(test_cars)
+            random_step = random.choice([-1, 1])
+            random_move(random_car_to_move, 1)
+            
+            print(f"Move {total_moves}, moving car '{random_car_to_move.name}'")
 
-    #     solved_grid = Grid.add_cars_to_board(solved_grid, new_boardposition)
+            previous_boardposition = copy.copy(boardposition1)
 
-    #     for row in solved_grid:
-    #         print(" ".join(str(cell) for cell in row))
-    #     print()
+            # Update board with new positions
+            newboard_position = update_position(previous_boardposition, random_car_to_move)
 
+            # Check if move is valid
+            if valid_board(test_cars):
+                valid_move is True
 
-    # print(f"Board solved after {total_moves} moves")
+            else:
+                newboard_positions = copy.copy(previous_boardposition)
 
+            solved_grid = Grid(6)
+            solved_grid.create_grid()
+            solved_grid.add_borders()
 
+            solved_grid = Grid.add_cars_to_board(solved_grid, newboard_position)
 
-    "----TEsting grid --- "
+            for row in solved_grid:
+                print(" ".join(str(cell) for cell in row))
+            print()
 
-    test = Grid(6)
-    (Grid.create_grid(test))
-    (Grid.add_borders(test))
-
-
-    #Create a test grid
-    gridtesting = Grid.add_cars_to_board(test, boardposition1)
-
-    #Create next moves list of grids
-    next_move = Grid.get_moves(test)
-    moves_per_car = Grid.get_move_diff(test)
-    print(moves_per_car)
+    print(f"Board solved after {total_moves} moves")
 
 
-    #Print loops to visualize them
-    for row in gridtesting:
-        #ADD SOURCE THAT SHOWED HOW TO REMOVE  '' from letter
-        print(" ".join(str(cell) for cell in row))
-    print()
-
-    for move in next_move:
-        for row in move:
-            print(" ".join(str(cell) for cell in row))
-        print()
 
 
-    chosen_grid, index = random_next_grid(next_move)
+#     "----TEsting grid --- "
 
-    print(f"The grid that was chosen was grid: {index}")
-    print()
+#     test = Grid(6)
+#     (Grid.create_grid(test))
+#     (Grid.add_borders(test))
 
-    for row in chosen_grid:
-        #ADD SOURCE THAT SHOWED HOW TO REMOVE  '' from letter
-        print(" ".join(str(cell) for cell in row))
-    print()
 
-#     attempts = 0
-#     while Grid.grid_solved(test) and attempts > 20:
-#         next_move = Grid.get_moves(test)
-#         moves_per_car = Grid.get_move_diff(test)
-#         chosen_grid, index = random_next_grid(next_move)
-#         attempts += 1
+#     #Create a test grid
+#     gridtesting = Grid.add_cars_to_board(test, boardposition1)
 
-#         print(f"The grid that was chosen was grid: {index}")
-#         print()
+#     #Create next moves list of grids
+#     next_move = Grid.get_moves(test)
+#     moves_per_car = Grid.get_move_diff(test)
+#     print(moves_per_car)
 
-#         for row in chosen_grid:
-#             #ADD SOURCE THAT SHOWED HOW TO REMOVE  '' from letter
+
+#     #Print loops to visualize them
+#     for row in gridtesting:
+#         #ADD SOURCE THAT SHOWED HOW TO REMOVE  '' from letter
+#         print(" ".join(str(cell) for cell in row))
+#     print()
+
+#     for move in next_move:
+#         for row in move:
 #             print(" ".join(str(cell) for cell in row))
 #         print()
 
-#         test = chosen_grid
-# print(attempts)
+
+#     chosen_grid, index = random_next_grid(next_move)
+
+#     print(f"The grid that was chosen was grid: {index}")
+#     print()
+
+#     for row in chosen_grid:
+#         #ADD SOURCE THAT SHOWED HOW TO REMOVE  '' from letter
+#         print(" ".join(str(cell) for cell in row))
+#     print()
+
+# #     attempts = 0
+# #     while Grid.grid_solved(test) and attempts > 20:
+# #         next_move = Grid.get_moves(test)
+# #         moves_per_car = Grid.get_move_diff(test)
+# #         chosen_grid, index = random_next_grid(next_move)
+# #         attempts += 1
+
+# #         print(f"The grid that was chosen was grid: {index}")
+# #         print()
+
+# #         for row in chosen_grid:
+# #             #ADD SOURCE THAT SHOWED HOW TO REMOVE  '' from letter
+# #             print(" ".join(str(cell) for cell in row))
+# #         print()
+
+# #         test = chosen_grid
+# # print(attempts)
 
 
 
