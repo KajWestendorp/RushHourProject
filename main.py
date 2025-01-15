@@ -12,7 +12,7 @@ import copy
 from code.algorithms.random_algorithm import *
 from code.classes.grid import *
 from code.classes.car import *
-
+from code.movement.updatedf import *
 
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -109,7 +109,11 @@ if __name__ == "__main__":
         random_car_to_move = random_car(test_cars)
         random_step = random_move(random_car_to_move, 1)
         total_moves += 1
+        print(f"Move {total_moves}, moving car '{random_car_to_move.name}'")
         
+
+        new_boardposition = update_positions(new_boardposition, random_step, random_car_to_move)
+
         for car in test_cars:
             new_boardposition['col'] = car.col
             new_boardposition['row'] = car.row
@@ -125,5 +129,5 @@ if __name__ == "__main__":
         print()
 
 
-    print(f"Board solved, it took {total_moves} moves")
+    print(f"Board solved after {total_moves} moves")
     
