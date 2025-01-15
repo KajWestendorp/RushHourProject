@@ -17,7 +17,7 @@ from code.algorithms.random_grid import *
 
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    relative_path = os.path.join("code", "gameboards", "Rushhour6x6_test.csv")
+    relative_path = os.path.join("code", "gameboards", "Rushhour6x6_1.csv")
 
     # Construct the path to the gameboard file
     board_file = os.path.normpath(os.path.join(script_dir, relative_path))
@@ -83,69 +83,37 @@ if __name__ == "__main__":
     """
     """--------- New Random_Algorithm ---------"""
 
-    # # Initialize a testing grid
-    test_grid = Grid(6)
-    test_grid.create_grid()
-    test_grid.add_borders()
+    # Initialize the board
+    boardsize = 6  
+    grid = Grid(boardsize)
+    grid.create_grid()
+    grid.add_borders()
 
-    # # Add cars to grid
-    test_grid.add_cars_to_board(boardposition1)
-    possible_moves = test_grid.get_moves()
+    # Add cars to board
+    grid.add_cars_to_board(boardposition1)
 
-    # Assign cars to list
-    test_cars = test_grid.cars
-    for car in test_cars:
-        print(car.name)
-        if car.name == 'X':
-            player_car = car
+    print("Startpositie van het bord:")
+    print_grid(grid)
 
     total_moves = 0
+    solved = False
 
-    """------ Random Solution ------"""
-    # Move until solution is reached
-    while is_solution(player_car) is False:
+    while not solved:
+        if valid_board(grid.cars):
+            car_to_move, direction = random_move(grid)
+            if car_to_move:
+                total_moves += 1
+                direction_str = "forward" if direction > 0 else "backward"
+                print(f"Move {total_moves}: Moving car {car_to_move.name} {direction_str}")
+                print_grid(grid)
+        else:
+            print("Invalid board configuration. Exiting.")
+            break
 
-        # Create copy of previous board position
-        previous_boardposition = copy.copy(boardposition1)
-
-        # Set valid move to False
-        valid_move = False
-        total_moves += 1
-
-        while not valid_move:
-            # Move a random car
-            random_car_to_move = random_car(test_cars)
-            random_step = random.choice([-1, 1])
-            random_move(random_car_to_move, 1)
-            
-            print(f"Move {total_moves}, moving car '{random_car_to_move.name}'")
-
-            previous_boardposition = copy.copy(boardposition1)
-
-            # Update board with new positions
-            newboard_position = update_position(previous_boardposition, random_car_to_move)
-
-            # Check if move is valid
-            if valid_board(test_cars):
-                valid_move is True
-
-            else:
-                newboard_positions = copy.copy(previous_boardposition)
-
-            solved_grid = Grid(6)
-            solved_grid.create_grid()
-            solved_grid.add_borders()
-
-            solved_grid = Grid.add_cars_to_board(solved_grid, newboard_position)
-
-            for row in solved_grid:
-                print(" ".join(str(cell) for cell in row))
-            print()
-
-    print(f"Board solved after {total_moves} moves")
-
-
-
+        # Check if board is solved
+        if grid.grid_solved():
+            print(f"The board is solved in {total_moves} moves!")
+            solved = True
 
 #     "----TEsting grid --- "
 
