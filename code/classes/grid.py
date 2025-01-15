@@ -1,7 +1,18 @@
 import os
 import pandas as pd
-from cars import *
+from car import *
 import copy
+
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+relative_path = os.path.join("..", "gameboards", "Rushhour6x6_test.csv")
+
+# Construct the path to the gameboard file
+board_file = os.path.normpath(os.path.join(script_dir, relative_path))
+
+boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
+
+
 
 class Grid():
 
@@ -11,6 +22,7 @@ class Grid():
         #Initializing Grid attributes
         self.boardsize = boardsize
         self.redcargoal = 5
+        self.startcars = []
         self.cars = []
 
     def create_grid(self):
@@ -36,6 +48,7 @@ class Grid():
             self.grid[self.boardsize + 1][_] = 1
             self.grid[_][0] = 1
             self.grid[_][self.boardsize + 1] = 1
+            self.grid[3][self.boardsize + 1] = 2
 
         return self.grid
     
@@ -47,7 +60,9 @@ class Grid():
 
         #loop through the dataframe
         for _, car in cars.iterrows():
+            self.startcars.append(Car(car['car'],car['orientation'],car['col'], car['row'], car['length']))
             self.cars.append(Car(car['car'],car['orientation'],car['col'], car['row'], car['length']))
+
         # Checks the orientation of the car and abjusts the coordinates depending on length of the car to ensure all coords are kept
             if car['orientation'] == 'H' and car['length'] == 2:
                 coords[car['car']] = ((car['col'], car['row']), (car['col'] + 1, car['row']))
@@ -67,15 +82,16 @@ class Grid():
             #Then loop through the cars coordinates and add them to the grid by making that list index the label for that car
             for row, col in coordinates:
                 self.grid[col][row] = (car)
+
         return self.grid
     
     def get_moves(self):
         """This method finds the possible moves 1 step further from the current board position and stores them in a list as well"""
 
+        
         #list of possible moves and a initiliazation of the grid because it saves space
         possible_moves = []
         current_grid = self.grid
-
         # Go through the cars list and check orientation
         for car in self.cars:
             if car.orientation == 'H':
@@ -110,6 +126,21 @@ class Grid():
         return possible_moves
     
 
+    def get_move_diff(self):
+        moves_per_car = []
+        index_list = []
+
+        for car, startcar in zip(self.cars, self.startcars):
+            if car.orientation == 'H':
+                car_move = car.col - startcar.col
+            else:
+                car_move = car.row - startcar.row
+
+            moves_per_car.append(car_move)
+            index_list.append(car.name)
+
+        output_df = pd.DataFrame(moves_per_car, index= index_list)
+        return output_df
     
 
 test = Grid(6)
@@ -117,14 +148,14 @@ test = Grid(6)
 (Grid.add_borders(test))
 
 
-# Cars(boardposition1)
-# cardf = Cars.add_cars(test)
-
 #Create a test grid
 gridtesting = Grid.add_cars_to_board(test, boardposition1)
 
 #Create next moves list of grids
 next_move = Grid.get_moves(test)
+moves_per_car = Grid.get_move_diff(test)
+print(moves_per_car)
+
 
 
 #Print loops to visualize them
@@ -137,12 +168,6 @@ for move in next_move:
         print(" ".join(str(cell) for cell in row))
     print()
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-relative_path = os.path.join("..", "gameboards", "Rushhour6x6_test.csv")
 
-# Construct the path to the gameboard file
-board_file = os.path.normpath(os.path.join(script_dir, relative_path))
-
-boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
 
 # print(boardposition1)
