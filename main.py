@@ -181,7 +181,7 @@ grid.add_borders()
 grid.add_cars_to_board(boardposition1)
 total_moves = 0
 solved = False
-trials = 1000
+trials = 10000
 attempt_number = 0
 experimentdata = []
 for i in range(trials):
