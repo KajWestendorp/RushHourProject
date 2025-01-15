@@ -6,29 +6,27 @@ import pandas as pd
 
 def random_car(cars):
     """
-    This function selects a random car to move from a dataframe with cars
+    This function selects a random car to move from a list of car objects
     """
     random_car = random.choice(cars)
 
     return random_car
 
-def is_solution(cars):
+def is_solution(car):
     """
     This function checks whether or not the board has been solved. 
     It takes a grid and returns True or False
     """
     # Solution is reached if the red car 'X' is in the 6th column
-    for car in cars:
-
-        if car.name == 'X' and car.col == 5:
-            return True
-        
-        return False
+    if car.col == 5:
+        return True
+    return False
+    
 
 def valid_move(cars):
     """
     This function checks whether or not a move is valid.
-    It takes a grid and checks if a move is possible by checking car's coordinates
+    It takes a grid and checks if a move is possible by checking the car's coordinates
     """
     # Initialize empty set for saving coordinates
     coordinates = set()
@@ -50,4 +48,16 @@ def valid_move(cars):
         return True
 
 
+def random_move(car, move):
+    """
+    This function moves a car based on orientation and move.
+    Car is an instance of class Car and Move is an integer, indicating the direction (negative for backwards, 
+    positive for forwards)
+    """
+    if car.orientation == 'H':
+        car.col += move
+    
+    else:
+        car.row += move
 
+    return car
