@@ -11,11 +11,12 @@ import copy
 
 from code.algorithms.random_algorithm import *
 from code.classes.grid import *
+from code.classes.car import *
 
 
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    relative_path = os.path.join("gameboards", "Rushhour6x6_1_test.csv")
+    relative_path = os.path.join("code", "gameboards", "Rushhour6x6_test.csv")
 
     # Construct the path to the gameboard file
     board_file = os.path.normpath(os.path.join(script_dir, relative_path))
