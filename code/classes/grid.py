@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from car import *
+from .car import *
 import copy
 
 
@@ -11,7 +11,6 @@ relative_path = os.path.join("..", "gameboards", "Rushhour6x6_test.csv")
 board_file = os.path.normpath(os.path.join(script_dir, relative_path))
 
 boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
-
 
 
 class Grid():
@@ -48,6 +47,8 @@ class Grid():
             self.grid[self.boardsize + 1][_] = 1
             self.grid[_][0] = 1
             self.grid[_][self.boardsize + 1] = 1
+
+            #add goal
             self.grid[3][self.boardsize + 1] = 2
 
         return self.grid
@@ -113,19 +114,55 @@ class Grid():
 
                     #Append it to the list of possible moves that were made
                     possible_moves.append(new_grid)
-
-                #Same comments as above but in this case its for vetical cars
+                    car.col -= 1
+                
             elif car.orientation == 'V':
                 if car.row + car.length < self.boardsize + 2 and current_grid[car.row + car.length][car.col] == 0:
                     new_grid = copy.deepcopy(current_grid)
                     new_grid[car.row][car.col] = 0
                     car.row += 1
                     new_grid[car.row + car.length - 1][car.col] = car.name
+                    possible_moves.append(new_grid)
+                    car.row -= 1
+        for car in self.cars:
+            if car.orientation == 'H':
+
+                #Check if the cars position is within the space of the grid and if the position 1 step away is free
+                if car.col - car.length < self.boardsize + 2 and current_grid[car.row][car.col - 1] == 0:
+
+                    #We create a deepcopy so that we can edit it
+                    new_grid = copy.deepcopy(current_grid)
+
+                    #Make the old position 0
+                    new_grid[car.row][car.col + 1] = 0
+
+                    #Move 1 step BACKWARD
+                    car.col -= 1
+
+                    #Assign the car name to the new index in the new grid that was deepcopied
+                    new_grid[car.row][car.col + car.length - 2] = car.name
+
+                    #Append it to the list of possible moves that were made
+                    possible_moves.append(new_grid)
+
+                    car.col += 1
+            
+            #Same comments as above but in this case its for vetical cars
+            elif car.orientation == 'V':
+                if car.row - car.length < self.boardsize + 2 and current_grid[car.row - 1][car.col] == 0:
+                    new_grid = copy.deepcopy(current_grid)
+                    new_grid[car.row + 1][car.col] = 0
+                    car.row -= 1
+                    new_grid[car.row + car.length - 2][car.col] = car.name
+
                     possible_moves.append(new_grid) 
+                    car.row += 1
         
         return possible_moves
     
 
+
+    #TODO: FIX this function to work this current get moves system, right now the car.col is always reset to what it was last 
     def get_move_diff(self):
         moves_per_car = []
         index_list = []
