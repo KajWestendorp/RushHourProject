@@ -12,10 +12,12 @@ from algorithms.randomise import finish_check
 import os
 import copy
 
+from algorithms.random_algorithm import *
+from classes.grid import *
 
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    relative_path = os.path.join("gameboards", "Rushhour6x6_1.csv")
+    relative_path = os.path.join("gameboards", "Rushhour6x6_1_test.csv")
 
     # Construct the path to the gameboard file
     board_file = os.path.normpath(os.path.join(script_dir, relative_path))
@@ -24,8 +26,8 @@ if __name__ == "__main__":
 
     visualize_board(boardposition1)
 
-
-
+    """--------- Old Randomise Algorithm ---------"""
+    """
     #Pick a random car to move
     chosen_car = random_car(boardposition1)
     steps = random.choice([-1, 1])
@@ -66,8 +68,6 @@ if __name__ == "__main__":
         # plt.show(block = False)
         # plt.pause(2)
 
-
-    
     visualize_board(newboarddf)
     print(f"done this is how many tries it took {attempts}")
     print(boardposition1)
@@ -76,11 +76,19 @@ if __name__ == "__main__":
     create_coords(newboarddf)
     print(newboarddf)
 
-    #Made it so that the plots show 2 seconds after eachother making a sort of stop motion
+    # Made it so that the plots show 2 seconds after eachother making a sort of stop motion
     plt.show(block = False)
     plt.pause(2)
     plt.show()
+    """
+    """--------- New Random_Algorithm ---------"""
 
+    # Initialize a testing grid
+    test_grid = Grid(6)
+    test_grid.create_grid()
+    test_grid.add_borders()
+
+    # Add cars to grid
+    test_grid.add_cars_to_board(boardposition1)
     
-
-
+    
