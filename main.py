@@ -83,37 +83,37 @@ if __name__ == "__main__":
     """
     """--------- New Random_Algorithm ---------"""
 
-    # Initialize the board
-    boardsize = 6  
-    grid = Grid(boardsize)
-    grid.create_grid()
-    grid.add_borders()
+    # # Initialize the board
+    # boardsize = 6  
+    # grid = Grid(boardsize)
+    # grid.create_grid()
+    # grid.add_borders()
 
-    # Add cars to board
-    grid.add_cars_to_board(boardposition1)
+    # # Add cars to board
+    # grid.add_cars_to_board(boardposition1)
 
-    print("Startpositie van het bord:")
-    print_grid(grid)
+    # print("Startpositie van het bord:")
+    # print_grid(grid)
 
-    total_moves = 0
-    solved = False
+    # total_moves = 0
+    # solved = False
 
-    while not solved:
-        if valid_board(grid.cars):
-            car_to_move, direction = random_move(grid)
-            if car_to_move:
-                total_moves += 1
-                direction_str = "forward" if direction > 0 else "backward"
-                print(f"Move {total_moves}: Moving car {car_to_move.name} {direction_str}")
-                print_grid(grid)
-        else:
-            print("Invalid board configuration. Exiting.")
-            break
+    # while not solved:
+    #     if valid_board(grid.cars):
+    #         car_to_move, direction = random_move(grid)
+    #         if car_to_move:
+    #             total_moves += 1
+    #             direction_str = "forward" if direction > 0 else "backward"
+    #             print(f"Move {total_moves}: Moving car {car_to_move.name} {direction_str}")
+    #             print_grid(grid)
+    #     else:
+    #         print("Invalid board configuration. Exiting.")
+    #         break
 
-        # Check if board is solved
-        if grid.grid_solved():
-            print(f"The board is solved in {total_moves} moves!")
-            solved = True
+    #     # Check if board is solved
+    #     if grid.grid_solved():
+    #         print(f"The board is solved in {total_moves} moves!")
+    #         solved = True
 
 #     "----TEsting grid --- "
 
@@ -171,5 +171,45 @@ if __name__ == "__main__":
 # #         test = chosen_grid
 # # print(attempts)
 
+
+"----- Experiment for random data -----"
+
+boardsize = 6  
+grid = Grid(boardsize)
+grid.create_grid()
+grid.add_borders()
+grid.add_cars_to_board(boardposition1)
+total_moves = 0
+solved = False
+trials = 1000
+attempt_number = 0
+experimentdata = []
+for i in range(trials):
+    attempt_number += 1
+    boardsize = 6  
+    grid = Grid(boardsize)
+    grid.create_grid()
+    grid.add_borders()
+    grid.add_cars_to_board(boardposition1)
+    total_moves = 0
+    solved = False
+
+    while not solved:
+        if valid_board(grid.cars):
+            car_to_move, direction = random_move(grid)
+            if car_to_move:
+                total_moves += 1
+                direction_str = "forward" if direction > 0 else "backward"
+        else:
+            break
+
+        # Check if board is solved
+        if grid.grid_solved():
+            experimentdata.append(total_moves)
+            solved = True
+df_of_experiment = pd.DataFrame(experimentdata)
+print(df_of_experiment)
+
+df_of_experiment.to_csv('1000attempts.csv', header='Move Count', index=False)
 
 
