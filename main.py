@@ -23,7 +23,7 @@ if __name__ == "__main__":
     
     boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
 
-    visualize_board(boardposition1)
+    visualize_board(boardposition1, 6)
 
     """--------- Old Randomise Algorithm ---------"""
     """
@@ -102,11 +102,28 @@ if __name__ == "__main__":
     random_step = random.choice([-1, 1])
     total_moves = 0
 
+    new_boardposition = copy.copy(boardposition1)
+    print(new_boardposition)
 
     while is_solution(player_car) is False:
         random_car_to_move = random_car(test_cars)
         random_step = random_move(random_car_to_move, 1)
         total_moves += 1
+        
+        for car in test_cars:
+            new_boardposition['col'] = car.col
+            new_boardposition['row'] = car.row
+
+        solved_grid = Grid(6)
+        solved_grid.create_grid()
+        solved_grid.add_borders()
+
+        solved_grid = Grid.add_cars_to_board(solved_grid, new_boardposition)
+
+        for row in solved_grid:
+            print(" ".join(str(cell) for cell in row))
+        print()
+
 
     print(f"Board solved, it took {total_moves} moves")
     

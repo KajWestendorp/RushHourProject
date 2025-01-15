@@ -15,9 +15,8 @@ board_file = os.path.normpath(os.path.join(script_dir, relative_path))
 
 boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
 
-board_size = 6
 
-def visualize_board(boardposition1):
+def visualize_board(boardposition1, board_size):
     """
     This function creates a visualization of the boards positions
     https://matplotlib.org/stable/gallery/subplots_axes_and_figures/subplots_demo.html
