@@ -2,7 +2,6 @@
 
 import random
 import pandas as pd
-import classes
 
 
 def random_car(cars):

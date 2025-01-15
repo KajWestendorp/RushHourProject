@@ -3,17 +3,15 @@ import pandas as pd
 import random
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
-from movement.updatedf import update_positions
-from visualization.initBoard import visualize_board
-from algorithms.randomise import create_coords
-from algorithms.randomise import random_car
-from algorithms.randomise import is_valid
-from algorithms.randomise import finish_check
+from code.movement.updatedf import update_positions
+from code.visualization.initBoard import visualize_board
+
 import os
 import copy
 
-from algorithms.random_algorithm import *
-from classes.grid import *
+from code.algorithms.random_algorithm import *
+from code.classes.grid import *
+
 
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -90,5 +88,12 @@ if __name__ == "__main__":
 
     # Add cars to grid
     test_grid.add_cars_to_board(boardposition1)
-    
+    possible_moves = test_grid.get_moves()
+
+    # Visualize grid 
+    for row in gridtesting:
+        print(" ".join(str(cell) for cell in row))
+    print()
+
+
     
