@@ -103,20 +103,17 @@ if __name__ == "__main__":
     total_moves = 0
 
     new_boardposition = copy.copy(boardposition1)
-    print(new_boardposition)
-
+  
     while is_solution(player_car) is False:
         random_car_to_move = random_car(test_cars)
         random_step = random_move(random_car_to_move, 1)
         total_moves += 1
         print(f"Move {total_moves}, moving car '{random_car_to_move.name}'")
-        
-
-        new_boardposition = update_positions(new_boardposition, random_step, random_car_to_move)
 
         for car in test_cars:
             new_boardposition['col'] = car.col
             new_boardposition['row'] = car.row
+
 
         solved_grid = Grid(6)
         solved_grid.create_grid()
