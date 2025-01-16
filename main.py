@@ -18,13 +18,18 @@ from code.algorithms.random_grid import *
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
     relative_path = os.path.join("code", "gameboards", "Rushhour6x6_1.csv")
+    relative_path2 = os.path.join("code", "gameboards", "Rushhour9x9_4.csv")
 
     # Construct the path to the gameboard file
     board_file = os.path.normpath(os.path.join(script_dir, relative_path))
     
     boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
 
-    visualize_board(boardposition1, 6)
+    # visualize_board(boardposition1, 6)
+
+    boardfile2 = os.path.normpath(os.path.join(script_dir, relative_path2))
+    boardposition2 = pd.read_csv(boardfile2, sep=',', encoding='utf-8')
+
 
     """--------- Old Randomise Algorithm ---------"""
     """
@@ -174,23 +179,23 @@ if __name__ == "__main__":
 
 "----- Experiment for random data -----"
 
-boardsize = 6  
+boardsize = 9  
 grid = Grid(boardsize)
 grid.create_grid()
 grid.add_borders()
-grid.add_cars_to_board(boardposition1)
+grid.add_cars_to_board(boardposition2)
 total_moves = 0
 solved = False
-trials = 10000
+trials = 1000
 attempt_number = 0
 experimentdata = []
 for i in range(trials):
     attempt_number += 1
-    boardsize = 6  
+    boardsize = 9  
     grid = Grid(boardsize)
     grid.create_grid()
     grid.add_borders()
-    grid.add_cars_to_board(boardposition1)
+    grid.add_cars_to_board(boardposition2)
     total_moves = 0
     solved = False
 
@@ -210,6 +215,6 @@ for i in range(trials):
 df_of_experiment = pd.DataFrame(experimentdata)
 print(df_of_experiment)
 
-df_of_experiment.to_csv('1000attempts.csv', header='Move Count', index=False)
+df_of_experiment.to_csv('1000attempts_9x9.csv', header='Move Count', index=False)
 
 
