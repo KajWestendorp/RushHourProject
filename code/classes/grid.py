@@ -78,22 +78,21 @@ class Grid():
         # Assign the name of the current car as the value of the list in the grid
 
         #First loop through the cars
-        for car in coords:
-            coordinates = coords[car]
+        #TODO: Not adding object to list but adding the label
+        for car in self.cars:
+            coordinates = coords[car.name]
 
             #Then loop through the cars coordinates and add them to the grid by making that list index the label for that car
             for row, col in coordinates:
-                self.grid[col][row] = (car)
+                self.grid[col][row] = (car.name)
 
         return self.grid
     
     def get_moves(self):
         """This method finds the possible moves 1 step further from the current board position and stores them in a list as well"""
-
-        
         #list of possible moves and a initiliazation of the grid because it saves space
         possible_moves = []
-        current_grid = self.grid
+        current_grid = copy.deepcopy(self.grid)
         # Go through the cars list and check orientation
         for car in self.cars:
             if car.orientation == 'H':
@@ -238,6 +237,13 @@ class Grid():
                     return True
         
         return False
+    
+    def __hash__(self):
+        self.string_grid = str(self.grid)
+        return hash(self.string_grid)
+    
+    def __eq__(self, other_hash):
+        return hash(self.grid) == hash(other_hash)
 
 
 # print(boardposition1)

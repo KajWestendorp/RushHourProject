@@ -14,6 +14,7 @@ from code.classes.grid import *
 from code.classes.car import *
 from code.movement.updatedf import *
 from code.algorithms.random_grid import *
+from code.algorithms.BreadthFirst import breadth_first
 
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -124,18 +125,16 @@ if __name__ == "__main__":
 
 #     "----TEsting grid --- "
 
-#     test = Grid(6)
-#     (Grid.create_grid(test))
-#     (Grid.add_borders(test))
+    # test = Grid(6)
+    # (Grid.create_grid(test))
+    # (Grid.add_borders(test))
 
 
-#     #Create a test grid
-#     gridtesting = Grid.add_cars_to_board(test, boardposition1)
+    # #Create a test grid
+    # gridtesting = Grid.add_cars_to_board(test, boardposition1)
 
 #     #Create next moves list of grids
 #     next_move = Grid.get_moves(test)
-#     moves_per_car = Grid.get_move_diff(test)
-#     print(moves_per_car)
 
 
 #     #Print loops to visualize them
@@ -160,23 +159,22 @@ if __name__ == "__main__":
 #         print(" ".join(str(cell) for cell in row))
 #     print()
 
-# #     attempts = 0
-# #     while Grid.grid_solved(test) and attempts > 20:
-# #         next_move = Grid.get_moves(test)
-# #         moves_per_car = Grid.get_move_diff(test)
-# #         chosen_grid, index = random_next_grid(next_move)
-# #         attempts += 1
+#     attempts = 0
+#     while Grid.grid_solved(test) and attempts > 20:
+#         next_move = Grid.get_moves(test)
+#         chosen_grid, index = random_next_grid(next_move)
+#         attempts += 1
 
-# #         print(f"The grid that was chosen was grid: {index}")
-# #         print()
+#         print(f"The grid that was chosen was grid: {index}")
+#         print()
 
-# #         for row in chosen_grid:
-# #             #ADD SOURCE THAT SHOWED HOW TO REMOVE  '' from letter
-# #             print(" ".join(str(cell) for cell in row))
-# #         print()
+#         for row in chosen_grid:
+#             #ADD SOURCE THAT SHOWED HOW TO REMOVE  '' from letter
+#             print(" ".join(str(cell) for cell in row))
+#         print()
 
-# #         test = chosen_grid
-# # print(attempts)
+#         test = chosen_grid
+# print(attempts)
 
 
 "----- Experiment for random data -----"
@@ -189,45 +187,45 @@ grid.add_borders()
 
 # Change value when changing board
 grid.add_cars_to_board(boardposition3)
-total_moves = 0
-solved = False
-trials = 1
-attempt_number = 0
-experimentdata = []
-for i in range(trials):
-    attempt_number += 1
+# total_moves = 0
+# solved = False
+# trials = 1
+# attempt_number = 0
+# experimentdata = []
+# for i in range(trials):
+#     attempt_number += 1
 
-    # Change value when changing board size
-    boardsize = 6  
-    grid = Grid(boardsize)
-    grid.create_grid()
-    grid.add_borders()
+#     # Change value when changing board size
+#     boardsize = 6  
+#     grid = Grid(boardsize)
+#     grid.create_grid()
+#     grid.add_borders()
 
-    # Change value when changing board 
-    grid.add_cars_to_board(boardposition3)
-    total_moves = 0
-    solved = False
+#     # Change value when changing board 
+#     grid.add_cars_to_board(boardposition3)
+#     total_moves = 0
+#     solved = False
 
-    while not solved:
-        if valid_board(grid.cars):
-            car_to_move, direction = random_move(grid)
-            if car_to_move:
-                total_moves += 1
-                direction_str = "forward" if direction > 0 else "backward"
-        else:
-            break
+#     while not solved:
+#         if valid_board(grid.cars):
+#             car_to_move, direction = random_move(grid)
+#             if car_to_move:
+#                 total_moves += 1
+#                 direction_str = "forward" if direction > 0 else "backward"
+#         else:
+#             break
 
-        # Check if board is solved
-        if grid.grid_solved():
-            experimentdata.append(total_moves)
+#         # Check if board is solved
+#         if grid.grid_solved():
+#             experimentdata.append(total_moves)
             
-            for move in grid.car_moves:
-                print(move)
+#             for move in grid.car_moves:
+#                 print(move)
 
-            solved = True
-df_of_experiment = pd.DataFrame(experimentdata)
-print(df_of_experiment)
+#             solved = True
+# df_of_experiment = pd.DataFrame(experimentdata)
+# print(df_of_experiment)
 
-df_of_experiment.to_csv('1000attempts_9x9.csv', header='Move Count', index=False)
+# df_of_experiment.to_csv('1000attempts_9x9.csv', header='Move Count', index=False)
 
-
+breadth_first(grid)
