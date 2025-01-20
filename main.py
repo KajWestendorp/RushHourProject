@@ -17,18 +17,20 @@ from code.algorithms.random_grid import *
 
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
+   
     relative_path = os.path.join("code", "gameboards", "Rushhour6x6_1.csv")
     relative_path2 = os.path.join("code", "gameboards", "Rushhour9x9_4.csv")
+    relative_path3 = os.path.join("code", "gameboards", "Rushhour6x6_test.csv")
 
     # Construct the path to the gameboard file
     board_file = os.path.normpath(os.path.join(script_dir, relative_path))
-    
-    boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
+    board_file2 = os.path.normpath(os.path.join(script_dir, relative_path2))
+    board_file3 = os.path.normpath(os.path.join(script_dir, relative_path3))
 
     # visualize_board(boardposition1, 6)
-
-    boardfile2 = os.path.normpath(os.path.join(script_dir, relative_path2))
-    boardposition2 = pd.read_csv(boardfile2, sep=',', encoding='utf-8')
+    boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
+    boardposition2 = pd.read_csv(board_file2, sep=',', encoding='utf-8')
+    boardposition3 = pd.read_csv(board_file3, sep=',', encoding='utf-8')
 
 
     """--------- Old Randomise Algorithm ---------"""
@@ -179,23 +181,30 @@ if __name__ == "__main__":
 
 "----- Experiment for random data -----"
 
-boardsize = 9  
+# Change value when changing board size
+boardsize = 6  
 grid = Grid(boardsize)
 grid.create_grid()
 grid.add_borders()
-grid.add_cars_to_board(boardposition2)
+
+# Change value when changing board
+grid.add_cars_to_board(boardposition3)
 total_moves = 0
 solved = False
-trials = 1000
+trials = 1
 attempt_number = 0
 experimentdata = []
 for i in range(trials):
     attempt_number += 1
-    boardsize = 9  
+
+    # Change value when changing board size
+    boardsize = 6  
     grid = Grid(boardsize)
     grid.create_grid()
     grid.add_borders()
-    grid.add_cars_to_board(boardposition2)
+
+    # Change value when changing board 
+    grid.add_cars_to_board(boardposition3)
     total_moves = 0
     solved = False
 
@@ -211,6 +220,10 @@ for i in range(trials):
         # Check if board is solved
         if grid.grid_solved():
             experimentdata.append(total_moves)
+            
+            for move in grid.car_moves:
+                print(move)
+
             solved = True
 df_of_experiment = pd.DataFrame(experimentdata)
 print(df_of_experiment)

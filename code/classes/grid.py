@@ -23,6 +23,7 @@ class Grid():
         self.redcargoal = 5
         self.startcars = []
         self.cars = []
+        self.car_moves = []
 
     def create_grid(self):
         """This method creates a grid full of 0s that is 2 bigger than the boardsize allowing us to add 1s to the edge for detection"""
@@ -188,6 +189,9 @@ class Grid():
         """
         Move a car in the specified direction
         """
+        # Add move to list
+        self.car_moves.append((car.name, direction))
+        
         # Delete the car from its current location
         for i in range(car.length):
             if car.orientation == 'H':
@@ -207,6 +211,7 @@ class Grid():
                 self.grid[car.row][car.col + i] = car.name
             elif car.orientation == 'V':
                 self.grid[car.row + i][car.col] = car.name
+
 
 
     #TODO: FIX this function to work and record the order of the moves
