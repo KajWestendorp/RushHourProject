@@ -186,7 +186,11 @@ grid.create_grid()
 grid.add_borders()
 
 # Change value when changing board
-grid.add_cars_to_board(boardposition3)
+grid.add_cars_to_board(boardposition1)
+for row in grid.grid:
+    #ADD SOURCE THAT SHOWED HOW TO REMOVE  '' from letter
+    print(" ".join(str(cell) for cell in row))
+print()
 # total_moves = 0
 # solved = False
 # trials = 1
