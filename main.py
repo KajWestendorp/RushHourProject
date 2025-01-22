@@ -238,27 +238,34 @@ if __name__ == "__main__":
 
 # df_of_experiment.to_csv('1000attempts_9x9.csv', header='Move Count', index=False)
 
-# breadth_first(grid)
-
 
 """----- Hill Climber Algorithm -----"""
 
 from code.algorithms.hillclimber import *
 
 # Init Grid
+# initial_grid = Grid(6)
+# initial_grid.create_grid()
+# initial_grid.add_borders()
+# initial_grid.add_cars_to_board(boardposition3)
+
+# hill_climber = HillClimber(initial_grid)
+
+# # debugging
+# for car in initial_grid.cars:
+#     print(car.name)
+
+# # Run the algorithm for 100 iterations
+# hill_climber.run(iterations=1000, verbose=True)
+
+# # Final result
+# print(f"Final Value: {hill_climber.value}")
+
+"""----- BreadthFirstSearch Algorithm -----"""
 initial_grid = Grid(6)
 initial_grid.create_grid()
 initial_grid.add_borders()
-initial_grid.add_cars_to_board(boardposition3)
+initial_grid.add_cars_to_board(boardposition4)
 
-hill_climber = HillClimber(initial_grid)
-
-# debugging
-for car in initial_grid.cars:
-    print(car.name)
-
-# Run the algorithm for 100 iterations
-hill_climber.run(iterations=1000, verbose=True)
-
-# Final result
-print(f"Final Value: {hill_climber.value}")
+#Run algorithm
+breadth_first(initial_grid)
