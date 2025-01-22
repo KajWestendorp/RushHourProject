@@ -110,12 +110,12 @@ def get_output(grid, parents):
             if car.orientation == 'H' and car.col != parent_car.col:
 
                 # Check steps the car moved
-                output_list.append((car.name, car.col - parent_car.col))
+                output_list.append((car.name, parent_car.col - car.col))
                 break
             elif car.orientation == 'V' and car.row != parent_car.row:
 
                 # Check how many steps the car moved 
-                output_list.append((car.name, car.row - parent_car.col))
+                output_list.append((car.name, parent_car.row - car.row))
                 break
 
         # Move onto next parent
