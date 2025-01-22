@@ -228,30 +228,62 @@ class Grid():
 
     def move_car(self, car, direction):
         """
-        Move a car in the specified direction
+        Moves a car in the specified direction (-1 for backward, 1 for forward).
         """
-        # Add move to list
-        self.car_moves.append((car.name, direction))
-        
-        # Delete the car from its current location
+        # Validate the direction
+        if direction not in [-1, 1]:
+            return False
+
+        # Determine the new front and back positions based on the car's orientation and direction
+        if car.orientation == 'H':
+            # If moving right, new_front will be the car's new right-most position
+            new_front = car.col + car.length + direction - 1
+            # If moving left, new_back will be the car's new left-most position
+            new_back = car.col + direction
+        else: 
+            # If moving down, new_front will be the car's new bottom-most position
+            new_front = car.row + car.length + direction - 1
+            # If moving up, new_back will be the car's new top-most position
+            new_back = car.row + direction
+
+        # Check if the new front and back positions are within the grid boundaries
+        if new_front < 1 or new_front >= self.boardsize + 1 or new_back < 1 or new_back >= self.boardsize + 1:
+            return False
+
+        # Check if there is a collision in the new position (after the car moves)
+        if car.orientation == 'H':
+            # For horizontal cars, check all the columns that the car will occupy
+            for i in range(car.length):
+                if self.grid[car.row][car.col + i + direction] != 0 and self.grid[car.row][car.col + i + direction] != car.name:
+                    return False
+        else:
+            # For vertical cars, check all the rows that the car will occupy
+            for i in range(car.length):
+                if self.grid[car.row + i + direction][car.col] != 0 and self.grid[car.row + i + direction][car.col] != car.name:
+                    return False
+
+        # Now update the grid:
+        # Clear the old position of the car
         for i in range(car.length):
             if car.orientation == 'H':
                 self.grid[car.row][car.col + i] = 0
-            elif car.orientation == 'V':
+            else:
                 self.grid[car.row + i][car.col] = 0
 
         # Update the car's position
         if car.orientation == 'H':
             car.col += direction
-        elif car.orientation == 'V':
+        else:
             car.row += direction
 
-        # Put car in new location
+        # Place the car in its new position
         for i in range(car.length):
             if car.orientation == 'H':
                 self.grid[car.row][car.col + i] = car.name
-            elif car.orientation == 'V':
+            else:
                 self.grid[car.row + i][car.col] = car.name
+
+        return True
 
     
     def grid_solved(self):
