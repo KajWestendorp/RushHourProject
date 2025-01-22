@@ -1,62 +1,103 @@
 import copy
 import random
 
-from random_algorithm import random_move
-
 class HillClimber:
+    """The HillClimber class implements an optimization algorithm to find
+    better solutions by modifying the grid state and keeping improvements.
     """
-    The HillClimber class changes a random node in the graph to a random valid value. Each improvement or
-    equivalent solution is kept for the next iteration.
-    """
-    def __init__(self, grid, cars):
-        if not grid.grid_solved():
-            raise Exception("HillClimber requires a complete solution")
+    def __init__(self, grid):
+        if grid.grid_solved():
+            raise Exception("HillClimber requires an unsolved grid")
         
         self.grid = copy.deepcopy(grid)
-        self.cars = cars
-
-        self.value = grid.cost_function()
+        self.value = self.calculate_value(self.grid)
 
     def calculate_value(self, grid):
-        """Calculates the value of the grid based on:
-        - Number of spaces between red car and exit
-        - Number of cars between red car and exit
-
-        Moven naar grid.py
         """
+        Calculates the value of the grid based on:
+        - Number of spaces between the red car and the exit
+        - Number of cars blocking the red car
+        """
+        red_car = [car for car in grid.cars if car.name == 'X']
+        if not red_car:
+            raise ValueError("Red car 'X' not found in the grid.")
+        red_car = red_car[0]
 
-    def mutate_single_car(self, new_grid):
-        """Changes the position of a random car with a random direciton"""
-        car_to_move, direction = random_move(new_grid)
+        distance_to_exit = grid.boardsize - (red_car.col + red_car.length)
 
-    def mutate_grid(self, new_grid, number_of_cars=1):
-        """Changes the value of a number of nodes with a random valid value"""
-        for _ in range(number_of_cars):
-            self.mutate_single_car(new_grid)
+        # Count blocking cars
+        blocking_cars = 0
+        for col in range(red_car.col + red_car.length, grid.boardsize):
+            if grid.grid[red_car.row][col] != 0:
+                blocking_cars += 1
+
+        # Total cost is distance + number of blocking cars
+        return distance_to_exit + blocking_cars
+
+    def mutate_single_car(self, grid):
+        """
+        Changes the position of a random car by moving it in a random valid direction.
+        """
+        car_to_move = random.choice(grid.cars)
+        direction = random.choice([-1, 1])
+
+        print(f"Trying to move car {car_to_move.name} in direction {'left/up' if direction == -1 else 'right/down'}")
+
+        # Try to move the car in the chosen direction
+        if grid.move_car(car_to_move, direction):
+            print(f"Move successful for car {car_to_move.name}")
+            return True
+        
+        print(f"Move failed for car {car_to_move.name}")
+        return False
+
+    def mutate_grid(self, grid, number_of_cars=1):
+        """
+        Mutates the grid by moving one or more cars randomly.
+        """
+        for i in range(number_of_cars):
+            if not self.mutate_single_car(grid):
+                print("Mutation failed; trying a different car.")
 
     def check_solution(self, new_grid):
-        """Checks and accepts better solutions than the currrent solution"""
-        new_value = new_grid.calculate_value()
-        old_value = self.calculate_value()
+        """
+        Checks if the new grid has a better or equal solution. If so, accept it.
+        """
+        new_value = self.calculate_value(new_grid)
+        print(f"Evaluating new grid: New Value = {new_value}, Current Value = {self.value}")
 
-        if new_value <= old_value:
-            self.grid = new_grid
+        if new_value <= self.value:
+            print("New grid accepted.")
+            self.grid = copy.deepcopy(new_grid)
             self.value = new_value
+        else:
+            print("New grid rejected.")
 
-    def run(self, iterations, verbose=False, mutate_nodes_number=1):
-        """Runs the HillClimber algorithm for a specific amount of iterations"""
-        self.iterations = iterations
-
+    def run(self, iterations, verbose=False):
+        """
+        Runs the HillClimber algorithm for a given number of iterations.
+        """
+        print("Starting Hill Climber...")
         for iteration in range(iterations):
-            # Trick to only print if variable is set to True
-            print(f"Iteration {iteration}/{iterations}, current vallue: {self.value}") if verbose else None
+            # Added some print statements for clarity
+            if verbose:
+                print(f"\nIteration {iteration + 1}/{iterations}")
+                print(f"Current Value: {self.value}")
 
-            # Create copy of grid to simulate change
+            # Create a copy of the grid to simulate
             new_grid = copy.deepcopy(self.grid)
 
-            self.mutate_graph(new_grid, number_of_nodes=mutate_nodes_number)
+            # Apply a random mutation
+            self.mutate_grid(new_grid)
 
-            # Accept if better
+            # Accept or reject the new solution
             self.check_solution(new_grid)
 
+            # If the grid is solved, break 
+            if self.value == 0:
+                print(f"Solution found at iteration {iteration + 1}")
+                break
 
+        print("\nFinal Results:")
+        print(f"Final Value: {self.value}")
+        print(f"Final Grid:\n{self.grid}")
