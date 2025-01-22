@@ -262,10 +262,10 @@ from code.algorithms.hillclimber import *
 # print(f"Final Value: {hill_climber.value}")
 
 """----- BreadthFirstSearch Algorithm -----"""
-initial_grid = Grid(6)
+initial_grid = Grid(9)
 initial_grid.create_grid()
 initial_grid.add_borders()
-initial_grid.add_cars_to_board(boardposition5)
+initial_grid.add_cars_to_board(boardposition2)
 
 #Run algorithm
 import time
@@ -290,5 +290,5 @@ outputdf.to_csv('output.csv',index=False)
 # 6x6 Board 2 output = checked :)
 # 6x6 Board 3 output = checked :)
 
-# 9x9 board 1 output = 
+# 9x9 board 4 output = 
 
