@@ -1,5 +1,6 @@
 from ..classes.grid import Grid
 from collections import deque
+import pandas as pd
 
 def breadth_first(grid):
     """ 
@@ -43,8 +44,8 @@ def breadth_first(grid):
                     print(f"Move number {move}:")
                 for row in grid.grid:
                     print(" ".join(str(cell) for cell in row))
-                print()
-            return grid
+            print()
+            return grid, get_output(grid, parent_of_grid)
 
         #Call get_moves function to get the child grid nodes from the current Node
         child_grids = Grid.get_moves(grid)
@@ -57,7 +58,7 @@ def breadth_first(grid):
             # Add the parent to the child_grid in the dict
             parent_of_grid[child_grid] = grid 
 
-            # Lower the depth 
+            # Lower the depth and add child to dlist
             queue.append((child_grid, depth + 1))
 
             #Avoid going to two grid positions so we archive it
@@ -78,6 +79,8 @@ def backtrace_path(grid, parents):
         # Append current grid to shortest path list of grids
         shortest_path.append(grid)
 
+
+
         # Get the next parent
         grid = parents[grid]
     
@@ -85,3 +88,41 @@ def backtrace_path(grid, parents):
     shortest_path.reverse()
 
     return shortest_path
+
+def get_output(grid, parents):
+    """
+    """
+    
+    output_list = []
+    
+    while grid is not None:
+
+        #Get next parent of the new parent XD confujsing
+        parent = parents[grid]  
+
+        if parent is None: 
+            break
+
+        # Compare the parent grid to the current grid to find the car that moved, using zip to loop through both lists of cars at the same time
+        for car, parent_car in zip(grid.cars, parent.cars):
+
+            #Check orientation and whether this car even moved
+            if car.orientation == 'H' and car.col != parent_car.col:
+
+                # Check steps the car moved
+                output_list.append((car.name, parent_car.col - car.col))
+                break
+            elif car.orientation == 'V' and car.row != parent_car.row:
+
+                # Check how many steps the car moved 
+                output_list.append((car.name, parent_car.row - car.row))
+                break
+
+        # Move onto next parent
+        grid = parent
+
+    # Reverse the output list to show the moves in the correct order (start to solution)
+    output_list.reverse()
+
+    df_output = pd.DataFrame(output_list, columns = ['car', 'move'])
+    return df_output

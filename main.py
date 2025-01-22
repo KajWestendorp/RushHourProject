@@ -265,7 +265,21 @@ from code.algorithms.hillclimber import *
 initial_grid = Grid(6)
 initial_grid.create_grid()
 initial_grid.add_borders()
-initial_grid.add_cars_to_board(boardposition4)
+initial_grid.add_cars_to_board(boardposition1)
 
 #Run algorithm
-breadth_first(initial_grid)
+import time
+
+# Calculate the start time
+start = time.time()
+final_grid, outputdf = breadth_first(initial_grid)
+# Calculate the end time and time taken
+end = time.time()
+length = end - start
+# Show the results : this can be altered however you like
+
+print("It took", length, "seconds to find the best solution!")
+print()
+
+print(outputdf)
+outputdf.to_csv('output.csv',index=False)
