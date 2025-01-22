@@ -22,16 +22,22 @@ if __name__ == "__main__":
     relative_path = os.path.join("code", "gameboards", "Rushhour6x6_1.csv")
     relative_path2 = os.path.join("code", "gameboards", "Rushhour9x9_4.csv")
     relative_path3 = os.path.join("code", "gameboards", "Rushhour6x6_test.csv")
+    relative_path4 = os.path.join("code", "gameboards", "Rushhour6x6_2.csv")
+    relative_path5 = os.path.join("code", "gameboards", "Rushhour6x6_3.csv")
 
     # Construct the path to the gameboard file
     board_file = os.path.normpath(os.path.join(script_dir, relative_path))
     board_file2 = os.path.normpath(os.path.join(script_dir, relative_path2))
     board_file3 = os.path.normpath(os.path.join(script_dir, relative_path3))
+    board_file4 = os.path.normpath(os.path.join(script_dir, relative_path4))
+    board_file5 = os.path.normpath(os.path.join(script_dir, relative_path5))
 
     # visualize_board(boardposition1, 6)
     boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
     boardposition2 = pd.read_csv(board_file2, sep=',', encoding='utf-8')
     boardposition3 = pd.read_csv(board_file3, sep=',', encoding='utf-8')
+    boardposition4 = pd.read_csv(board_file4, sep=',', encoding='utf-8')
+    boardposition5 = pd.read_csv(board_file5, sep=',', encoding='utf-8')
 
 
     """--------- Old Randomise Algorithm ---------"""
@@ -180,13 +186,13 @@ if __name__ == "__main__":
 "----- Experiment for random data -----"
 
 # Change value when changing board size
-boardsize = 6  
+boardsize = 9
 grid = Grid(boardsize)
 grid.create_grid()
 grid.add_borders()
 
 # Change value when changing board
-grid.add_cars_to_board(boardposition1)
+grid.add_cars_to_board(boardposition2)
 for row in grid.grid:
     #ADD SOURCE THAT SHOWED HOW TO REMOVE  '' from letter
     print(" ".join(str(cell) for cell in row))

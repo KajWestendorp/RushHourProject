@@ -271,11 +271,12 @@ class Grid():
             # Compare the grid strings
             return ''.join(''.join(str(cell) for cell in self.grid)) == ''.join(''.join(str(cell) for cell in other.grid))
         return False
+    
+    
+
 
 
 # print(boardposition1)
-
-    import copy
 
     def get_moves(self):
         """Find all possible moves for the current board state and store them in a list."""
@@ -300,7 +301,7 @@ class Grid():
 
                 # Move left
                 step = 1
-                while car.col - step >= 0 and self.grid[car.row][car.col - step] == 0:
+                while 0 <= car.col - step < self.boardsize and self.grid[car.row][car.col - step] == 0:
                     new_grid = copy.deepcopy(self)
                     for cars in new_grid.cars:
                         if cars.name == car.name:
@@ -316,7 +317,7 @@ class Grid():
             elif car.orientation == 'V':
                 # Move down
                 step = 1
-                while car.row + car.length + step - 1 < self.boardsize and self.grid[car.row + car.length + step - 1][car.col] == 0:
+                while car.row + car.length + step - 1 < self.boardsize + 1 and self.grid[car.row + car.length + step - 1][car.col] == 0:
                     new_grid = copy.deepcopy(self)
                     for cars in new_grid.cars:
                         if cars.name == car.name:
@@ -330,7 +331,7 @@ class Grid():
 
                 # Move up
                 step = 1
-                while car.row - step >= 0 and self.grid[car.row - step][car.col] == 0:
+                while car.row - step < self.boardsize and self.grid[car.row - step][car.col] == 0:
                     new_grid = copy.deepcopy(self)
                     for cars in new_grid.cars:
                         if cars.name == car.name:
