@@ -11,6 +11,7 @@ class HillClimber:
         
         self.grid = copy.deepcopy(grid)
         self.value = self.calculate_value(self.grid)
+        self.moves = []
 
     def calculate_value(self, grid):
         """
@@ -46,6 +47,10 @@ class HillClimber:
         # Try to move the car in the chosen direction
         if grid.move_car(car_to_move, direction):
             print(f"Move successful for car {car_to_move.name}")
+
+            # Log the successful move --- TODO: add logic for vertical and horizontal orientation for cleaner print statements
+            self.moves.append(({car_to_move.name}, {"left/up" if direction == -1 else "right/down"}))
+
             return True
         
         print(f"Move failed for car {car_to_move.name}")
@@ -101,3 +106,4 @@ class HillClimber:
         print("\nFinal Results:")
         print(f"Final Value: {self.value}")
         print(f"Final Grid:\n{self.grid}")
+        print(f"Moves Made: {self.moves}")
