@@ -287,13 +287,10 @@ class Grid():
 
     
     def grid_solved(self):
-        for car in self.cars:
-            if car.name == 'X':
-                if car.col == self.redcargoal:
-                    return True
+        """Checks if the red car 'X' has reached the exit."""
+        red_car = next((car for car in self.cars if car.name == 'X'), None)
+        return red_car and red_car.col == self.boardsize - 1
         
-        return False
-    
     def __hash__(self):
         string_grid = ''.join(''.join(str(cell) for cell in row) for row in self.grid)
         return hash(string_grid)
@@ -305,6 +302,13 @@ class Grid():
         return False
     
     
+    def print_grid(self):
+        """Prints the current state of the grid."""
+        print("\nHuidige bordstatus:")
+        for row in self.grid:
+            print(" ".join(str(cell) for cell in row))
+        print("\n")
+
 
 
 
@@ -395,5 +399,4 @@ class Grid():
                 self.grid[car.row][car.col + i] = car.name
             elif car.orientation == 'V':
                 self.grid[car.row + i][car.col] = car.name
-
 

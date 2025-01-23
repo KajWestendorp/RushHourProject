@@ -1,7 +1,7 @@
 import random
 import math
 
-from code.algorithms.random_hillclimber import Random_HillClimber
+from code.algorithms.random_heuristic import Random_HillClimber
 
 class SimulatedAnnealing(Random_HillClimber):
     """

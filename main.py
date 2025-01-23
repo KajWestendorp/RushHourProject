@@ -39,6 +39,34 @@ if __name__ == "__main__":
     boardposition4 = pd.read_csv(board_file4, sep=',', encoding='utf-8')
     boardposition5 = pd.read_csv(board_file5, sep=',', encoding='utf-8')
 
+    """----- Hill Climber Algorithm -----"""
+    # Initialize the grid
+    boardsize = 6  
+    grid = Grid(boardsize)
+    grid.create_grid()
+    grid.add_borders()
+    grid.add_cars_to_board(boardposition3)
+
+    print("Startpositie van het bord:")
+    grid.print_grid()
+
+    # Initialiseer en run het algoritme
+    random_solver = Random_Algorithm(grid)
+    moves_made = random_solver.run(iterations=100000, verbose=True)
+
+    print("\nUitgevoerde zetten:")
+    print("car, move")
+    for move in moves_made:
+        print(f"'{move[0]}', {move[1]}")
+
+    print("\nEindstatus van het bord:")
+    random_solver.grid.print_grid()
+
+    if random_solver.is_solution():
+        print("\nDe puzzel is opgelost!")
+    else:
+        print("\nDe puzzel kon niet worden opgelost binnen het aantal iteraties.")
+
 
     """--------- Old Randomise Algorithm ---------"""
     """
@@ -237,39 +265,6 @@ if __name__ == "__main__":
 # print(df_of_experiment)
 
 # df_of_experiment.to_csv('1000attempts_9x9.csv', header='Move Count', index=False)
-
-
-"""----- Hill Climber Algorithm -----"""
-
-from code.algorithms.random_hillclimber import *
-
-experiment_data_random = []
-trials = 1
-
-for i in range(trials):
-    print(f"Starting trial {i + 1}/{trials}")
-    
-    # Initialize the grid 
-    grid = Grid(6)
-    grid.create_grid()
-    grid.add_borders()
-    grid.add_cars_to_board(boardposition1)
-
-    # Initialize the Hill Climber
-    hill_climber = Random_HillClimber(grid)
-
-    # Run the Hill Climber for a number of iterations
-    hill_climber.run(iterations=100_000, verbose=False)
-
-    # Store the number of moves 
-    experiment_data_random.append(len(hill_climber.moves))
-
-# Save results 
-df_random = pd.DataFrame(experiment_data_random, columns=['move count'])
-df_random.to_csv("100trials_random_6x6test.csv", index=False)
-
-# Debugging
-print("Experiment klaar. Resultaten opgeslagen in 100trials_random_6x6test.csv")
 
 
 # """----- BreadthFirstSearch Algorithm -----"""
