@@ -107,7 +107,7 @@ if __name__ == "__main__":
     """
 
     """----- HillClimber Algorithm -----"""
-    num_trials = 1
+    num_trials = 10
     iterations = 1000  
 
     hillclimber_results = []
@@ -124,7 +124,7 @@ if __name__ == "__main__":
 
         # Solve the puzzle with Random Algorithm
         solver = Random_Algorithm(grid)
-        solver.run(iterations=100000, verbose=False)
+        random_moves = solver.run(iterations=100000, verbose=False)
 
         # Ensure we pass a solved grid to HillClimber
         if solver.is_solution():
@@ -141,18 +141,21 @@ if __name__ == "__main__":
             best_moves = hillclimber.run(iterations=iterations, verbose=False)
 
             # Store results
-            if best_moves:
-                hillclimber_results.append(len(best_moves))
-            else:
-                hillclimber_results.append("Not solved")
+            hillclimber_results.append({
+                "random_moves": len(random_moves),
+                "hillclimber_moves": len(best_moves) if best_moves else "Not solved"
+            })
         else:
             print("Random Algorithm failed to find a solution, skipping trial.")
-            hillclimber_results.append("Not solved")
+            hillclimber_results.append({
+                "random_moves": "Not solved",
+                "hillclimber_moves": "Not solved"
+            })
 
     # Save results to CSV
-    df_hillclimber = pd.DataFrame(hillclimber_results, columns=['moves'])
-    df_hillclimber.to_csv("1_trials_hillclimber_6x6.csv", index=False)
-    print("\nHill Climber Algorithm trials completed")
+    df_hillclimber = pd.DataFrame(hillclimber_results)
+    df_hillclimber.to_csv("hillclimber_comparison_6x6.csv", index=False)
+    print("\nHill Climber Algorithm trials completed and saved.")
 
 "----- Experiment for random data -----"
 
