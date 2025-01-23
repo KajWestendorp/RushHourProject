@@ -45,7 +45,7 @@ if __name__ == "__main__":
     grid = Grid(boardsize)
     grid.create_grid()
     grid.add_borders()
-    grid.add_cars_to_board(boardposition3)
+    grid.add_cars_to_board(boardposition1)
 
     print("Startpositie van het bord:")
     grid.print_grid()
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     random_solver.grid.print_grid()
 
     if random_solver.is_solution():
-        print("\nDe puzzel is opgelost!")
+        print(f"\nDe puzzel is opgelost in {len(moves_made)} zetten!")
     else:
         print("\nDe puzzel kon niet worden opgelost binnen het aantal iteraties.")
 
