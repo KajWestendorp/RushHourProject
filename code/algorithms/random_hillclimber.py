@@ -1,8 +1,8 @@
 import copy
 import random
 
-class HillClimber:
-    """The HillClimber class implements an optimization algorithm to find
+class Random_HillClimber:
+    """This random algorithm with a Hill Climber Heuristic class implements an optimization algorithm to find
     better solutions by modifying the grid state and keeping improvements.
     """
     def __init__(self, grid):

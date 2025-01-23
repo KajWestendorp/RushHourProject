@@ -241,7 +241,7 @@ if __name__ == "__main__":
 
 """----- Hill Climber Algorithm -----"""
 
-from code.algorithms.hillclimber import *
+from code.algorithms.random_hillclimber import *
 
 # Init Grid
 # initial_grid = Grid(6)

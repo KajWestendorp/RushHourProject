@@ -1,9 +1,9 @@
 import random
 import math
 
-from hillclimber import HillClimber
+from code.algorithms.random_hillclimber import Random_HillClimber
 
-class SimulatedAnnealing(HillClimber):
+class SimulatedAnnealing(Random_HillClimber):
     """
     The SimulatedAnnealing class that changes a random node in the graph to a random valid value.
     Each improvement or equivalent solution is kept for the next iteration.
