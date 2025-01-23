@@ -289,7 +289,11 @@ class Grid():
     def grid_solved(self):
         """Checks if the red car 'X' has reached the exit."""
         red_car = next((car for car in self.cars if car.name == 'X'), None)
-        return red_car and red_car.col == self.boardsize - 1
+
+        exit_col = self.boardsize
+        red_car_end_position = red_car.col + red_car.length - 1  
+
+        return red_car_end_position == exit_col
         
     def __hash__(self):
         string_grid = ''.join(''.join(str(cell) for cell in row) for row in self.grid)

@@ -1,97 +1,100 @@
 import copy
 import random
+import pandas as pd
 
-#TODO: Inheriten van random_hillclimber ? 
+# https://github.com/minprog/radio_russia_demo/blob/college_2/code/algorithms/hillclimber.py ('inspiratie')
 
 class HillClimber:
-    """This Hill Climber Algorithm class implements an optimization algorithm to find
-    better solutions by modifying the grid state and keeping improvements.
-    """
-    def __init__(self, grid):
-        if not grid.grid_solved():
+    """Hill Climber Algorithm that optimizes a solved board by copying a solved grid, and mutating moves by either
+    removing a random move, swapping two moves or changing a random direction.."""
+    
+    def __init__(self, solved_grid):
+        if not solved_grid.grid_solved():
             raise Exception("HillClimber requires a solved grid")
         
-        self.grid = copy.deepcopy(grid)
-        self.value = self.calculate_value(self.grid)
-        self.moves = []
+        self.grid = copy.deepcopy(solved_grid)
+        self.best_moves = []
 
-    def calculate_value(self, grid):
-        """
-        Calculates the value of the grid based on:
-        - Number of spaces between the red car and the exit
-        - Number of cars blocking the red car
-        """
-        red_car = [car for car in grid.cars if car.name == 'X']
-        if not red_car:
-            raise ValueError("Red car 'X' not found in the grid.")
-        red_car = red_car[0]
+        # Determine solved path length
+        self.best_value = len(solved_grid.car_moves)  
 
-        # Distance to the exit (number of spaces)
-        distance_to_exit = grid.boardsize - (red_car.col + red_car.length)
-
-        # Count blocking cars
-        blocking_cars = 0
-        for col in range(red_car.col + red_car.length, grid.boardsize):
-            if grid.grid[red_car.row][col] != 0:
-                blocking_cars += 1
-
-        # Total cost is distance + number of blocking cars
-        return distance_to_exit + blocking_cars
-
-    def mutate_single_car(self, grid):
+    def calculate_value(self, move_sequence):
         """
-        Changes the position of a random car by moving it in a random valid direction.
+        Evaluates a solution based on the number of moves used.
         """
-        car_to_move = random.choice(grid.cars)
-        direction = random.choice([-1, 1])
+        return len(move_sequence)
 
-        if grid.move_car(car_to_move, direction):
-            # Log the successful move
-            self.moves.append((car_to_move.name, "left/up" if direction == -1 else "right/down"))
-            return True
-        return False
+    def mutate_moves(self, move_sequence):
+        """
+        Mutates the move sequence by randomly removing, reordering, or tweaking moves.
+        """
+        new_moves = copy.deepcopy(move_sequence)
 
-    def generate_neighbor(self):
-        """
-        Creates a neighbor grid by applying a random mutation to the current grid.
-        """
-        new_grid = copy.deepcopy(self.grid)
-        if not self.mutate_single_car(new_grid):
-            return None  # If the move was invalid, return None
-        return new_grid
+        # Choose a random mutation type
+        mutation_type = random.choice(["remove", "swap", "modify"])
 
-    def run(self, iterations, verbose=False):
+        # Remove a random move
+        if mutation_type == "remove" and len(new_moves) > 1:
+            index = random.randint(0, len(new_moves) - 1)
+            del new_moves[index]  
+
+        # Swap two moves
+        elif mutation_type == "swap" and len(new_moves) > 1:
+            i, j = random.sample(range(len(new_moves)), 2)
+            new_moves[i], new_moves[j] = new_moves[j], new_moves[i]  
+
+        # Pick a new random direction and change direction
+        elif mutation_type == "modify":
+            index = random.randint(0, len(new_moves) - 1)
+            car_name, direction = new_moves[index]
+            new_direction = random.choice([-1, 1])  
+            new_moves[index] = (car_name, new_direction) 
+        return new_moves
+
+    def apply_moves(self, move_sequence):
         """
-        Runs the Hill Climber algorithm for a given number of iterations.
+        Applies a sequence of moves to a copy of the solved grid.
         """
-        print("Starting Hill Climber...")
+        test_grid = copy.deepcopy(self.grid)
+        test_grid.create_grid()
+        test_grid.add_borders()
+
+        # Convert list of Car objects back to a DataFrame format
+        cars_data = [{'car': car.name, 'orientation': car.orientation, 'col': car.col, 'row': car.row, 'length': car.length} for car in self.grid.cars]
+        cars_df = pd.DataFrame(cars_data)  
+
+        # Add cars to the test grid
+        test_grid.add_cars_to_board(cars_df)
+
+        for car_name, direction in move_sequence:
+            car = next(car for car in test_grid.cars if car.name == car_name)
+            test_grid.move_car(car, direction)
+
+        return test_grid
+
+
+    def run(self, iterations=1000, verbose=True):
+        """
+        Runs the Hill Climber algorithm to iteratively optimize the move sequence.
+        """
+        current_moves = copy.deepcopy(self.grid.car_moves)
+
         for iteration in range(iterations):
-            if verbose:
-                print(f"\nIteration {iteration + 1}/{iterations}")
-                print(f"Current Value: {self.value}")
+            new_moves = self.mutate_moves(current_moves)
+            new_grid = self.apply_moves(new_moves)
 
-            # Generate a neighbor grid
-            neighbor_grid = self.generate_neighbor()
+            if new_grid.grid_solved():
+                new_value = self.calculate_value(new_moves)
 
-            if neighbor_grid is None:
-                continue 
+                if new_value < self.best_value:
+                    self.best_value = new_value
+                    self.best_moves = new_moves
 
-            # Calculate the value of the neighbor
-            neighbor_value = self.calculate_value(neighbor_grid)
+                    # Accept better solution
+                    current_moves = new_moves  
 
-            if verbose:
-                print(f"Neighbor Value: {neighbor_value}, Current Value: {self.value}")
+                    if verbose:
+                        print(f"Iteration {iteration}: Found better solution ({new_value} moves)")
 
-            # Accept or reject the new solution
-            if neighbor_value <= self.value:
-                self.grid = neighbor_grid
-                self.value = neighbor_value
-                if verbose:
-                    print("Accepted new grid.")
-            else:
-                if verbose:
-                    print("Rejected new grid.")
-
-        print("\nFinal Results:")
-        print(f"Final Value: {self.value}")
-        print(f"Final Moves Made: {len(self.moves)}")
+        print(f"\nFinal Optimized Solution: {self.best_value} moves")
+        return self.best_moves

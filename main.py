@@ -11,6 +11,7 @@ import copy
 
 from code.algorithms.random_algorithm import Random_Algorithm
 from code.algorithms.random_heuristic import Random_Heuristic
+from code.algorithms.hillclimber import HillClimber
 from code.classes.grid import *
 from code.classes.car import *
 from code.movement.updatedf import *
@@ -77,6 +78,7 @@ if __name__ == "__main__":
     print("\nRandom Algorithm trials completed")
     """
 
+    """
     # Run trials for Random_Heuristic
     print(f"\nRunning {num_trials} trials for Random Heuristic Algorithm")
     for trial in range(num_trials):
@@ -102,7 +104,55 @@ if __name__ == "__main__":
     df_heuristic = pd.DataFrame(heuristic_results, columns=['moves'])
     df_heuristic.to_csv("10_trials_randomise_heuristic_6x6.csv", index=False)
     print("\nRandom Heuristic Algorithm trials completed")
+    """
 
+    """----- HillClimber Algorithm -----"""
+    num_trials = 1
+    iterations = 1000  
+
+    hillclimber_results = []
+
+    print(f"\nRunning {num_trials} trials for Hill Climber Algorithm")
+    for trial in range(num_trials):
+        print(f"Trial {trial + 1}/{num_trials}")
+
+        # Generate grid
+        grid = Grid(6)
+        grid.create_grid()
+        grid.add_borders()
+        grid.add_cars_to_board(boardposition1)
+
+        # Solve the puzzle with Random Algorithm
+        solver = Random_Algorithm(grid)
+        solver.run(iterations=100000, verbose=False)
+
+        # Ensure we pass a solved grid to HillClimber
+        if solver.is_solution():
+            print("\nPassing solved grid to HillClimber...")
+
+            # Deepcopy the grid AFTER solving to capture the solved state
+            solved_grid = copy.deepcopy(solver.grid)
+
+            # Debugging check
+            print("\nFinal Solved Grid Before Passing to HillClimber:")
+            solved_grid.print_grid()  # Ensure red car is in the correct position
+
+            hillclimber = HillClimber(solved_grid)
+            best_moves = hillclimber.run(iterations=iterations, verbose=False)
+
+            # Store results
+            if best_moves:
+                hillclimber_results.append(len(best_moves))
+            else:
+                hillclimber_results.append("Not solved")
+        else:
+            print("Random Algorithm failed to find a solution, skipping trial.")
+            hillclimber_results.append("Not solved")
+
+    # Save results to CSV
+    df_hillclimber = pd.DataFrame(hillclimber_results, columns=['moves'])
+    df_hillclimber.to_csv("1_trials_hillclimber_6x6.csv", index=False)
+    print("\nHill Climber Algorithm trials completed")
 
 "----- Experiment for random data -----"
 

@@ -14,8 +14,15 @@ class Random_Algorithm:
     def is_solution(self):
         """Checks if the red car 'X' has reached the exit."""
         red_car = next((car for car in self.grid.cars if car.name == 'X'), None)
-        print(f"Checking solution: Red car at col {red_car.col} (Exit at 5)")
-        return red_car and red_car.col == 5
+              
+        # Rightmost column of the board 
+        exit_col = self.grid.boardsize  
+
+        # Rightmost column of the board
+        red_car_end_position = red_car.col + red_car.length - 1  
+        
+        # Check if fully at exit
+        return red_car_end_position == exit_col  
 
     def get_valid_moves(self):
         """Finds all valid moves for each car."""
@@ -38,23 +45,22 @@ class Random_Algorithm:
         return valid_moves
 
     def random_move(self):
-        """Selects a random valid move from the list and executes it."""
         valid_moves = self.get_valid_moves()
         if valid_moves:
             car_to_move, direction = random.choice(valid_moves)
-            print(f"Moving car {car_to_move.name}, {direction}")
             self.grid.move_car(car_to_move, direction)
 
-            # Store move as specified in check50 (future work)
+            # Store moves correctly
+            self.grid.car_moves.append((car_to_move.name, direction))
             self.moves.append((car_to_move.name, direction))
+
             return True
         return False
+
 
     def run(self, iterations=100000, verbose=True):
         """Runs the random algorithm for a given number of iterations."""
         for i in range(iterations):
-            # Print grid state before each move
-            self.print_grid() 
             if self.is_solution():
                 print(f"\nDe puzzel is opgelost in {len(self.moves)} moves!")
                 return self.moves
