@@ -244,7 +244,7 @@ if __name__ == "__main__":
 from code.algorithms.random_hillclimber import *
 
 experiment_data_random = []
-trials = 10
+trials = 1
 
 for i in range(trials):
     print(f"Starting trial {i + 1}/{trials}")
@@ -259,7 +259,7 @@ for i in range(trials):
     hill_climber = Random_HillClimber(grid)
 
     # Run the Hill Climber for a number of iterations
-    hill_climber.run(iterations=1000, verbose=False)
+    hill_climber.run(iterations=100_000, verbose=False)
 
     # Store the number of moves 
     experiment_data_random.append(len(hill_climber.moves))

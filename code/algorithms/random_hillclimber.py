@@ -2,12 +2,14 @@ import copy
 import random
 
 class Random_HillClimber:
-    """This random algorithm with a Hill Climber Heuristic class implements an optimization algorithm to find
-    better solutions by modifying the grid state and keeping improvements.
+    """This random algorithm implements a random algorithm with a couple added heuristics:
+    - Hill Climber: Only accept new grids that have equal or better board value
+    - Prioritize cars that block the exit
+    - Prioritize optimal mutations
     """
     def __init__(self, grid):
         if grid.grid_solved():
-            raise Exception("HillClimber requires an unsolved grid")
+            raise Exception("Random HillClimber requires an unsolved grid")
         
         self.grid = copy.deepcopy(grid)
         self.value = self.calculate_value(self.grid)
@@ -35,34 +37,39 @@ class Random_HillClimber:
         # Total cost is distance + number of blocking cars
         return distance_to_exit + blocking_cars
 
+    def prioritize_blocking_cars(self, grid):
+        red_car = [car for car in grid.cars if car.name == 'X'][0]
+        blocking_cars = []
+        for col in range(red_car.col + red_car.length, grid.boardsize):
+            if grid.grid[red_car.row][col] != 0:
+                blocking_cars.append(grid.grid[red_car.row][col])
+        return blocking_cars
+
     def mutate_single_car(self, grid):
-        """
-        Changes the position of a random car by moving it in a random valid direction.
-        """
-        car_to_move = random.choice(grid.cars)
+        blocking_cars = self.prioritize_blocking_cars(grid)
+        car_to_move = None
+
+        # Prioritize blocking cars if they exist
+        if blocking_cars:
+            car_to_move = random.choice([car for car in grid.cars if car.name in blocking_cars])
+        else:
+            car_to_move = random.choice(grid.cars)
+        
         direction = random.choice([-1, 1])
 
         print(f"Trying to move car {car_to_move.name} in direction {'left/up' if direction == -1 else 'right/down'}")
 
-        # Try to move the car in the chosen direction
         if grid.move_car(car_to_move, direction):
             print(f"Move successful for car {car_to_move.name}")
-
-            # Log the successful move --- TODO: add logic for vertical and horizontal orientation for cleaner print statements
             self.moves.append(({car_to_move.name}, {"left/up" if direction == -1 else "right/down"}))
-
             return True
         
         print(f"Move failed for car {car_to_move.name}")
         return False
 
     def mutate_grid(self, grid, number_of_cars=1):
-        """
-        Mutates the grid by moving one or more cars randomly.
-        """
         for i in range(number_of_cars):
-            if not self.mutate_single_car(grid):
-                print("Mutation failed; trying a different car.")
+            self.mutate_single_car(grid)
 
     def check_solution(self, new_grid):
         """
@@ -79,26 +86,25 @@ class Random_HillClimber:
             print("New grid rejected.")
 
     def run(self, iterations, verbose=False):
-        """
-        Runs the HillClimber algorithm for a given number of iterations.
-        """
         print("Starting Hill Climber...")
         for iteration in range(iterations):
-            # Added some print statements for clarity
             if verbose:
                 print(f"\nIteration {iteration + 1}/{iterations}")
                 print(f"Current Value: {self.value}")
 
-            # Create a copy of the grid to simulate
             new_grid = copy.deepcopy(self.grid)
-
-            # Apply a random mutation
             self.mutate_grid(new_grid)
+            new_value = self.calculate_value(new_grid)
 
-            # Accept or reject the new solution
-            self.check_solution(new_grid)
+            if new_value <= self.value:
+                self.grid = copy.deepcopy(new_grid)
+                self.value = new_value
+                if verbose:
+                    print(f"Move accepted. New Value: {new_value}")
+            else:
+                if verbose:
+                    print("Move rejected.")
 
-            # If the grid is solved, break 
             if self.value == 0:
                 print(f"Solution found at iteration {iteration + 1}")
                 break
