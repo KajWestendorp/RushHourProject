@@ -43,12 +43,13 @@ if __name__ == "__main__":
     """----- Random Algorithm -----"""
     # Number of trials
     num_trials = 10
-    iterations = 100000 
+    iterations = 10000
 
     # Results storage
     random_results = []
     heuristic_results = []
 
+    """
     # Run trials for Random_Algorithm
     print(f"\nRunning {num_trials} trials for Random Algorithm")
     for trial in range(num_trials):
@@ -74,6 +75,7 @@ if __name__ == "__main__":
     df_random = pd.DataFrame(random_results, columns=['moves'])
     df_random.to_csv("1000_trials_randomise_6x6.csv", index=False)
     print("\nRandom Algorithm trials completed")
+    """
 
     # Run trials for Random_Heuristic
     print(f"\nRunning {num_trials} trials for Random Heuristic Algorithm")
@@ -98,7 +100,7 @@ if __name__ == "__main__":
 
     # Save heuristic results to CSV
     df_heuristic = pd.DataFrame(heuristic_results, columns=['moves'])
-    df_heuristic.to_csv("1000_trials_randomise_heuristic_6x6.csv", index=False)
+    df_heuristic.to_csv("10_trials_randomise_heuristic_6x6.csv", index=False)
     print("\nRandom Heuristic Algorithm trials completed")
 
 

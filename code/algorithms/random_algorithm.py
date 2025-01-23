@@ -52,7 +52,7 @@ class Random_Algorithm:
 
     def run(self, iterations=100000, verbose=True):
         """Runs the random algorithm for a given number of iterations."""
-        for _ in range(iterations):
+        for i in range(iterations):
             # Print grid state before each move
             self.print_grid() 
             if self.is_solution():
