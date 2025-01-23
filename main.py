@@ -9,7 +9,8 @@ from code.visualization.initBoard import visualize_board
 import os
 import copy
 
-from code.algorithms.random_algorithm import *
+from code.algorithms.random_algorithm import Random_Algorithm
+from code.algorithms.random_heuristic import Random_Heuristic
 from code.classes.grid import *
 from code.classes.car import *
 from code.movement.updatedf import *
@@ -39,176 +40,66 @@ if __name__ == "__main__":
     boardposition4 = pd.read_csv(board_file4, sep=',', encoding='utf-8')
     boardposition5 = pd.read_csv(board_file5, sep=',', encoding='utf-8')
 
-    """----- Hill Climber Algorithm -----"""
-    # Initialize the grid
-    boardsize = 6  
-    grid = Grid(boardsize)
-    grid.create_grid()
-    grid.add_borders()
-    grid.add_cars_to_board(boardposition1)
+    """----- Random Algorithm -----"""
+    # Number of trials
+    num_trials = 10
+    iterations = 100000 
 
-    print("Startpositie van het bord:")
-    grid.print_grid()
+    # Results storage
+    random_results = []
+    heuristic_results = []
 
-    # Initialiseer en run het algoritme
-    random_solver = Random_Algorithm(grid)
-    moves_made = random_solver.run(iterations=100000, verbose=True)
+    # Run trials for Random_Algorithm
+    print(f"\nRunning {num_trials} trials for Random Algorithm")
+    for trial in range(num_trials):
+        print(f"Trial {trial + 1}/{num_trials}")
 
-    print("\nUitgevoerde zetten:")
-    print("car, move")
-    for move in moves_made:
-        print(f"'{move[0]}', {move[1]}")
+        # Initialize and reset grid
+        grid = Grid(6)
+        grid.create_grid()
+        grid.add_borders()
+        grid.add_cars_to_board(boardposition1)
 
-    print("\nEindstatus van het bord:")
-    random_solver.grid.print_grid()
+        # Run random algorithm
+        solver = Random_Algorithm(grid)
+        moves_made = solver.run(iterations=iterations, verbose=False)
 
-    if random_solver.is_solution():
-        print(f"\nDe puzzel is opgelost in {len(moves_made)} zetten!")
-    else:
-        print("\nDe puzzel kon niet worden opgelost binnen het aantal iteraties.")
+        # Store result
+        if solver.is_solution():
+            random_results.append(len(moves_made))
+        else:
+            random_results.append("Not solved")
 
+    # Save results
+    df_random = pd.DataFrame(random_results, columns=['moves'])
+    df_random.to_csv("1000_trials_randomise_6x6.csv", index=False)
+    print("\nRandom Algorithm trials completed")
 
-    """--------- Old Randomise Algorithm ---------"""
-    """
-    #Pick a random car to move
-    chosen_car = random_car(boardposition1)
-    steps = random.choice([-1, 1])
-    newboarddf = update_positions(boardposition1.copy(), steps, chosen_car)
-    attempts = 0
-    # Check if the game is over
-    while finish_check(newboarddf):
-        steps = random.choice([-1, 1])
-        #Set valid move to false to start off
-        valid_move = False
+    # Run trials for Random_Heuristic
+    print(f"\nRunning {num_trials} trials for Random Heuristic Algorithm")
+    for trial in range(num_trials):
+        print(f"Trial {trial + 1}/{num_trials}")
 
-        #Copy the board so that I can go back onto it if the move is not valid
-        previousboard = copy.copy(newboarddf)
-        
-        while not valid_move:
-            steps = random.choice([-1, 1])
-            #Get random car
-            chosen_car = random_car(newboarddf)
+        # Initialize and reset grid
+        grid = Grid(6)
+        grid.create_grid()
+        grid.add_borders()
+        grid.add_cars_to_board(boardposition1)
 
-            #Copy board
-            previousboard = copy.copy(newboarddf)
+        # Run random_heuristic algorithm
+        solver = Random_Heuristic(grid)
+        moves_made = solver.run(iterations=iterations, verbose=False)
 
-            #Update the newboarddf with new positions
-            newboarddf = update_positions(newboarddf, steps, chosen_car)
+        # Store result
+        if solver.is_solution():
+            heuristic_results.append(len(moves_made))
+        else:
+            heuristic_results.append("Not solved")
 
-            #Check to see if these dont collide with other cars and are within boundaries
-            if is_valid(create_coords(newboarddf)):
-
-                #If yes then break out the loop
-                valid_move = True
-            else:
-                
-                #If not we stay in the loop and the newboarddf goes back to being the previousboard so that the move gets undone
-                newboarddf = copy.copy(previousboard)
-            attempts += 1
-            print(attempts)
-        # visualize_board(newboarddf)
-        # plt.show(block = False)
-        # plt.pause(2)
-
-    visualize_board(newboarddf)
-    print(f"done this is how many tries it took {attempts}")
-    print(boardposition1)
-    print(newboarddf)
-
-    create_coords(newboarddf)
-    print(newboarddf)
-
-    # Made it so that the plots show 2 seconds after eachother making a sort of stop motion
-    plt.show(block = False)
-    plt.pause(2)
-    plt.show()
-    """
-    """--------- New Random_Algorithm ---------"""
-
-    # # Initialize the board
-    # boardsize = 6  
-    # grid = Grid(boardsize)
-    # grid.create_grid()
-    # grid.add_borders()
-
-    # # Add cars to board
-    # grid.add_cars_to_board(boardposition1)
-
-    # print("Startpositie van het bord:")
-    # print_grid(grid)
-
-    # total_moves = 0
-    # solved = False
-
-    # while not solved:
-    #     if valid_board(grid.cars):
-    #         car_to_move, direction = random_move(grid)
-    #         if car_to_move:
-    #             total_moves += 1
-    #             direction_str = "forward" if direction > 0 else "backward"
-    #             print(f"Move {total_moves}: Moving car {car_to_move.name} {direction_str}")
-    #             print_grid(grid)
-    #     else:
-    #         print("Invalid board configuration. Exiting.")
-    #         break
-
-    #     # Check if board is solved
-    #     if grid.grid_solved():
-    #         print(f"The board is solved in {total_moves} moves!")
-    #         solved = True
-
-#     "----TEsting grid --- "
-
-    # test = Grid(6)
-    # (Grid.create_grid(test))
-    # (Grid.add_borders(test))
-
-
-    # #Create a test grid
-    # gridtesting = Grid.add_cars_to_board(test, boardposition1)
-
-#     #Create next moves list of grids
-#     next_move = Grid.get_moves(test)
-
-
-#     #Print loops to visualize them
-#     for row in gridtesting:
-#         #ADD SOURCE THAT SHOWED HOW TO REMOVE  '' from letter
-#         print(" ".join(str(cell) for cell in row))
-#     print()
-
-#     for move in next_move:
-#         for row in move:
-#             print(" ".join(str(cell) for cell in row))
-#         print()
-
-
-#     chosen_grid, index = random_next_grid(next_move)
-
-#     print(f"The grid that was chosen was grid: {index}")
-#     print()
-
-#     for row in chosen_grid:
-#         #ADD SOURCE THAT SHOWED HOW TO REMOVE  '' from letter
-#         print(" ".join(str(cell) for cell in row))
-#     print()
-
-#     attempts = 0
-#     while Grid.grid_solved(test) and attempts > 20:
-#         next_move = Grid.get_moves(test)
-#         chosen_grid, index = random_next_grid(next_move)
-#         attempts += 1
-
-#         print(f"The grid that was chosen was grid: {index}")
-#         print()
-
-#         for row in chosen_grid:
-#             #ADD SOURCE THAT SHOWED HOW TO REMOVE  '' from letter
-#             print(" ".join(str(cell) for cell in row))
-#         print()
-
-#         test = chosen_grid
-# print(attempts)
+    # Save heuristic results to CSV
+    df_heuristic = pd.DataFrame(heuristic_results, columns=['moves'])
+    df_heuristic.to_csv("1000_trials_randomise_heuristic_6x6.csv", index=False)
+    print("\nRandom Heuristic Algorithm trials completed")
 
 
 "----- Experiment for random data -----"

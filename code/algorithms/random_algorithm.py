@@ -56,7 +56,7 @@ class Random_Algorithm:
             # Print grid state before each move
             self.print_grid() 
             if self.is_solution():
-                print("\nDe puzzel is opgelost!")
+                print(f"\nDe puzzel is opgelost in {len(self.moves)} moves!")
                 return self.moves
             
             if not self.random_move():
