@@ -243,52 +243,63 @@ if __name__ == "__main__":
 
 from code.algorithms.random_hillclimber import *
 
-# Init Grid
-# initial_grid = Grid(6)
+experiment_data_random = []
+trials = 10
+
+for i in range(trials):
+    print(f"Starting trial {i + 1}/{trials}")
+    
+    # Initialize the grid 
+    grid = Grid(6)
+    grid.create_grid()
+    grid.add_borders()
+    grid.add_cars_to_board(boardposition1)
+
+    # Initialize the Hill Climber
+    hill_climber = Random_HillClimber(grid)
+
+    # Run the Hill Climber for a number of iterations
+    hill_climber.run(iterations=1000, verbose=False)
+
+    # Store the number of moves 
+    experiment_data_random.append(len(hill_climber.moves))
+
+# Save results 
+df_random = pd.DataFrame(experiment_data_random, columns=['move count'])
+df_random.to_csv("100trials_random_6x6test.csv", index=False)
+
+# Debugging
+print("Experiment klaar. Resultaten opgeslagen in 100trials_random_6x6test.csv")
+
+
+# """----- BreadthFirstSearch Algorithm -----"""
+# initial_grid = Grid(9)
 # initial_grid.create_grid()
 # initial_grid.add_borders()
-# initial_grid.add_cars_to_board(boardposition3)
+# initial_grid.add_cars_to_board(boardposition2)
 
-# hill_climber = HillClimber(initial_grid)
+# #Run algorithm
+# import time
 
-# # debugging
-# for car in initial_grid.cars:
-#     print(car.name)
+# # Calculate the start time
+# start = time.time()
+# final_grid, outputdf = breadth_first(initial_grid)
+# # Calculate the end time and time taken
+# end = time.time()
+# length = end - start
+# # Show the results : this can be altered however you like
 
-# # Run the algorithm for 100 iterations
-# hill_climber.run(iterations=1000, verbose=True)
+# print("It took", length, "seconds to find the best solution!")
+# print()
 
-# # Final result
-# print(f"Final Value: {hill_climber.value}")
+# print(outputdf)
+# outputdf.to_csv('output.csv',index=False)
 
-"""----- BreadthFirstSearch Algorithm -----"""
-initial_grid = Grid(9)
-initial_grid.create_grid()
-initial_grid.add_borders()
-initial_grid.add_cars_to_board(boardposition2)
+# #nOTES
 
-#Run algorithm
-import time
+# # 6x6 Board 1 output = checked :)
+# # 6x6 Board 2 output = checked :)
+# # 6x6 Board 3 output = checked :)
 
-# Calculate the start time
-start = time.time()
-final_grid, outputdf = breadth_first(initial_grid)
-# Calculate the end time and time taken
-end = time.time()
-length = end - start
-# Show the results : this can be altered however you like
-
-print("It took", length, "seconds to find the best solution!")
-print()
-
-print(outputdf)
-outputdf.to_csv('output.csv',index=False)
-
-#nOTES
-
-# 6x6 Board 1 output = checked :)
-# 6x6 Board 2 output = checked :)
-# 6x6 Board 3 output = checked :)
-
-# 9x9 board 4 output = 
+# # 9x9 board 4 output = 
 

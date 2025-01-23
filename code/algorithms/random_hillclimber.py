@@ -106,4 +106,4 @@ class Random_HillClimber:
         print("\nFinal Results:")
         print(f"Final Value: {self.value}")
         print(f"Final Grid:\n{self.grid}")
-        print(f"Moves Made: {self.moves}")
+        print(f"Moves Made: {len(self.moves)}")
