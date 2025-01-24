@@ -12,6 +12,7 @@ import copy
 from code.algorithms.random_algorithm import Random_Algorithm
 from code.algorithms.random_heuristic import Random_Heuristic
 from code.algorithms.hillclimber import HillClimber
+from code.algorithms.sa import SimulatedAnnealing
 from code.classes.grid import *
 from code.classes.car import *
 from code.movement.updatedf import *
@@ -138,7 +139,7 @@ if __name__ == "__main__":
 
     #         # Debugging check
     #         print("\nFinal Solved Grid Before Passing to HillClimber:")
-    #         solved_grid.print_grid()  # Ensure red car is in the correct position
+    #         solved_grid.print_grid() 
 
     #         hillclimber = HillClimber(solved_grid)
     #         best_moves = hillclimber.run(iterations=iterations, verbose=False)
@@ -159,7 +160,53 @@ if __name__ == "__main__":
     # df_hillclimber = pd.DataFrame(hillclimber_results)
     # df_hillclimber.to_csv("hillclimber_comparison_6x6.csv", index=False)
     # print("\nHill Climber Algorithm trials completed and saved.")
+    """----- Simulated Annealing Algorithm -----"""
+    num_trials = 10
+    iterations = 10
+    temperature = 5  
+    cooling_rate = 0.99
 
+    simulated_annealing_results = []
+
+    print(f"\nRunning {num_trials} trials for Simulated Annealing Algorithm")
+    for trial in range(num_trials):
+        print(f"Trial {trial + 1}/{num_trials}")
+
+        # Generate grid
+        grid = Grid(6)
+        grid.create_grid()
+        grid.add_borders()
+        grid.add_cars_to_board(boardposition1)
+
+        # Solve the puzzle with Random Algorithm first
+        solver = Random_Algorithm(grid)
+        solver.run(iterations=100000, verbose=False)
+
+        # Ensure we pass a solved grid to Simulated Annealing
+        if solver.is_solution():
+            print("\nPassing solved grid to Simulated Annealing...")
+
+            solved_grid = copy.deepcopy(solver.grid)  
+
+            sa_solver = SimulatedAnnealing(solved_grid, temperature, cooling_rate)
+            best_moves = sa_solver.run(iterations=iterations, verbose=False)
+
+            # Store results
+            simulated_annealing_results.append({
+                "random_moves": len(solver.moves),
+                "simulated_annealing_moves": len(best_moves)
+            })
+        else:
+            print("Random Algorithm failed, skipping trial.")
+            simulated_annealing_results.append({
+                "random_moves": "Not solved",
+                "simulated_annealing_moves": "Not solved"
+            })
+
+    # Save results to CSV
+    df_sa = pd.DataFrame(simulated_annealing_results)
+    df_sa.to_csv("simulated_annealing_comparison_6x6.csv", index=False)
+    print("\nSimulated Annealing Algorithm trials completed and saved.")
 "----- Experiment for random data -----"
 
 # Change value when changing board size
@@ -217,32 +264,28 @@ if __name__ == "__main__":
 
 
 # """----- BreadthFirstSearch Algorithm -----"""
-initial_grid = Grid(6)
-initial_grid.create_grid()
-initial_grid.add_borders()
-initial_grid.add_cars_to_board(boardposition1)
+# initial_grid = Grid(9)
+# initial_grid.create_grid()
+# initial_grid.add_borders()
+# initial_grid.add_cars_to_board(boardposition2)
 
-#Run algorithm
-import time
+# #Run algorithm
+# import time
 
-# Calculate the start time
-start = time.time()
-# Create an instance of RushHourSolver
-BFS_solve = RushHourBFS(initial_grid)
+# # Calculate the start time
+# start = time.time()
+# final_grid, outputdf = breadth_first(initial_grid)
 
-# Call the run method on the solver instance
-final_grid, outputdf = BFS_solve.run()
+# # Calculate the end time and time taken (https://stackoverflow.com/questions/70058132/how-do-i-make-a-timer-in-python)
+# end = time.time()
+# length = end - start
+# # Show the results
 
-# Calculate the end time and time taken (https://stackoverflow.com/questions/70058132/how-do-i-make-a-timer-in-python)
-end = time.time()
-length = end - start
-# Show the results
+# print("It took", length, "seconds to find the best solution!")
+# print()
 
-print("It took", length, "seconds to find the best solution!")
-print()
-
-print(outputdf)
-outputdf.to_csv('output.csv',index=False)
+# print(outputdf)
+# outputdf.to_csv('output.csv',index=False)
 
 #nOTES
 
