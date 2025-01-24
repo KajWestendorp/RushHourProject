@@ -217,7 +217,7 @@ if __name__ == "__main__":
 
 
 # """----- BreadthFirstSearch Algorithm -----"""
-initial_grid = Grid(12)
+initial_grid = Grid(9)
 initial_grid.create_grid()
 initial_grid.add_borders()
 initial_grid.add_cars_to_board(boardposition2)
@@ -228,10 +228,11 @@ import time
 # Calculate the start time
 start = time.time()
 final_grid, outputdf = breadth_first(initial_grid)
-# Calculate the end time and time taken
+
+# Calculate the end time and time taken (https://stackoverflow.com/questions/70058132/how-do-i-make-a-timer-in-python)
 end = time.time()
 length = end - start
-# Show the results : this can be altered however you like
+# Show the results
 
 print("It took", length, "seconds to find the best solution!")
 print()
@@ -241,9 +242,9 @@ outputdf.to_csv('output.csv',index=False)
 
 #nOTES
 
-# 6x6 Board 1 output = checked, Movecount = 
-# 6x6 Board 2 output = checked, Movecount = 
-# 6x6 Board 3 output = checked, Movecount = 
+# 6x6 Board 1 output = checked, Movecount = 21 moves, 2 seconds
+# 6x6 Board 2 output = checked, Movecount = 15 moves, 11 seconds
+# 6x6 Board 3 output = checked, Movecount = 33 moves, 27 seconds
 
 # 9x9 board 4 output = checked, Movecount = 
 # 9x9 board 5 output = checked, Movecount =
