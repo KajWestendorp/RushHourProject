@@ -16,7 +16,7 @@ from code.classes.grid import *
 from code.classes.car import *
 from code.movement.updatedf import *
 from code.algorithms.random_grid import *
-from code.algorithms.BreadthFirst import breadth_first
+from code.algorithms.BreadthFirst import RushHourBFS
 
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -217,17 +217,21 @@ if __name__ == "__main__":
 
 
 # """----- BreadthFirstSearch Algorithm -----"""
-initial_grid = Grid(9)
+initial_grid = Grid(6)
 initial_grid.create_grid()
 initial_grid.add_borders()
-initial_grid.add_cars_to_board(boardposition2)
+initial_grid.add_cars_to_board(boardposition1)
 
 #Run algorithm
 import time
 
 # Calculate the start time
 start = time.time()
-final_grid, outputdf = breadth_first(initial_grid)
+# Create an instance of RushHourSolver
+BFS_solve = RushHourBFS(initial_grid)
+
+# Call the run method on the solver instance
+final_grid, outputdf = BFS_solve.run()
 
 # Calculate the end time and time taken (https://stackoverflow.com/questions/70058132/how-do-i-make-a-timer-in-python)
 end = time.time()
