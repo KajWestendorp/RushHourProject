@@ -26,6 +26,7 @@ if __name__ == "__main__":
     relative_path3 = os.path.join("code", "gameboards", "Rushhour6x6_test.csv")
     relative_path4 = os.path.join("code", "gameboards", "Rushhour6x6_2.csv")
     relative_path5 = os.path.join("code", "gameboards", "Rushhour6x6_3.csv")
+    relative_path6 = os.path.join("code", "gameboards", "Rushhour12x12_7.csv")
 
     # Construct the path to the gameboard file
     board_file = os.path.normpath(os.path.join(script_dir, relative_path))
@@ -33,6 +34,7 @@ if __name__ == "__main__":
     board_file3 = os.path.normpath(os.path.join(script_dir, relative_path3))
     board_file4 = os.path.normpath(os.path.join(script_dir, relative_path4))
     board_file5 = os.path.normpath(os.path.join(script_dir, relative_path5))
+    board_file6 = os.path.normpath(os.path.join(script_dir, relative_path6))
 
     # visualize_board(boardposition1, 6)
     boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
@@ -40,15 +42,16 @@ if __name__ == "__main__":
     boardposition3 = pd.read_csv(board_file3, sep=',', encoding='utf-8')
     boardposition4 = pd.read_csv(board_file4, sep=',', encoding='utf-8')
     boardposition5 = pd.read_csv(board_file5, sep=',', encoding='utf-8')
+    boardposition6 = pd.read_csv(board_file6, sep=',', encoding='utf-8')
 
     """----- Random Algorithm -----"""
     # Number of trials
-    num_trials = 10
-    iterations = 10000
+    # num_trials = 10
+    # iterations = 10000
 
-    # Results storage
-    random_results = []
-    heuristic_results = []
+    # # Results storage
+    # random_results = []
+    # heuristic_results = []
 
     """
     # Run trials for Random_Algorithm
@@ -107,55 +110,55 @@ if __name__ == "__main__":
     """
 
     """----- HillClimber Algorithm -----"""
-    num_trials = 10
-    iterations = 1000  
+    # num_trials = 10
+    # iterations = 1000  
 
-    hillclimber_results = []
+    # hillclimber_results = []
 
-    print(f"\nRunning {num_trials} trials for Hill Climber Algorithm")
-    for trial in range(num_trials):
-        print(f"Trial {trial + 1}/{num_trials}")
+    # print(f"\nRunning {num_trials} trials for Hill Climber Algorithm")
+    # for trial in range(num_trials):
+    #     print(f"Trial {trial + 1}/{num_trials}")
 
-        # Generate grid
-        grid = Grid(6)
-        grid.create_grid()
-        grid.add_borders()
-        grid.add_cars_to_board(boardposition1)
+    #     # Generate grid
+    #     grid = Grid(6)
+    #     grid.create_grid()
+    #     grid.add_borders()
+    #     grid.add_cars_to_board(boardposition1)
 
-        # Solve the puzzle with Random Algorithm
-        solver = Random_Algorithm(grid)
-        random_moves = solver.run(iterations=100000, verbose=False)
+    #     # Solve the puzzle with Random Algorithm
+    #     solver = Random_Algorithm(grid)
+    #     random_moves = solver.run(iterations=100000, verbose=False)
 
-        # Ensure we pass a solved grid to HillClimber
-        if solver.is_solution():
-            print("\nPassing solved grid to HillClimber...")
+    #     # Ensure we pass a solved grid to HillClimber
+    #     if solver.is_solution():
+    #         print("\nPassing solved grid to HillClimber...")
 
-            # Deepcopy the grid AFTER solving to capture the solved state
-            solved_grid = copy.deepcopy(solver.grid)
+    #         # Deepcopy the grid AFTER solving to capture the solved state
+    #         solved_grid = copy.deepcopy(solver.grid)
 
-            # Debugging check
-            print("\nFinal Solved Grid Before Passing to HillClimber:")
-            solved_grid.print_grid()  # Ensure red car is in the correct position
+    #         # Debugging check
+    #         print("\nFinal Solved Grid Before Passing to HillClimber:")
+    #         solved_grid.print_grid()  # Ensure red car is in the correct position
 
-            hillclimber = HillClimber(solved_grid)
-            best_moves = hillclimber.run(iterations=iterations, verbose=False)
+    #         hillclimber = HillClimber(solved_grid)
+    #         best_moves = hillclimber.run(iterations=iterations, verbose=False)
 
-            # Store results
-            hillclimber_results.append({
-                "random_moves": len(random_moves),
-                "hillclimber_moves": len(best_moves) if best_moves else "Not solved"
-            })
-        else:
-            print("Random Algorithm failed to find a solution, skipping trial.")
-            hillclimber_results.append({
-                "random_moves": "Not solved",
-                "hillclimber_moves": "Not solved"
-            })
+    #         # Store results
+    #         hillclimber_results.append({
+    #             "random_moves": len(random_moves),
+    #             "hillclimber_moves": len(best_moves) if best_moves else "Not solved"
+    #         })
+    #     else:
+    #         print("Random Algorithm failed to find a solution, skipping trial.")
+    #         hillclimber_results.append({
+    #             "random_moves": "Not solved",
+    #             "hillclimber_moves": "Not solved"
+    #         })
 
-    # Save results to CSV
-    df_hillclimber = pd.DataFrame(hillclimber_results)
-    df_hillclimber.to_csv("hillclimber_comparison_6x6.csv", index=False)
-    print("\nHill Climber Algorithm trials completed and saved.")
+    # # Save results to CSV
+    # df_hillclimber = pd.DataFrame(hillclimber_results)
+    # df_hillclimber.to_csv("hillclimber_comparison_6x6.csv", index=False)
+    # print("\nHill Climber Algorithm trials completed and saved.")
 
 "----- Experiment for random data -----"
 
@@ -214,33 +217,37 @@ if __name__ == "__main__":
 
 
 # """----- BreadthFirstSearch Algorithm -----"""
-# initial_grid = Grid(9)
-# initial_grid.create_grid()
-# initial_grid.add_borders()
-# initial_grid.add_cars_to_board(boardposition2)
+initial_grid = Grid(12)
+initial_grid.create_grid()
+initial_grid.add_borders()
+initial_grid.add_cars_to_board(boardposition2)
 
-# #Run algorithm
-# import time
+#Run algorithm
+import time
 
-# # Calculate the start time
-# start = time.time()
-# final_grid, outputdf = breadth_first(initial_grid)
-# # Calculate the end time and time taken
-# end = time.time()
-# length = end - start
-# # Show the results : this can be altered however you like
+# Calculate the start time
+start = time.time()
+final_grid, outputdf = breadth_first(initial_grid)
+# Calculate the end time and time taken
+end = time.time()
+length = end - start
+# Show the results : this can be altered however you like
 
-# print("It took", length, "seconds to find the best solution!")
-# print()
+print("It took", length, "seconds to find the best solution!")
+print()
 
-# print(outputdf)
-# outputdf.to_csv('output.csv',index=False)
+print(outputdf)
+outputdf.to_csv('output.csv',index=False)
 
-# #nOTES
+#nOTES
 
-# # 6x6 Board 1 output = checked :)
-# # 6x6 Board 2 output = checked :)
-# # 6x6 Board 3 output = checked :)
+# 6x6 Board 1 output = checked, Movecount = 
+# 6x6 Board 2 output = checked, Movecount = 
+# 6x6 Board 3 output = checked, Movecount = 
 
-# # 9x9 board 4 output = 
+# 9x9 board 4 output = checked, Movecount = 
+# 9x9 board 5 output = checked, Movecount =
+# 9x9 board 6 output = checked, Movecount =
+
+# 12x12 board 7 output = 
 

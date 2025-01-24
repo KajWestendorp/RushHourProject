@@ -55,7 +55,11 @@ class Grid():
         return self.grid
     
     def add_cars_to_board(self, cars):
-        """This method adds cars to the board and adds them to the list of car objects in the class Grid that we can later use"""
+        """This method adds cars to the board and adds them to the list of car objects in the class Grid that we can later use
+        
+        Args: The grid (self) and the cars (df) from csv file
+        
+        Returns: The grid object but with a list of car objects added in the correct coords"""
 
         #Create a dict to store coordinates in (might not be best way but was how i originally did it so for now keeping it)
         coords = {}
@@ -75,10 +79,7 @@ class Grid():
             elif car['orientation'] == 'V' and car['length'] == 3:
                 coords[car['car']] = ((car['col'], car['row']), (car['col'], car['row'] + 1), (car['col'], car['row'] + 2))
 
-        # Assign the name of the current car as the value of the list in the grid
-
         #First loop through the cars
-        #TODO: Not adding object to list but adding the label
         for car in self.cars:
             coordinates = coords[car.name]
 
@@ -87,120 +88,6 @@ class Grid():
                 self.grid[col][row] = (car.name)
 
         return self.grid
-    
-    #TODO: FIX SO THAT THE CARS for that grid are updated and not the universal cars
-    # def get_moves(self):
-    #     """This method finds the possible moves 1 step further from the current board position and stores them in a list as well"""
-    #     possible_moves = []  
-    #     current_grid = copy.deepcopy(self.grid)
-    #     # print(self.grid)
-    #     # print(self.cars)
-    #     new_cars = copy.deepcopy(self.cars)
-    #     # print(new_cars)
-        
-    #     # Go through the cars list and check orientation
-    #     for car in new_cars:
-    #         if car.orientation == 'H':
-    #             # Check if the cars position is within the space of the grid and if the position 1 step away is free
-    #             if car.col + car.length < self.boardsize + 1 and current_grid[car.row][car.col + car.length] == 0:
-    #                 print("moved forward")
-    #                 # Create a new Grid 
-    #                 new_grid = copy.deepcopy(self)  
-                    
-                    
-    #                 # Make the old position 0
-    #                 new_grid.grid[car.row][car.col] = 0
-                    
-    #                 # Move the car 1 step forward
-    #                 # car.col += 1
-                    
-    #                 # Assign the car name to the new index in the new grid that was deepcopied
-    #                 for i in range(1,car.length + 1):
-    #                     new_grid.grid[car.row][car.col + i] = car.name
-
-    #                 # Append the new Grid object to the list
-    #                 possible_moves.append(new_grid)
-
-    #                 # # Restore the original position of the car
-    #                 car.col -= 1
-
-    #         elif car.orientation == 'V':
-    #             if car.row + car.length < self.boardsize + 1 and current_grid[car.row + car.length][car.col] == 0:
-    #                 print("moved down")
-    #                 # Create a new Grid object
-    #                 new_grid = copy.deepcopy(self)  
-
-    #                 # Make the old position 0
-    #                 new_grid.grid[car.row][car.col] = 0
-                    
-    #                 # Move the car 1 step forward
-    #                 # car.row += 1
-
-    #                 # Assign the car name to the new index in the new grid
-    #                 for i in range(1,car.length + 1):
-    #                     new_grid.grid[car.row + i][car.col] = car.name
-                    
-    #                 # Append the new Grid object to the list
-    #                 possible_moves.append(new_grid)
-                    
-
-    #                 # Restore the original position of the car
-    #                 for i in range(1,car.length + 1):
-    #                     new_grid.grid[car.row - i][car.col] = car.name
-    #                     print(car.row, car.col)
-
-
-        
-    #     # Repeat the same for moving cars backward (if applicable)
-    #     for car in new_cars:
-    #         if car.orientation == 'H':
-    #             if car.col - car.length < self.boardsize + 1 and current_grid[car.row][car.col - 1] == 0:
-    #                 print("moved backward")
-    #                 # Create a new Grid object
-    #                 new_grid = copy.deepcopy(self)    
-                    
-    #                 # Make the old position 0
-    #                 new_grid.grid[car.row][car.col + 1] = 0
-                    
-    #                 # # Move the car 1 step backward
-    #                 # car.col -= 1
-                    
-    #                 # Assign the car name to the new index in the new grid
-    #                 for i in range(1,car.length + 1):
-    #                     new_grid.grid[car.row][car.col - i] = car.name
-                    
-    #                 # Append the new Grid object to the list
-    #                 possible_moves.append(new_grid)
-
-    #                 # Restore the original position of the car
-    #                 car.col += 1
-            
-    #         elif car.orientation == 'V':
-    #             if car.row - car.length < self.boardsize + 2 and current_grid[car.row - 1][car.col] == 0:
-    #                 print(f"{car.name}")
-    #                 print(f"{car.row}")
-                    
-    #                 new_grid = copy.deepcopy(self) 
-                    
-                    
-    #                 new_grid.grid[car.row + 1][car.col] = 0
-                    
-                    
-    #                 # car.row -= 1
-                    
-                    
-    #                 for i in range(1,car.length + 1):
-    #                     new_grid.grid[car.row - i][car.col] = car.name
-    #                     print("moving")
-                    
-    #                 print("moved up")
-    #                 print(f"{car.name}")
-    #                 print(f"{car.row}")
-                    
-    #                 possible_moves.append(new_grid)
-                    
-    #                 car.row += 1
-    #     return possible_moves
 
     
     def is_valid_move(self, car, new_row, new_col):
@@ -236,13 +123,17 @@ class Grid():
 
         # Determine the new front and back positions based on the car's orientation and direction
         if car.orientation == 'H':
+
             # If moving right, new_front will be the car's new right-most position
             new_front = car.col + car.length + direction - 1
+
             # If moving left, new_back will be the car's new left-most position
             new_back = car.col + direction
         else: 
+
             # If moving down, new_front will be the car's new bottom-most position
             new_front = car.row + car.length + direction - 1
+
             # If moving up, new_back will be the car's new top-most position
             new_back = car.row + direction
 
@@ -296,10 +187,13 @@ class Grid():
         return red_car_end_position == exit_col
         
     def __hash__(self):
+        """ Returns a hashed string of the grid"""
+        #Hash the grid as a string (https://stackoverflow.com/questions/2909106/whats-a-correct-and-good-way-to-implement-hash) and (https://stackoverflow.com/questions/5618878/how-to-convert-list-to-string)
         string_grid = ''.join(''.join(str(cell) for cell in row) for row in self.grid)
         return hash(string_grid)
     
     def __eq__(self, other):
+        """Allows for the hashed strings to be compared"""
         if isinstance(other, Grid):
             # Compare the grid strings
             return ''.join(''.join(str(cell) for cell in self.grid)) == ''.join(''.join(str(cell) for cell in other.grid))
@@ -314,33 +208,52 @@ class Grid():
         print("\n")
 
 
-
-
-# print(boardposition1)
-
     def get_moves(self):
-        """Find all possible moves for the current board state and store them in a list."""
+        """Find all possible moves for the current board state and store them in a list.
+        
+        Args: self (the grid object)
+        
+        Returns: A list grid objects which are possible moves"""
+
+        #init list
         possible_moves = []
 
+        #loop through the cars in the given "parent" grid
         for car in self.cars:
-            # Horizontal movement
+
+            # Check for Horizontal movement
             if car.orientation == 'H':
+
                 # Move right
                 step = 1
+                
+                #Border check and collision check
                 while car.col + car.length + step - 1 < self.boardsize + 1 and self.grid[car.row][car.col + car.length + step - 1] == 0:
+
+                    #Copy the grid as to not impact the original parent grid
                     new_grid = copy.deepcopy(self)
+
+                    #loop through new grids cars to update the new grid cars and not the parent grids ones
                     for cars in new_grid.cars:
                         if cars.name == car.name:
                             new_car = cars
                             break  
+                    
+                    #Call the clear and update car helper functions
                     new_grid.clear_car(new_car)
                     new_car.col += step  
                     new_grid.update_car(new_car)
+
+                    #Append the grid object to the list
                     possible_moves.append(new_grid)
+
+                    #Increase the step to allow for more than 1 step mvoement
                     step += 1  
 
-                # Move left
+                # Move left and reset the step
                 step = 1
+
+                #Same as moving right except tghat step is now -= to move left
                 while 0 <= car.col - step < self.boardsize and self.grid[car.row][car.col - step] == 0:
                     new_grid = copy.deepcopy(self)
                     for cars in new_grid.cars:
@@ -357,6 +270,8 @@ class Grid():
             elif car.orientation == 'V':
                 # Move down
                 step = 1
+
+                #Same as moving right
                 while car.row + car.length + step - 1 < self.boardsize + 1 and self.grid[car.row + car.length + step - 1][car.col] == 0:
                     new_grid = copy.deepcopy(self)
                     for cars in new_grid.cars:
@@ -371,6 +286,8 @@ class Grid():
 
                 # Move up
                 step = 1
+
+                #Same as moving left
                 while car.row - step < self.boardsize and self.grid[car.row - step][car.col] == 0:
                     new_grid = copy.deepcopy(self)
                     for cars in new_grid.cars:
@@ -382,7 +299,6 @@ class Grid():
                     new_grid.update_car(new_car)
                     possible_moves.append(new_grid)
                     step += 1  
-
         return possible_moves
 
 

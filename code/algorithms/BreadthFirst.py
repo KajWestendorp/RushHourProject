@@ -5,7 +5,12 @@ import pandas as pd
 def breadth_first(grid):
     """ 
         Implementation of bfs for rush hour problem
-        TODO: ADD MORE DETAILED DOC STRING
+
+        Args: The grid object
+
+        Returns: The final solved grid and the df of moves
+
+        Also prints all the moves from start to solution and prints the total movecount
     """
 
     # Archive as a set to store grids
@@ -70,6 +75,10 @@ def breadth_first(grid):
 def backtrace_path(grid, parents):
     """
     Backtrace's tehe path that led to the quickest solution from BFS
+
+    Args: The grid object and parent dict
+
+    Returns: A list of grid objects that show the shortest path
     """
     shortest_path = []
     
@@ -91,6 +100,11 @@ def backtrace_path(grid, parents):
 
 def get_output(grid, parents):
     """
+    This gets the move output that is in check50 format
+
+    Args: The grid object and the parent dictionary
+
+    Returns: A df with the moves in order labelled per car
     """
     
     output_list = []
