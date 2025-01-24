@@ -12,11 +12,12 @@ import copy
 from code.algorithms.random_algorithm import Random_Algorithm
 from code.algorithms.random_heuristic import Random_Heuristic
 from code.algorithms.hillclimber import HillClimber
+from code.algorithms.sa import SimulatedAnnealing
 from code.classes.grid import *
 from code.classes.car import *
 from code.movement.updatedf import *
 from code.algorithms.random_grid import *
-from code.algorithms.BreadthFirst import breadth_first
+from code.algorithms.BreadthFirst import RushHourBFS
 
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -142,7 +143,7 @@ if __name__ == "__main__":
 
     #         # Debugging check
     #         print("\nFinal Solved Grid Before Passing to HillClimber:")
-    #         solved_grid.print_grid()  # Ensure red car is in the correct position
+    #         solved_grid.print_grid() 
 
     #         hillclimber = HillClimber(solved_grid)
     #         best_moves = hillclimber.run(iterations=iterations, verbose=False)
@@ -163,7 +164,53 @@ if __name__ == "__main__":
     # df_hillclimber = pd.DataFrame(hillclimber_results)
     # df_hillclimber.to_csv("hillclimber_comparison_6x6.csv", index=False)
     # print("\nHill Climber Algorithm trials completed and saved.")
+    """----- Simulated Annealing Algorithm -----"""
+    num_trials = 10
+    iterations = 10
+    temperature = 5  
+    cooling_rate = 0.99
 
+    simulated_annealing_results = []
+
+    print(f"\nRunning {num_trials} trials for Simulated Annealing Algorithm")
+    for trial in range(num_trials):
+        print(f"Trial {trial + 1}/{num_trials}")
+
+        # Generate grid
+        grid = Grid(6)
+        grid.create_grid()
+        grid.add_borders()
+        grid.add_cars_to_board(boardposition1)
+
+        # Solve the puzzle with Random Algorithm first
+        solver = Random_Algorithm(grid)
+        solver.run(iterations=100000, verbose=False)
+
+        # Ensure we pass a solved grid to Simulated Annealing
+        if solver.is_solution():
+            print("\nPassing solved grid to Simulated Annealing...")
+
+            solved_grid = copy.deepcopy(solver.grid)  
+
+            sa_solver = SimulatedAnnealing(solved_grid, temperature, cooling_rate)
+            best_moves = sa_solver.run(iterations=iterations, verbose=False)
+
+            # Store results
+            simulated_annealing_results.append({
+                "random_moves": len(solver.moves),
+                "simulated_annealing_moves": len(best_moves)
+            })
+        else:
+            print("Random Algorithm failed, skipping trial.")
+            simulated_annealing_results.append({
+                "random_moves": "Not solved",
+                "simulated_annealing_moves": "Not solved"
+            })
+
+    # Save results to CSV
+    df_sa = pd.DataFrame(simulated_annealing_results)
+    df_sa.to_csv("simulated_annealing_comparison_6x6.csv", index=False)
+    print("\nSimulated Annealing Algorithm trials completed and saved.")
 "----- Experiment for random data -----"
 
 # Change value when changing board size
@@ -221,6 +268,13 @@ if __name__ == "__main__":
 
 
 # """----- BreadthFirstSearch Algorithm -----"""
+# initial_grid = Grid(9)
+# initial_grid.create_grid()
+# initial_grid.add_borders()
+# initial_grid.add_cars_to_board(boardposition2)
+
+# #Run algorithm
+# import time
 initial_grid = Grid(12)
 initial_grid.create_grid()
 initial_grid.add_borders()
@@ -228,6 +282,17 @@ initial_grid.add_cars_to_board(boardposition6)
 #Run algorithm
 import time
 
+# # Calculate the start time
+# start = time.time()
+# final_grid, outputdf = breadth_first(initial_grid)
+
+# # Calculate the end time and time taken (https://stackoverflow.com/questions/70058132/how-do-i-make-a-timer-in-python)
+# end = time.time()
+# length = end - start
+# # Show the results
+
+# print("It took", length, "seconds to find the best solution!")
+# print()
 # Calculate the start time
 start = time.time()
 
@@ -240,14 +305,14 @@ length = end - start
 print("It took", length, "seconds to find the best solution!")
 print()
 
-print(outputdf)
-outputdf.to_csv('output.csv',index=False)
+# print(outputdf)
+# outputdf.to_csv('output.csv',index=False)
 
 #nOTES
 
-# 6x6 Board 1 output = checked, Movecount = 
-# 6x6 Board 2 output = checked, Movecount = 
-# 6x6 Board 3 output = checked, Movecount = 
+# 6x6 Board 1 output = checked, Movecount = 21 moves, 2 seconds
+# 6x6 Board 2 output = checked, Movecount = 15 moves, 11 seconds
+# 6x6 Board 3 output = checked, Movecount = 33 moves, 27 seconds
 
 # 9x9 board 4 output = checked, Movecount = 
 # 9x9 board 5 output = checked, Movecount =
