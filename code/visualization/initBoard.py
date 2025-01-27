@@ -1,86 +1,97 @@
-# This script reads in a csv board file and visualizes the board's car positions and orientations
-
 import pandas as pd
 import random
-import matplotlib.patches as patches
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 import os
+import time
 
-# Get the directory of the current script and defin epath
-script_dir = os.path.dirname(os.path.abspath(__file__))
-relative_path = os.path.join("..", "gameboards", "Rushhour6x6_1.csv")
-
-# Construct the path to the gameboard file
-board_file = os.path.normpath(os.path.join(script_dir, relative_path))
-
-boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
-
-
-def visualize_board(grid, board_size):
+def visualize_board(grid, moves_csv):
     """
-    This function creates a visualization of the boards positions
-    https://matplotlib.org/stable/gallery/subplots_axes_and_figures/subplots_demo.html
+    This function creates an animatin of the Rush Hour board state and move sequence by using a step-by-step update.
+    Takes the initial grid and an output CSV with move sequences to animate.
     """
 
-    figure, axes = plt.subplots(figsize=(board_size, board_size))
+    # Load the move sequence
+    moves_df = pd.read_csv(moves_csv)
 
-    cars_data = [{'car': car.name, 'orientation': car.orientation, 'col': car.col, 'row': car.row, 'length': car.length}
-                     for car in grid.cars]
-    cars_df = pd.DataFrame(cars_data)
+    # Board size from the grid
+    board_size = grid.boardsize
 
-    # Draw the grid
-    for x in range(board_size + 1):
-        axes.axhline(x, color='black', linewidth=0.5)
-        axes.axvline(x, color='black', linewidth=0.5)
-
-    # Format the board
-    axes.set_title(f"Rush Hour {board_size}x{board_size} Board")
+    # Assign constant colors to each car by mapping
+    car_names = [car.name for car in grid.cars]
+    color_map = {car: random.choice(['yellow', 'purple', 'orange', 'blue', 'teal', 'cyan', 'aqua']) for car in car_names}
     
-    # Flip the y-axis to match the board's natural orientation
-    axes.invert_yaxis()
+    # Ensure the player's car is always red
+    color_map['X'] = 'red'  
 
-    # Format grid to fit axes and figure
-    axes.set_xlim(0, board_size)
-    axes.set_ylim(0, board_size)
-    axes.set_yticks(range(board_size))
-    axes.set_xticks(range(board_size))
+    # Create figure and axis
+    fig, ax = plt.subplots(figsize=(board_size, board_size))
 
-    # Remove tick numbers
-    axes.set_xticklabels([])
-    axes.set_yticklabels([])
-    axes.set_aspect('equal')
+    def draw_grid():
+        """Draws a board grid."""
+        ax.clear()
+        ax.set_title(f"Rush Hour {board_size}x{board_size} - BFS Animation")
+        ax.set_xlim(0, board_size)
+        ax.set_ylim(0, board_size)
+        ax.set_xticks(range(board_size))
+        ax.set_yticks(range(board_size))
+        ax.set_xticklabels([])
+        ax.set_yticklabels([])
+        ax.set_aspect('equal')
 
-    # Function to assign colors
-    def get_car_color(name, length):
+        # Draw grid lines
+        for x in range(board_size + 1):
+            ax.axhline(x, color='black', linewidth=0.5)
+            ax.axvline(x, color='black', linewidth=0.5)
 
-        # Colour player's car red
-        if name == 'X': return 'red'
+    def draw_cars():
+        """Places all cars on the board, ensuring correct alignment."""
+        for car in grid.cars:
+            color = color_map[car.name]
 
-        # Trucks are either yellow or purple, cars have several other colours
-        if length == 3: return random.choice(['yellow', 'purple'])
-        return random.choice(['orange', 'blue', 'teal', 'cyan', 'aqua'])
+            # Convert from 1-based to 0-based indexing
+            if car.orientation == 'H':
+                # Adjust horizontal cars by reformatting col and row index
+                x = car.col - 1  
+                y = board_size - car.row  
+                width, height = car.length, 1  
+            else:
+                # Adjust vertical cars by reofrmatting col and row index
+                x = car.col - 1  
+                y = board_size - car.row - car.length + 1  
+                width, height = 1, car.length  
 
-    # Draw cars with borders
-    for index, car in cars_df.iterrows():
-        color = get_car_color(car['car'], car['length'])
+            # Draw the car
+            rect = patches.Rectangle((x, y), width, height, facecolor=color, edgecolor='black', lw=3)
+            ax.add_patch(rect)
+            ax.text(x + width / 2, y + height / 2, car.name, 
+                    color='black', ha='center', va='center', fontsize=10, weight='bold')
 
-        # Convert to 0-based grid
-        x, y = car['col'] - 1, board_size - car['row']  
+    def update_board(car_name, move):
+        """Moves the car in the correct direction based on the BFS output."""
+        car = next((c for c in grid.cars if c.name == car_name), None)
+        if car:
+            if car.orientation == 'H':
 
-        width, height = (car['length'], 1) if car['orientation'] == 'H' else (1, car['length'])
+                # Move entire car horizontally
+                car.col += move  
+            else:
+                # Move entire car vertically
+                car.row -= move  
 
-        # https://matplotlib.org/stable/api/_as_gen/matplotlib.patches.Rectangle.html
-        # Add car patch with a thicker border
-        rect = patches.Rectangle(
-            (x, y - height + 1), width, height,
-            facecolor=color, edgecolor='black', lw=3)
-        axes.add_patch(rect)
+    # Clear previous state before moving cars
+    for index, row in moves_df.iterrows():
+        # debug
+        print(f"Move {index + 1}: {row['car']} moves {row['move']} spaces") 
+        
+        draw_grid()
+        draw_cars()
 
-        # Place the car name
-        axes.text(x + 0.5, y + 0.5, car['car'], color='black', ha='center', va='center', fontsize=8, weight='bold')
-    #adding block = FAlse did not work cuz plots closed immediately
-    return figure
+        # Apply move
+        update_board(row['car'], row['move'])
 
-# i commented this out ebcause it caused the function in main to run xd
-# board = visualize_board(boardposition1)
-# print(board)
+        # Pause between each move to visualize each step
+        plt.pause(0.5)
+
+    # Show final frame
+    plt.show()
