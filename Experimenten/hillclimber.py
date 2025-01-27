@@ -93,13 +93,10 @@ for trial in range(num_trials):
 
         # Store results
         if best_moves:
-            hillclimber_results.append(len(best_moves))
+            hillclimber_results.append((len(random_moves),len(best_moves)))
         else:
-            hillclimber_results.append("Not solved")
-        hillclimber_results.append({
-            "random_moves": len(random_moves),
-            "hillclimber_moves": len(best_moves) if best_moves else "Not solved"
-        })
+            hillclimber_results.append((len(random_moves), 999999))
+        
     else:
         print("Random Algorithm failed to find a solution, skipping trial.")
         hillclimber_results.append("Not solved")
@@ -109,6 +106,7 @@ for trial in range(num_trials):
         })
 
 # Save results to CSV
-df_hillclimber = pd.DataFrame(hillclimber_results, columns=['moves'])
+df_hillclimber = pd.DataFrame(hillclimber_results, columns=['random_moves', 'hillclimber_moves'])
 df_hillclimber.to_csv(f"{num_trials}_trials_hillclimber_boardposition{boardposition}.csv", index=False)
 print("\nHill Climber Algorithm trials completed")
+
