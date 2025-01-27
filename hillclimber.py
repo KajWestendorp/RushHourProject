@@ -86,19 +86,14 @@ for trial in range(num_trials):
 
     # Run algorithm
     solver = Random_Algorithm(grid) if algorithm == 1 else Random_Heuristic(grid)
-    random_moves = solver.run(iterations=30000, verbose=False)
+    random_moves = solver.run(iterations=100000, verbose=False)
 
     if solver.is_solution():
-        solved_grid = copy.deepcopy(solver.grid)
-        red_car = next((car for car in solved_grid.cars if car.name == 'X'), None)
-
-        # Ensure the red car is at the correct exit position
-        if red_car is None or (red_car.col + red_car.length - 1 != board_size - 1):
-            print(f"Error: Red car not at the exit in Trial {trial + 1}. Skipping trial.")
-            continue
-
+        # Start by copying the solved grid, and locating the red car
+        
         print("\nFinal Solved Grid Before Passing to HillClimber:")
-        solved_grid.print_grid()
+        solver.print_grid()
+        solved_grid = copy.deepcopy(solver.grid)
 
         hillclimber = HillClimber(solved_grid)
         best_moves = hillclimber.run(iterations=iterations, verbose=False)
@@ -111,5 +106,5 @@ for trial in range(num_trials):
 
 # Save results
 df_hillclimber = pd.DataFrame(hillclimber_results, columns=['random_moves', 'hillclimber_moves'])
-df_hillclimber.to_csv(f"{num_trials}trials_{iterations}iterations_hillclimber_boardposition{boardposition}.csv", index=False)
+df_hillclimber.to_csv(f"{num_trials}trials_{iterations}iterations_hillclimber_{algorithm}_boardposition{boardposition}.csv", index=False)
 print("\nHill Climber trials completed")

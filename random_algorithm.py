@@ -84,8 +84,11 @@ for trial in range(num_trials):
     # Store result
     if solver.is_solution():
         random_results.append(len(moves_made))
+        solver.print_grid()
     else:
         random_results.append("Not solved")
+
+        
 
 # Save results
 df_random = pd.DataFrame(random_results, columns=['moves'])

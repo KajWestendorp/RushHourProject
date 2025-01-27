@@ -44,7 +44,10 @@ class HillClimber:
                 new_direction = random.choice([-1, 1])
                 new_moves[index] = (car_name, new_direction)
 
-        # Ensuring it does not increase in length
+        # Ensure the mutated sequence is shorter
+        if len(new_moves) >= len(move_sequence):
+            return move_sequence
+        
         return new_moves  
 
     def apply_moves(self, move_sequence):

@@ -24,7 +24,8 @@ class Random_Heuristic(Random_Algorithm):
         """
         Reverts the grid back to the board configuration at the target_index.
         """
-        print(f"Reverting back to state {target_index}")
+        # Debug print (turned off for experimental purposes)
+        #print(f"Reverting back to state {target_index}")
 
         # Reset the grid
         self.grid.create_grid()
@@ -59,7 +60,8 @@ class Random_Heuristic(Random_Algorithm):
             new_state = self.hash_grid(test_grid)
 
             if new_state in self.state_index:
-                print(f"State already seen! Rolling back to index {self.state_index[new_state]}")
+                # Debug print (turned off for experimental purposes)
+                #print(f"State already seen! Rolling back to index {self.state_index[new_state]}")
                 self.revert_to_state(self.state_index[new_state])
 
             # Actually make the move
