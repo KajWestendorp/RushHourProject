@@ -48,12 +48,20 @@ if __name__ == "__main__":
     
 
     Board_size = int(input("Enter which board-size you would like to solve (6x6 = 6, 9x9 = 9, 12x12 = 12): "))
-    Board_choice = int(input("Enter which difficulty (1,2 or 3): "))
-    Algo_choice = int(input("Enter which algorithm you would like to choose:(BreadthFirst = 0, DepthFirst = 1, SA = 2, Random = 3, Random + heuristic = 4): "))
+    if Board_size != 12:
+        Board_choice = int(input("Enter which difficulty (1,2 or 3): "))
+    if Board_size == 6 or 9:
+        if (Board_size == 9 and Board_choice == 1) or (Board_size == 6):
+            Algo_choice = int(input("Enter which algorithm you would like to choose:(BreadthFirst = 0, DepthFirst = 1, SA = 2, Random = 3, Random + heuristic = 4): "))
+        else:
+            Algo_choice = int(input("Enter which algorithm you would like to choose: (SA = 2, Random = 3, Random + heuristic = 4): "))
+    elif Board_size == 12:
+        Algo_choice = int(input("Enter which algorithm you would like to choose:(SA = 2, Random = 3, Random + heuristic = 4): "))
+
     initial_grid = Grid(Board_size)
     initial_grid.create_grid()
     initial_grid.add_borders()
-    while Algo_choice < 1:
+    while Algo_choice <= 1:
         if Board_size  == 6 and Board_choice == 1:
             initial_grid.add_cars_to_board(boardposition1)
         if Board_size  == 6 and Board_choice == 2:
