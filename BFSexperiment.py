@@ -48,10 +48,10 @@ if __name__ == "__main__":
     boardposition9x9_6 = pd.read_csv(board_file9x9_5, sep=',', encoding='utf-8')
 
 
-initial_grid = Grid(6)
+initial_grid = Grid(9)
 initial_grid.create_grid()
 initial_grid.add_borders()
-initial_grid.add_cars_to_board(boardposition1)
+initial_grid.add_cars_to_board(boardposition9x9_5)
 
 #Run algorithm
 import time

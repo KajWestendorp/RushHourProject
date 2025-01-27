@@ -110,7 +110,7 @@ class RushHourBFS:
         while queue:
 
             #first grid and first depth taken from the queue
-            grid, depth = queue.popleft()
+            grid, depth = queue.pop()
 
             #Check if solution has been found
             if Grid.grid_solved(grid):
