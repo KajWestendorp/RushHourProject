@@ -3,7 +3,6 @@ import pandas as pd
 import random
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
-from code.movement.updatedf import update_positions
 from code.visualization.initBoard import visualize_board
 
 import os
@@ -15,7 +14,6 @@ from code.algorithms.hillclimber import HillClimber
 from code.algorithms.sa import SimulatedAnnealing
 from code.classes.grid import *
 from code.classes.car import *
-from code.movement.updatedf import *
 from code.algorithms.random_grid import *
 from code.algorithms.BreadthFirst import RushHourBFS
 
@@ -266,57 +264,4 @@ if __name__ == "__main__":
 
 # df_of_experiment.to_csv('1000attempts_9x9.csv', header='Move Count', index=False)
 
-
-# """----- BreadthFirstSearch Algorithm -----"""
-# initial_grid = Grid(9)
-# initial_grid.create_grid()
-# initial_grid.add_borders()
-# initial_grid.add_cars_to_board(boardposition2)
-
-# #Run algorithm
-# import time
-initial_grid = Grid(12)
-initial_grid.create_grid()
-initial_grid.add_borders()
-initial_grid.add_cars_to_board(boardposition6)
-#Run algorithm
-import time
-
-# # Calculate the start time
-# start = time.time()
-# final_grid, outputdf = breadth_first(initial_grid)
-
-# # Calculate the end time and time taken (https://stackoverflow.com/questions/70058132/how-do-i-make-a-timer-in-python)
-# end = time.time()
-# length = end - start
-# # Show the results
-
-# print("It took", length, "seconds to find the best solution!")
-# print()
-# Calculate the start time
-start = time.time()
-
-final_grid, outputdf = breadth_first(initial_grid)
-# Calculate the end time and time taken
-end = time.time()
-length = end - start
-# Show the results : this can be altered however you like
-
-print("It took", length, "seconds to find the best solution!")
-print()
-
-# print(outputdf)
-# outputdf.to_csv('output.csv',index=False)
-
-#nOTES
-
-# 6x6 Board 1 output = checked, Movecount = 21 moves, 2 seconds
-# 6x6 Board 2 output = checked, Movecount = 15 moves, 11 seconds
-# 6x6 Board 3 output = checked, Movecount = 33 moves, 27 seconds
-
-# 9x9 board 4 output = checked, Movecount = 
-# 9x9 board 5 output = checked, Movecount =
-# 9x9 board 6 output = checked, Movecount =
-
-# 12x12 board 7 output = 
 
