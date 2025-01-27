@@ -56,6 +56,13 @@ if board is None:
 print("How many iterations do you want to set: ")
 iterations = int(input())
 
+# Determine board size based on boardposition
+board_sizes = {'1': 6, '2': 6, '3': 6, 
+               '4': 9, '5': 9, '6': 9, 
+               '7': 12}
+
+board_size = board_sizes.get(boardposition)
+
 # Results storage
 random_results = []
 
@@ -65,7 +72,7 @@ for trial in range(num_trials):
     print(f"Trial {trial + 1}/{num_trials}")
 
     # Initialize and reset grid
-    grid = Grid(6)
+    grid = Grid(board_size)
     grid.create_grid()
     grid.add_borders()
     grid.add_cars_to_board(board)
@@ -82,6 +89,6 @@ for trial in range(num_trials):
 
 # Save results
 df_random = pd.DataFrame(random_results, columns=['moves'])
-df_random.to_csv((f"{num_trials}_randomalgorithm_boardposition{boardposition}.csv"), index=False)
+df_random.to_csv((f"{num_trials}trials_{iterations}iterations_randomalgorithm_boardposition{boardposition}.csv"), index=False)
 print("\nRandom Algorithm finished")
     

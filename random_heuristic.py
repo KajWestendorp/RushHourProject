@@ -82,6 +82,6 @@ for trial in range(num_trials):
 
 # Save results
 df_random = pd.DataFrame(randomheuristic_results, columns=['moves'])
-df_random.to_csv((f"{num_trials}_randomheuristic_boardposition{boardposition}.csv"), index=False)
+df_random.to_csv((f"{num_trials}trials_{iterations}iterations_randomheuristic_boardposition{boardposition}.csv"), index=False)
 print("\nRandom Heuristic Algorithm finished")
     
