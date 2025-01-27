@@ -10,3 +10,26 @@
 12x12 Board --> Memory error
 
 # Results from DFS (AMD 5800x3d, AMD 5700xt and 32gb RAM)
+6x6 Board 1 output --> Movecount = 
+6x6 Board 2 output --> Movecount = 
+6x6 Board 3 output --> Movecount = 
+
+9x9 Board 1 output --> Movecount = 
+9x9 Board 2 --> Memory error
+9x9 Board 3 --> Memory error
+
+12x12 Board --> Memory error
+
+
+# Results from Random (1000 iterations)
+6x6 Board 1 output --> Movecount = 
+6x6 Board 2 output --> Movecount = 
+6x6 Board 3 output --> Movecount = 
+
+9x9 Board 1 output --> Movecount = 
+9x9 Board 2 output --> Movecount = 
+9x9 Board 3 output --> Movecount = 
+
+12x12 Board 1 output --> Movecount = 
+
+
