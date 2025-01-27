@@ -16,13 +16,17 @@ board_file = os.path.normpath(os.path.join(script_dir, relative_path))
 boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
 
 
-def visualize_board(boardposition1, board_size):
+def visualize_board(grid, board_size):
     """
     This function creates a visualization of the boards positions
     https://matplotlib.org/stable/gallery/subplots_axes_and_figures/subplots_demo.html
     """
 
     figure, axes = plt.subplots(figsize=(board_size, board_size))
+
+    cars_data = [{'car': car.name, 'orientation': car.orientation, 'col': car.col, 'row': car.row, 'length': car.length}
+                     for car in grid.cars]
+    cars_df = pd.DataFrame(cars_data)
 
     # Draw the grid
     for x in range(board_size + 1):
@@ -57,7 +61,7 @@ def visualize_board(boardposition1, board_size):
         return random.choice(['orange', 'blue', 'teal', 'cyan', 'aqua'])
 
     # Draw cars with borders
-    for index, car in boardposition1.iterrows():
+    for index, car in cars_df.iterrows():
         color = get_car_color(car['car'], car['length'])
 
         # Convert to 0-based grid
