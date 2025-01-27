@@ -61,8 +61,8 @@ start = time.time()
 
 Solved_grid = RushHourBFS(initial_grid)
 
-#0 for BFS
-final_grid, outputdf = RushHourBFS.run(Solved_grid, 0)
+#1 for DFS
+final_grid, outputdf = RushHourBFS.run(Solved_grid, 1)
 # Calculate the end time and time taken
 end = time.time()
 length = end - start

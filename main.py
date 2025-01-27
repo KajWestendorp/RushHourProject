@@ -49,20 +49,22 @@ if __name__ == "__main__":
 
     Board_size = int(input("Enter which board-size you would like to solve (6x6 = 6, 9x9 = 9, 12x12 = 12): "))
     Board_choice = int(input("Enter which difficulty (1,2 or 3): "))
-    Algo_choice = int(input("Enter which algorithm you would like to choose:(Breadthfirst = 1, SA = 2, Random = 3, Random + heuristic = 4): "))
+    Algo_choice = int(input("Enter which algorithm you would like to choose:(BreadthFirst = 0, DepthFirst = 1, SA = 2, Random = 3, Random + heuristic = 4): "))
     initial_grid = Grid(Board_size)
     initial_grid.create_grid()
     initial_grid.add_borders()
-    while Algo_choice == 1:
+    while Algo_choice < 1:
         if Board_size  == 6 and Board_choice == 1:
             initial_grid.add_cars_to_board(boardposition1)
         if Board_size  == 6 and Board_choice == 2:
             initial_grid.add_cars_to_board(boardposition2)
         if Board_size  == 6 and Board_choice == 3:
             initial_grid.add_cars_to_board(boardposition3)
+        if Board_size  == 9 and Board_choice == 1:
+            initial_grid.add_cars_to_board(boardposition1)
         start = time.time()
         Solved_grid = RushHourBFS(initial_grid)
-        final_grid, outputdf = RushHourBFS.run(Solved_grid)
+        final_grid, outputdf = RushHourBFS.run(Solved_grid, Algo_choice)
         # Calculate the end time and time taken
         end = time.time()
         length = end - start

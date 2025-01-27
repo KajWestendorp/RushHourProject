@@ -82,7 +82,7 @@ class RushHourBFS:
 
         return pd.DataFrame(output_list, columns = ['car', 'move'])
 
-    def run(self):
+    def run(self, choice):
         """ 
             Implementation of bfs for rush hour problem
 
@@ -110,7 +110,10 @@ class RushHourBFS:
         while queue:
 
             #first grid and first depth taken from the queue
-            grid, depth = queue.pop()
+            if choice == 1:
+                grid, depth = queue.pop()
+            else:
+                grid, depth = queue.popleft()
 
             #Check if solution has been found
             if Grid.grid_solved(grid):
