@@ -1,18 +1,9 @@
 
 #Implement script that takes a board starting position and can keep updating it
 import pandas as pd
-import random
-import matplotlib.patches as patches
-import matplotlib.pyplot as plt
-from code.visualization.initBoard import visualize_board
 
 import os
-import copy
 
-from code.algorithms.random_algorithm import Random_Algorithm
-from code.algorithms.random_heuristic import Random_Heuristic
-from code.algorithms.hillclimber import HillClimber
-from code.algorithms.sa import SimulatedAnnealing
 from code.classes.grid import *
 from code.classes.car import *
 from code.algorithms.random_grid import *
