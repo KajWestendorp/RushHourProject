@@ -4,7 +4,7 @@ import random
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 from code.visualization.initBoard import visualize_board
-
+import time
 import os
 import copy
 
@@ -21,12 +21,12 @@ if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
    
     relative_path = os.path.join("code", "gameboards", "Rushhour6x6_1.csv")
-    relative_path2 = os.path.join("code", "gameboards", "Rushhour9x9_4.csv")
-    relative_path3 = os.path.join("code", "gameboards", "Rushhour6x6_test.csv")
-    relative_path4 = os.path.join("code", "gameboards", "Rushhour6x6_2.csv")
-    relative_path5 = os.path.join("code", "gameboards", "Rushhour6x6_3.csv")
-    relative_path9x9_5 = os.path.join("code", "gameboards", "Rushhour9x9_5.csv")
-    relative_path9x9_6 = os.path.join("code", "gameboards", "Rushhour9x9_6.csv")
+    relative_path2 = os.path.join("code", "gameboards", "Rushhour6x6_2.csv")
+    relative_path3 = os.path.join("code", "gameboards", "Rushhour6x6_3.csv")
+    relative_path4 = os.path.join("code", "gameboards", "Rushhour9x9_4.csv")
+    relative_path5 = os.path.join("code", "gameboards", "Rushhour9x9_5.csv")
+    relative_path6 = os.path.join("code", "gameboards", "Rushhour9x9_6.csv")
+    relative_path7 = os.path.join("code", "gameboards", "Rushhour12x12_7.csv")
 
     # Construct the path to the gameboard file
     board_file = os.path.normpath(os.path.join(script_dir, relative_path))
@@ -34,8 +34,8 @@ if __name__ == "__main__":
     board_file3 = os.path.normpath(os.path.join(script_dir, relative_path3))
     board_file4 = os.path.normpath(os.path.join(script_dir, relative_path4))
     board_file5 = os.path.normpath(os.path.join(script_dir, relative_path5))
-    board_file9x9_5 = os.path.normpath(os.path.join(script_dir, relative_path9x9_5))
-    board_file9x9_6 = os.path.normpath(os.path.join(script_dir, relative_path9x9_6))
+    board_file6 = os.path.normpath(os.path.join(script_dir, relative_path6))
+    board_file7 = os.path.normpath(os.path.join(script_dir, relative_path7))
 
     # visualize_board(boardposition1, 6)
     boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
@@ -43,225 +43,33 @@ if __name__ == "__main__":
     boardposition3 = pd.read_csv(board_file3, sep=',', encoding='utf-8')
     boardposition4 = pd.read_csv(board_file4, sep=',', encoding='utf-8')
     boardposition5 = pd.read_csv(board_file5, sep=',', encoding='utf-8')
-    boardposition9x9_5 = pd.read_csv(board_file9x9_5, sep=',', encoding='utf-8')
-    boardposition9x9_6 = pd.read_csv(board_file9x9_5, sep=',', encoding='utf-8')
+    boardposition6 = pd.read_csv(board_file6, sep=',', encoding='utf-8')
+    boardposition7 = pd.read_csv(board_file7, sep=',', encoding='utf-8')
+    
 
+    Board_size = int(input("Enter which board-size you would like to solve (6x6 = 6, 9x9 = 9, 12x12 = 12): "))
+    Board_choice = int(input("Enter which difficulty (1,2 or 3): "))
+    Algo_choice = int(input("Enter which algorithm you would like to choose:(Breadthfirst = 1, SA = 2, Random = 3, Random + heuristic = 4): "))
+    initial_grid = Grid(Board_size)
+    initial_grid.create_grid()
+    initial_grid.add_borders()
+    while Algo_choice == 1:
+        if Board_size  == 6 and Board_choice == 1:
+            initial_grid.add_cars_to_board(boardposition1)
+        if Board_size  == 6 and Board_choice == 2:
+            initial_grid.add_cars_to_board(boardposition2)
+        if Board_size  == 6 and Board_choice == 3:
+            initial_grid.add_cars_to_board(boardposition3)
+        start = time.time()
+        Solved_grid = RushHourBFS(initial_grid)
+        final_grid, outputdf = RushHourBFS.run(Solved_grid)
+        # Calculate the end time and time taken
+        end = time.time()
+        length = end - start
+        # Show the results : this can be altered however you like
 
-    """----- Random Algorithm -----"""
-    # Number of trials
-    # num_trials = 10
-    # iterations = 10000
-
-    # # Results storage
-    # random_results = []
-    # heuristic_results = []
-
-    """
-    # Run trials for Random_Algorithm
-    print(f"\nRunning {num_trials} trials for Random Algorithm")
-    for trial in range(num_trials):
-        print(f"Trial {trial + 1}/{num_trials}")
-
-        # Initialize and reset grid
-        grid = Grid(6)
-        grid.create_grid()
-        grid.add_borders()
-        grid.add_cars_to_board(boardposition1)
-
-        # Run random algorithm
-        solver = Random_Algorithm(grid)
-        moves_made = solver.run(iterations=iterations, verbose=False)
-
-        # Store result
-        if solver.is_solution():
-            random_results.append(len(moves_made))
-        else:
-            random_results.append("Not solved")
-
-    # Save results
-    df_random = pd.DataFrame(random_results, columns=['moves'])
-    df_random.to_csv("1000_trials_randomise_6x6.csv", index=False)
-    print("\nRandom Algorithm trials completed")
-    """
-
-    """
-    # Run trials for Random_Heuristic
-    print(f"\nRunning {num_trials} trials for Random Heuristic Algorithm")
-    for trial in range(num_trials):
-        print(f"Trial {trial + 1}/{num_trials}")
-
-        # Initialize and reset grid
-        grid = Grid(6)
-        grid.create_grid()
-        grid.add_borders()
-        grid.add_cars_to_board(boardposition1)
-
-        # Run random_heuristic algorithm
-        solver = Random_Heuristic(grid)
-        moves_made = solver.run(iterations=iterations, verbose=False)
-
-        # Store result
-        if solver.is_solution():
-            heuristic_results.append(len(moves_made))
-        else:
-            heuristic_results.append("Not solved")
-
-    # Save heuristic results to CSV
-    df_heuristic = pd.DataFrame(heuristic_results, columns=['moves'])
-    df_heuristic.to_csv("10_trials_randomise_heuristic_6x6.csv", index=False)
-    print("\nRandom Heuristic Algorithm trials completed")
-    """
-
-    """----- HillClimber Algorithm -----"""
-    # num_trials = 10
-    # iterations = 1000  
-
-    # hillclimber_results = []
-
-    # print(f"\nRunning {num_trials} trials for Hill Climber Algorithm")
-    # for trial in range(num_trials):
-    #     print(f"Trial {trial + 1}/{num_trials}")
-
-    #     # Generate grid
-    #     grid = Grid(6)
-    #     grid.create_grid()
-    #     grid.add_borders()
-    #     grid.add_cars_to_board(boardposition1)
-
-    #     # Solve the puzzle with Random Algorithm
-    #     solver = Random_Algorithm(grid)
-    #     random_moves = solver.run(iterations=100000, verbose=False)
-
-    #     # Ensure we pass a solved grid to HillClimber
-    #     if solver.is_solution():
-    #         print("\nPassing solved grid to HillClimber...")
-
-    #         # Deepcopy the grid AFTER solving to capture the solved state
-    #         solved_grid = copy.deepcopy(solver.grid)
-
-    #         # Debugging check
-    #         print("\nFinal Solved Grid Before Passing to HillClimber:")
-    #         solved_grid.print_grid() 
-
-    #         hillclimber = HillClimber(solved_grid)
-    #         best_moves = hillclimber.run(iterations=iterations, verbose=False)
-
-    #         # Store results
-    #         hillclimber_results.append({
-    #             "random_moves": len(random_moves),
-    #             "hillclimber_moves": len(best_moves) if best_moves else "Not solved"
-    #         })
-    #     else:
-    #         print("Random Algorithm failed to find a solution, skipping trial.")
-    #         hillclimber_results.append({
-    #             "random_moves": "Not solved",
-    #             "hillclimber_moves": "Not solved"
-    #         })
-
-    # # Save results to CSV
-    # df_hillclimber = pd.DataFrame(hillclimber_results)
-    # df_hillclimber.to_csv("hillclimber_comparison_6x6.csv", index=False)
-    # print("\nHill Climber Algorithm trials completed and saved.")
-    """----- Simulated Annealing Algorithm -----"""
-    num_trials = 10
-    iterations = 10
-    temperature = 5  
-    cooling_rate = 0.99
-
-    simulated_annealing_results = []
-
-    print(f"\nRunning {num_trials} trials for Simulated Annealing Algorithm")
-    for trial in range(num_trials):
-        print(f"Trial {trial + 1}/{num_trials}")
-
-        # Generate grid
-        grid = Grid(6)
-        grid.create_grid()
-        grid.add_borders()
-        grid.add_cars_to_board(boardposition1)
-
-        # Solve the puzzle with Random Algorithm first
-        solver = Random_Algorithm(grid)
-        solver.run(iterations=100000, verbose=False)
-
-        # Ensure we pass a solved grid to Simulated Annealing
-        if solver.is_solution():
-            print("\nPassing solved grid to Simulated Annealing...")
-
-            solved_grid = copy.deepcopy(solver.grid)  
-
-            sa_solver = SimulatedAnnealing(solved_grid, temperature, cooling_rate)
-            best_moves = sa_solver.run(iterations=iterations, verbose=False)
-
-            # Store results
-            simulated_annealing_results.append({
-                "random_moves": len(solver.moves),
-                "simulated_annealing_moves": len(best_moves)
-            })
-        else:
-            print("Random Algorithm failed, skipping trial.")
-            simulated_annealing_results.append({
-                "random_moves": "Not solved",
-                "simulated_annealing_moves": "Not solved"
-            })
-
-    # Save results to CSV
-    df_sa = pd.DataFrame(simulated_annealing_results)
-    df_sa.to_csv("simulated_annealing_comparison_6x6.csv", index=False)
-    print("\nSimulated Annealing Algorithm trials completed and saved.")
-"----- Experiment for random data -----"
-
-# Change value when changing board size
-# boardsize = 9
-# grid = Grid(boardsize)
-# grid.create_grid()
-# grid.add_borders()
-
-# # Change value when changing board
-# grid.add_cars_to_board(boardposition2)
-# for row in grid.grid:
-#     #ADD SOURCE THAT SHOWED HOW TO REMOVE  '' from letter
-#     print(" ".join(str(cell) for cell in row))
-# print()
-# total_moves = 0
-# solved = False
-# trials = 1
-# attempt_number = 0
-# experimentdata = []
-# for i in range(trials):
-#     attempt_number += 1
-
-#     # Change value when changing board size
-#     boardsize = 6  
-#     grid = Grid(boardsize)
-#     grid.create_grid()
-#     grid.add_borders()
-
-#     # Change value when changing board 
-#     grid.add_cars_to_board(boardposition3)
-#     total_moves = 0
-#     solved = False
-
-#     while not solved:
-#         if valid_board(grid.cars):
-#             car_to_move, direction = random_move(grid)
-#             if car_to_move:
-#                 total_moves += 1
-#                 direction_str = "forward" if direction > 0 else "backward"
-#         else:
-#             break
-
-#         # Check if board is solved
-#         if grid.grid_solved():
-#             experimentdata.append(total_moves)
-            
-#             for move in grid.car_moves:
-#                 print(move)
-
-#             solved = True
-# df_of_experiment = pd.DataFrame(experimentdata)
-# print(df_of_experiment)
-
-# df_of_experiment.to_csv('1000attempts_9x9.csv', header='Move Count', index=False)
+        print("It took", length, "seconds to find the best solution!")
+        print()
+        Algo_choice = 0
 
 
