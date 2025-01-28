@@ -7,6 +7,7 @@ from code.algorithms.random_heuristic import Random_Heuristic
 from code.algorithms.hillclimber import HillClimber
 from code.algorithms.sa import SimulatedAnnealing
 from code.algorithms.BreadthFirst import RushHourBFS
+from code.algorithms.hillclimber2 import HillClimber2
 from code.classes.grid import Grid
 
 # https://stackoverflow.com/questions/12229064/mapping-over-values-in-a-python-dictionary
@@ -32,7 +33,8 @@ algorithms = {
     "3": ("Hill Climber", HillClimber),
     "4": ("Simulated Annealing", SimulatedAnnealing),
     "5": ("Breadth First Search", RushHourBFS),
-    "6": ("Depth First Search", RushHourBFS)
+    "6": ("Depth First Search", RushHourBFS),
+    "7": ("Hill Climber Optimized", HillClimber2)
 }
 
 # Print algorithm options
@@ -41,7 +43,7 @@ for key, (name, _) in algorithms.items():
     print(f"  {key}. {name}")
 
 # Retrieve input
-algorithm = input("Select an algorithm (1-6): ").strip()
+algorithm = input("Select an algorithm (1-7): ").strip()
 num_trials = int(input("Enter number of trials: ").strip())
 iterations = int(input("Enter number of iterations: ").strip())
 
@@ -60,6 +62,11 @@ if board_choice not in board_files:
 board_df = pd.read_csv(board_files[board_choice], sep=',', encoding='utf-8')
 board_size = board_sizes[board_choice]
 
+# Algorithm choice for HillClimber and SA
+if algorithm in ["3", "4", "7"]:
+    print("Do you want to use the (1) random or (2) random + heuristic algorithm: ")
+    random_start_algorithm = int(input())  
+    
 # Initialize results list
 results = []
 
@@ -112,10 +119,11 @@ for trial in range(num_trials):
         # Save move count and runtime
         results.append([len(moves_made), runtime])
 
-   # HillClimber or SA
-    elif algorithm in ["3", "4"]:  
+   # HillClimber or SA or Optimized HillClimber
+    elif algorithm in ["3", "4", "7"]:
+
         # Solve grid using Random Algorithm first
-        random_solver = Random_Algorithm(grid)
+        random_solver = Random_Algorithm(grid) if random_start_algorithm == 1 else Random_Heuristic(grid)
         random_moves = random_solver.run(iterations=100000, verbose=False)
 
         # Ensure grid is solved before passing to HillClimber/SA
@@ -149,7 +157,8 @@ columns_mapping = {
     "3": ["random_moves", "hillclimber_moves", "runtime"],
     "4": ["random_moves", "sa_moves", "runtime"],
     "5": ["moves", "runtime"],
-    "6": ["moves", "runtime"]
+    "6": ["moves", "runtime"],
+    "7": ["random_moves", "optimized_hillclimber_moves", "runtime"]
 }
 
 df_results = pd.DataFrame(results, columns=columns_mapping[algorithm])
