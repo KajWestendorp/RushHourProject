@@ -1,26 +1,31 @@
-# RushHourProject
-Rush Hour is een ogenschijnlijk eenvoudig puzzeltje met een verrassend uitdagend karakter. In een veld van 6 hoog en 6 breed staat een rode auto, de jouwe, en die moet naar de uitgang. die recht voor je ligt. Maar andere voertuigen versperren de weg; auto’s van twee eenheden lang en trucks van drie eenheden lang, die alleen in hun rijrichting bewogen mogen worden. Ze mogen niet draaien. De opdracht is simpel: beweeg je auto naar buiten, of beter: schrijf een computerprogramma om dat voor je te doen.
+**Rush Hour** is een ogenschijnlijk eenvoudig puzzeltje met een verrassend uitdagend karakter. In een veld van 6 hoog en 6 breed staat een rode auto (de jouwe), en die moet naar de uitgang die recht voor je ligt. Andere voertuigen versperren echter de weg: auto's van twee eenheden lang en trucks van drie eenheden lang, die alleen in hun rijrichting bewogen mogen worden. Ze mogen niet draaien.  
+De opdracht is simpel: **beweeg je auto naar buiten** of, beter nog, **schrijf een computerprogramma om dat voor je te doen**.
 
+---
 
-# Experimenteren
-Om de resultaten te reproduceren moet uw simpelweg de main.py functie roepen in uw terminal terwijl uw in de RushHourProject directory bent, hierna volgt een keuze menu om de verschillende borden te keizen en de verschillende algoritmes te runnen. 
-De data voor BFS wordt automatisch opgeslagen in een csv met de naam van het bordgrote en de moeilijkheid van het bord. 
-Vervolgs wordt er in de terminal de sequence van moves geprint en de tijd dat het gekost heeft om de functie te runnen.
-Ook de oplossing wordt opgeslagen
+## Experimenteren
 
+Om de resultaten te reproduceren, roep je simpelweg de `main.py` functie aan in je terminal terwijl je in de `RushHourProject` directory bent. Hierna verschijnt een keuzemenu waarmee je verschillende borden kunt kiezen en de verschillende algoritmes kunt uitvoeren.
 
-# Om het programma te runnen
+- De data voor **Breadth First Search (BFS)** wordt automatisch opgeslagen in een `.csv`-bestand, met de naam gebaseerd op de grootte en moeilijkheidsgraad van het bord.
+- In de terminal worden vervolgens de **sequence van moves** geprint, samen met de tijd die het gekost heeft om de functie uit te voeren.
+- De oplossing wordt ook opgeslagen.
 
-Om het programma te runnen moet je de volgende command in de terminal zetten terwijl je in de RushHourProject directory bent:
+---
 
-'''
+## Het programma uitvoeren
+
+Om het programma uit te voeren, voer je het volgende commando uit in de terminal terwijl je in de `RushHourProject` directory bent:
+
+```bash
 $ python main.py
+```
 
-'''
+### Stap 1: Kies een algoritme
 
-Daarna volgt de eerste keuze menu om het algoritme te kiezen:
+Na het uitvoeren van het programma verschijnt een keuzemenu om het algoritme te selecteren:
 
-'''
+```plaintext
 Available algorithms:
   1. Random Algorithm
   2. Random + Heuristic
@@ -30,21 +35,29 @@ Available algorithms:
   6. Depth First Search
   7. Hill Climber Optimized
 Select an algorithm (1-7):
+```
 
-'''
+### Stap 2: Aantal trials invoeren
 
-Daarna volgt de keuze menu voor aantal trials
+Daarna volgt een keuzemenu voor het aantal trials:
 
-'''
+```plaintext
 Enter number of trials:
+```
 
-'''
+### Stap 3: Aantal iteraties invoeren
 
-Als laatste de keuze voor het aantal iteraties:
+Tot slot kies je het aantal iteraties:
 
-'''
+```plaintext
 Enter number of iterations:
+```
 
-'''
+---
 
-Het programma zal dan runnen en bewaard de oplossingen en de informatie
+## Uitvoering en opslag
+
+Het programma wordt uitgevoerd en:
+
+1. De oplossingen en bijbehorende informatie worden opgeslagen.
+2. In de terminal worden de moves, tijdsduur, en details over het proces weergegeven.
