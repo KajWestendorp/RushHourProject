@@ -320,3 +320,22 @@ class Grid():
             elif car.orientation == 'V':
                 self.grid[car.row + i][car.col] = car.name
 
+
+    def reset_grid(self):
+        """
+        Resets the grid to its initial state.
+        This removes all cars and places them back according to their original positions.
+        """
+        # Clear the grid
+        self.create_grid()
+        self.add_borders()
+
+        # Reset the cars list to the original start state
+        self.cars = [copy.deepcopy(car) for car in self.startcars]
+
+        # Re-add the cars to the grid
+        self.add_cars_to_board(pd.DataFrame([
+            {'car': car.name, 'orientation': car.orientation, 
+            'col': car.col, 'row': car.row, 'length': car.length} 
+            for car in self.cars
+        ]))
