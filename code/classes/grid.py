@@ -187,10 +187,10 @@ class Grid():
         return red_car_end_position == exit_col
         
     def __hash__(self):
-        """ Returns a hashed string of the grid"""
-        #Hash the grid as a string (https://stackoverflow.com/questions/2909106/whats-a-correct-and-good-way-to-implement-hash) and (https://stackoverflow.com/questions/5618878/how-to-convert-list-to-string)
-        string_grid = ''.join(''.join(str(cell) for cell in row) for row in self.grid)
-        return hash(string_grid)
+        """Returns a hash of the grid based on car positions. Created using deepseek
+        """
+        car_positions = tuple((car.name, car.row, car.col) for car in sorted(self.cars, key=lambda x: x.name))
+        return hash(car_positions)
     
     def __eq__(self, other):
         """Allows for the hashed strings to be compared"""

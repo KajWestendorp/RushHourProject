@@ -42,10 +42,10 @@ if __name__ == "__main__":
 
     output_csv = os.path.join(script_dir, "output.csv")
 
-    initial_grid = Grid(6)
+    initial_grid = Grid(9)
     initial_grid.create_grid()
     initial_grid.add_borders()
-    initial_grid.add_cars_to_board(boardposition1)
+    initial_grid.add_cars_to_board(boardposition2)
 
     #Run algorithm
     import time
