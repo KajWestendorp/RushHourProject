@@ -1,96 +1,160 @@
-#Implement script that takes a board starting position and can keep updating it
-import pandas as pd
-import random
-import matplotlib.patches as patches
-import matplotlib.pyplot as plt
-import time
 import os
+import pandas as pd
+import time
 import copy
-
 from code.algorithms.random_algorithm import Random_Algorithm
 from code.algorithms.random_heuristic import Random_Heuristic
 from code.algorithms.hillclimber import HillClimber
 from code.algorithms.sa import SimulatedAnnealing
-from code.classes.grid import *
-from code.classes.car import *
-from code.algorithms.random_grid import *
 from code.algorithms.BreadthFirst import RushHourBFS
-from code.visualization.initBoard import visualize_board
+from code.classes.grid import Grid
 
+# https://stackoverflow.com/questions/12229064/mapping-over-values-in-a-python-dictionary
+# Load board files in dictionary to be more dynamic
+script_dir = os.path.dirname(os.path.abspath(__file__))
+board_files = {
+    '1': os.path.normpath(os.path.join(script_dir, "code", "gameboards", "Rushhour6x6_1.csv")),
+    '2': os.path.normpath(os.path.join(script_dir, "code", "gameboards", "Rushhour6x6_2.csv")),
+    '3': os.path.normpath(os.path.join(script_dir, "code", "gameboards", "Rushhour6x6_3.csv")),
+    '4': os.path.normpath(os.path.join(script_dir, "code", "gameboards", "Rushhour9x9_4.csv")),
+    '5': os.path.normpath(os.path.join(script_dir, "code", "gameboards", "Rushhour9x9_5.csv")),
+    '6': os.path.normpath(os.path.join(script_dir, "code", "gameboards", "Rushhour9x9_6.csv")),
+    '7': os.path.normpath(os.path.join(script_dir, "code", "gameboards", "Rushhour12x12_7.csv"))
+}
 
-if __name__ == "__main__":
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-   
-    relative_path = os.path.join("code", "gameboards", "Rushhour6x6_1.csv")
-    relative_path2 = os.path.join("code", "gameboards", "Rushhour6x6_2.csv")
-    relative_path3 = os.path.join("code", "gameboards", "Rushhour6x6_3.csv")
-    relative_path4 = os.path.join("code", "gameboards", "Rushhour9x9_4.csv")
-    relative_path5 = os.path.join("code", "gameboards", "Rushhour9x9_5.csv")
-    relative_path6 = os.path.join("code", "gameboards", "Rushhour9x9_6.csv")
-    relative_path7 = os.path.join("code", "gameboards", "Rushhour12x12_7.csv")
+# Map for board size and position
+board_sizes = {'1': 6, '2': 6, '3': 6, '4': 9, '5': 9, '6': 9, '7': 12}
 
-    # Construct the path to the gameboard file
-    board_file = os.path.normpath(os.path.join(script_dir, relative_path))
-    board_file2 = os.path.normpath(os.path.join(script_dir, relative_path2))
-    board_file3 = os.path.normpath(os.path.join(script_dir, relative_path3))
-    board_file4 = os.path.normpath(os.path.join(script_dir, relative_path4))
-    board_file5 = os.path.normpath(os.path.join(script_dir, relative_path5))
-    board_file6 = os.path.normpath(os.path.join(script_dir, relative_path6))
-    board_file7 = os.path.normpath(os.path.join(script_dir, relative_path7))
+# Algorithm choices map
+algorithms = {
+    "1": ("Random Algorithm", Random_Algorithm),
+    "2": ("Random + Heuristic", Random_Heuristic),
+    "3": ("Hill Climber", HillClimber),
+    "4": ("Simulated Annealing", SimulatedAnnealing),
+    "5": ("Breadth First Search", RushHourBFS),
+    "6": ("Depth First Search", RushHourBFS)
+}
 
-    # visualize_board(boardposition1, 6)
-    boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
-    boardposition2 = pd.read_csv(board_file2, sep=',', encoding='utf-8')
-    boardposition3 = pd.read_csv(board_file3, sep=',', encoding='utf-8')
-    boardposition4 = pd.read_csv(board_file4, sep=',', encoding='utf-8')
-    boardposition5 = pd.read_csv(board_file5, sep=',', encoding='utf-8')
-    boardposition6 = pd.read_csv(board_file6, sep=',', encoding='utf-8')
-    boardposition7 = pd.read_csv(board_file7, sep=',', encoding='utf-8')
-    
+# Print algorithm options
+print("\nAvailable algorithms:")
+for key, (name, _) in algorithms.items():
+    print(f"  {key}. {name}")
 
-    Board_size = int(input("Enter which board-size you would like to solve (6x6 = 6, 9x9 = 9, 12x12 = 12): "))
-    if Board_size == 12:
-        Algo_choice = int(input("Enter which algorithm you would like to choose:(BreadthFirst = 0, DepthFirst = 1, SA = 2, Random = 3, Random + heuristic = 4): "))
-    else:
-        Board_choice = int(input("Enter which difficulty (1,2 or 3): "))
-        Algo_choice = int(input("Enter which algorithm you would like to choose:(BreadthFirst = 0, DepthFirst = 1, SA = 2, Random = 3, Random + heuristic = 4): "))
+# Retrieve input
+algorithm = input("Select an algorithm (1-6): ").strip()
+num_trials = int(input("Enter number of trials: ").strip())
+iterations = int(input("Enter number of iterations: ").strip())
+
+# Print board options
+print("\nAvailable board positions:")
+for key, value in board_files.items():
+    print(f"  {key}. {value.split('/')[-1]}")  
+
+# Retrieve input
+board_choice = input("Select a board (1-7): ").strip()
+if board_choice not in board_files:
+    print("Invalid board choice!")
+    exit()
+
+# Load selected board file and size
+board_df = pd.read_csv(board_files[board_choice], sep=',', encoding='utf-8')
+board_size = board_sizes[board_choice]
+
+# Initialize results list
+results = []
+
+print(f"\nRunning {num_trials} trials for {algorithms[algorithm][0]} on board {board_choice}")
+
+# Run selected algorithm for the specified number of trials
+for trial in range(num_trials):
+    print(f"Trial {trial + 1}/{num_trials}")
+
+    # Initialize Grid
+    grid = Grid(board_size)
+    grid.create_grid()
+    grid.add_borders()
+    grid.add_cars_to_board(board_df)
+
+    # Start timing
+    start_time = time.time()
+
+    # BFS or DFS
+    if algorithm in ["5", "6"]:  
+        solver = RushHourBFS(grid)
+
+        # Needed for the run method in algorithm
+        algorithm_type = 0 if algorithm == "5" else 1
+        solution_df = solver.run(algorithm_type)  
+
+        end_time = time.time()
+        runtime = end_time - start_time
+
+        # Check if solution exists and is valid
+        if solution_df is not None and not solution_df.empty:
+            moves_made = len(solution_df)
+
+            # Save the solution of move sequences dataFrame 
+            solution_filename = f"solution_BFS_{board_choice}.csv" if algorithm == "5" else f"solution_DFS_{board_choice}.csv"
+            solution_df.to_csv(solution_filename, index=False)
+        else:
+            moves_made = "Not solved"
+
+        # Save move count and runtime
+        results.append([moves_made, runtime])
+
+    # Random or Random Heuristic
+    elif algorithm in ["1", "2"]:  
+        solver = algorithms[algorithm][1](grid)
+        moves_made = solver.run(iterations=iterations, verbose=False)
+        end_time = time.time()
+        runtime = end_time - start_time
+
+        # Save move count and runtime
+        results.append([len(moves_made), runtime])
+
+   # HillClimber or SA
+    elif algorithm in ["3", "4"]:  
+        # Solve grid using Random Algorithm first
+        random_solver = Random_Algorithm(grid)
+        random_moves = random_solver.run(iterations=100000, verbose=False)
+
+        # Ensure grid is solved before passing to HillClimber/SA
+        if not random_solver.is_solution():
+            print(f"Random Algorithm failed to solve the board in Trial {trial + 1}. Skipping.")
+            results.append(["Not solved", "Not solved", "N/A"])
+            continue
+
+        # Deepcopy solved grid
+        solved_grid = copy.deepcopy(random_solver.grid)
+
+        # Run Hill Climber or SA on solved grid
+        solver_class = algorithms[algorithm][1]
+        solver = solver_class(solved_grid, temperature=5) if algorithm == "4" else solver_class(solved_grid)
+        best_moves = solver.run(iterations=iterations, verbose=False)
+
+        end_time = time.time()
+        runtime = end_time - start_time
+
+        # Ensure best_moves contains a valid solution
+        final_moves = len(best_moves) if best_moves else "Not solved"
         
-        
-
-    initial_grid = Grid(Board_size)
-    initial_grid.create_grid()
-    initial_grid.add_borders()
-    if Algo_choice == 0 or Algo_choice == 1:
-        if Board_size  == 6 and Board_choice == 1:
-            initial_grid.add_cars_to_board(boardposition1)
-        if Board_size  == 6 and Board_choice == 2:
-            initial_grid.add_cars_to_board(boardposition2)
-        if Board_size  == 6 and Board_choice == 3:
-            initial_grid.add_cars_to_board(boardposition3)
-        if Board_size  == 9 and Board_choice == 1:
-            initial_grid.add_cars_to_board(boardposition4)
-        if Board_size  == 9 and Board_choice == 2:
-            initial_grid.add_cars_to_board(boardposition5)
-        if Board_size  == 9 and Board_choice == 3:
-            initial_grid.add_cars_to_board(boardposition6)
-        if Board_size  == 12:
-            initial_grid.add_cars_to_board(boardposition7)
-        start = time.time()
-        Solved_grid = RushHourBFS(initial_grid)
-        outputdf = RushHourBFS.run(Solved_grid, Algo_choice)
-        # Calculate the end time and time taken
-        end = time.time()
-        length = end - start
-        # Show the results : this can be altered however you like
-
-        print("It took", length, "seconds to find the best solution!")
-        print()
-        output_file = f"{Board_size},{Board_choice}_output{Algo_choice}.csv"
-        outputdf.to_csv(output_file, index=False)
-        
-        output_csv = os.path.join(script_dir, output_file)
-        # Call visualization
-    
-    # visualize_board(initial_grid, output_csv)
+        # Store move count, improved move count and runtime
+        results.append([len(random_moves), final_moves, runtime])
 
 
+# Save results dynamically 
+columns_mapping = {
+    "1": ["moves", "runtime"],
+    "2": ["moves", "runtime"],
+    "3": ["random_moves", "hillclimber_moves", "runtime"],
+    "4": ["random_moves", "sa_moves", "runtime"],
+    "5": ["moves", "runtime"],
+    "6": ["moves", "runtime"]
+}
+
+df_results = pd.DataFrame(results, columns=columns_mapping[algorithm])
+# Replace spaces in map with lowercase
+output_filename = f"{num_trials}trials_{iterations}iterations_{algorithms[algorithm][0].replace(' ', '_')}_board{board_choice}.csv"
+df_results.to_csv(output_filename, index=False)
+
+print(f"\nAlgorithm finished! Results saved to {output_filename}.")
