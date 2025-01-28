@@ -96,6 +96,7 @@ class RushHourBFS:
         # Archive as a set to store grids
         archive = set()
         archive.add(self.start_grid)
+        
 
         # the queue is made up of a tuple, the grid and the depth of the tree layers to count moves correctly 
         # (https://stackoverflow.com/questions/52513309/tracking-depth-in-a-breadth-first-search-of-a-directed-tree)
@@ -108,13 +109,14 @@ class RushHourBFS:
 
         # When the queue is not empty
         while queue:
-
+            
             #first grid and first depth taken from the queue
             if choice == 1:
                 grid, depth = queue.pop()
             else:
                 grid, depth = queue.popleft()
 
+            print(depth)
             #Check if solution has been found
             if Grid.grid_solved(grid):
                 print("Solution found!")
