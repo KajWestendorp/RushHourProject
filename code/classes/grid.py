@@ -187,10 +187,10 @@ class Grid():
         return red_car_end_position == exit_col
         
     def __hash__(self):
-        """Returns a hash of the grid based on car positions. Created using deepseek
-        """
-        car_positions = tuple((car.name, car.row, car.col) for car in sorted(self.cars, key=lambda x: x.name))
-        return hash(car_positions)
+        """ Returns a hashed string of the grid"""
+        #Hash the grid as a string (https://stackoverflow.com/questions/2909106/whats-a-correct-and-good-way-to-implement-hash) and (https://stackoverflow.com/questions/5618878/how-to-convert-list-to-string)
+        string_grid = ''.join(''.join(str(cell) for cell in row) for row in self.grid)
+        return hash(string_grid)
     
     def __eq__(self, other):
         """Allows for the hashed strings to be compared"""
@@ -320,3 +320,22 @@ class Grid():
             elif car.orientation == 'V':
                 self.grid[car.row + i][car.col] = car.name
 
+
+    def reset_grid(self):
+        """
+        Resets the grid to its initial state.
+        This removes all cars and places them back according to their original positions.
+        """
+        # Clear the grid
+        self.create_grid()
+        self.add_borders()
+
+        # Reset the cars list to the original start state
+        self.cars = [copy.deepcopy(car) for car in self.startcars]
+
+        # Re-add the cars to the grid
+        self.add_cars_to_board(pd.DataFrame([
+            {'car': car.name, 'orientation': car.orientation, 
+            'col': car.col, 'row': car.row, 'length': car.length} 
+            for car in self.cars
+        ]))
