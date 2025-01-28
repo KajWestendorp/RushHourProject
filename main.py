@@ -3,7 +3,6 @@ import pandas as pd
 import random
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
-from code.visualization.initBoard import visualize_board
 import time
 import os
 import copy
@@ -16,6 +15,8 @@ from code.classes.grid import *
 from code.classes.car import *
 from code.algorithms.random_grid import *
 from code.algorithms.BreadthFirst import RushHourBFS
+from code.visualization.initBoard import visualize_board
+
 
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -48,20 +49,18 @@ if __name__ == "__main__":
     
 
     Board_size = int(input("Enter which board-size you would like to solve (6x6 = 6, 9x9 = 9, 12x12 = 12): "))
-    if Board_size != 12:
+    if Board_size == 12:
+        Algo_choice = int(input("Enter which algorithm you would like to choose:(BreadthFirst = 0, DepthFirst = 1, SA = 2, Random = 3, Random + heuristic = 4): "))
+    else:
         Board_choice = int(input("Enter which difficulty (1,2 or 3): "))
-    if Board_size == 6 or 9:
-        if (Board_size == 9 and Board_choice == 1) or (Board_size == 6):
-            Algo_choice = int(input("Enter which algorithm you would like to choose:(BreadthFirst = 0, DepthFirst = 1, SA = 2, Random = 3, Random + heuristic = 4): "))
-        else:
-            Algo_choice = int(input("Enter which algorithm you would like to choose: (SA = 2, Random = 3, Random + heuristic = 4): "))
-    elif Board_size == 12:
-        Algo_choice = int(input("Enter which algorithm you would like to choose:(SA = 2, Random = 3, Random + heuristic = 4): "))
+        Algo_choice = int(input("Enter which algorithm you would like to choose:(BreadthFirst = 0, DepthFirst = 1, SA = 2, Random = 3, Random + heuristic = 4): "))
+        
+        
 
     initial_grid = Grid(Board_size)
     initial_grid.create_grid()
     initial_grid.add_borders()
-    while Algo_choice <= 1:
+    if Algo_choice == 0 or Algo_choice == 1:
         if Board_size  == 6 and Board_choice == 1:
             initial_grid.add_cars_to_board(boardposition1)
         if Board_size  == 6 and Board_choice == 2:
@@ -69,10 +68,16 @@ if __name__ == "__main__":
         if Board_size  == 6 and Board_choice == 3:
             initial_grid.add_cars_to_board(boardposition3)
         if Board_size  == 9 and Board_choice == 1:
-            initial_grid.add_cars_to_board(boardposition1)
+            initial_grid.add_cars_to_board(boardposition4)
+        if Board_size  == 9 and Board_choice == 2:
+            initial_grid.add_cars_to_board(boardposition5)
+        if Board_size  == 9 and Board_choice == 3:
+            initial_grid.add_cars_to_board(boardposition6)
+        if Board_size  == 12:
+            initial_grid.add_cars_to_board(boardposition7)
         start = time.time()
         Solved_grid = RushHourBFS(initial_grid)
-        final_grid, outputdf = RushHourBFS.run(Solved_grid, Algo_choice)
+        outputdf = RushHourBFS.run(Solved_grid, Algo_choice)
         # Calculate the end time and time taken
         end = time.time()
         length = end - start
@@ -80,6 +85,12 @@ if __name__ == "__main__":
 
         print("It took", length, "seconds to find the best solution!")
         print()
-        Algo_choice = 0
+        output_file = f"{Board_size},{Board_choice}_output{Algo_choice}.csv"
+        outputdf.to_csv(output_file, index=False)
+        
+        output_csv = os.path.join(script_dir, output_file)
+        # Call visualization
+    
+    # visualize_board(initial_grid, output_csv)
 
 

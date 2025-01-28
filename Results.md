@@ -14,7 +14,7 @@
 6x6 Board 2 output --> Movecount = 
 6x6 Board 3 output --> Movecount = 
 
-9x9 Board 1 output --> Movecount = 
+9x9 Board 1 output --> Movecount = 76274 Time = 526 seconds
 9x9 Board 2 --> Memory error
 9x9 Board 3 --> Memory error
 

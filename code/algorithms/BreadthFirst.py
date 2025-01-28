@@ -135,7 +135,7 @@ class RushHourBFS:
                     for row in grid.grid:
                         print(" ".join(str(cell) for cell in row))
                 print()
-                return grid, self.get_output(grid, parent_of_grid)
+                return self.get_output(grid, parent_of_grid)
 
             #Call get_moves function to get the child grid nodes from the current Node
             child_grids = Grid.get_moves(grid)

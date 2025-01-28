@@ -42,10 +42,10 @@ if __name__ == "__main__":
 
     output_csv = os.path.join(script_dir, "output.csv")
 
-    initial_grid = Grid(9)
+    initial_grid = Grid(6)
     initial_grid.create_grid()
     initial_grid.add_borders()
-    initial_grid.add_cars_to_board(boardposition2)
+    initial_grid.add_cars_to_board(boardposition5)
 
     #Run algorithm
     import time
@@ -56,15 +56,17 @@ if __name__ == "__main__":
     Solved_grid = RushHourBFS(initial_grid)
 
     #0 for BFS
-    final_grid, outputdf = RushHourBFS.run(Solved_grid, 0)
+    outputdf = RushHourBFS.run(Solved_grid, 0)
     # Calculate the end time and time taken
     end = time.time()
     length = end - start
     # Show the results : this can be altered however you like
 
     print("It took", length, "seconds to find the best solution!")
-    print()
-
-    output_csv = os.path.join(script_dir, "output.csv")
+    print(type(outputdf))
+    output_file = "test_output.csv"
+    outputdf.to_csv(output_file, index=False)
+    
+    output_csv = os.path.join(script_dir, output_file)
     # Call visualization
     visualize_board(initial_grid, output_csv)
