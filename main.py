@@ -109,7 +109,7 @@ for trial in range(num_trials):
 
         # Save move count and runtime
         results.append([moves_made, runtime])
-        visualize_board(grid, solution_filename)
+        # visualize_board(grid, solution_filename)
 
         
 
