@@ -3,15 +3,15 @@ De opdracht is simpel: **beweeg je auto naar buiten** of, beter nog, **schrijf e
 
 ---
 
-## Experimenteren
+### Structuur
 
-Om de resultaten te reproduceren, roep je simpelweg de `main.py` functie aan in je terminal terwijl je in de `RushHourProject` directory bent. Hierna verschijnt een keuzemenu waarmee je verschillende borden kunt kiezen en de verschillende algoritmes kunt uitvoeren.
+De hierop volgende lijst beschrijft de belangrijkste mappen en files in het project, en waar je ze kan vinden:
 
-- De data voor **Breadth First Search (BFS)** wordt automatisch opgeslagen in een `.csv`-bestand, met de naam gebaseerd op de grootte en moeilijkheidsgraad van het bord.
-- In de terminal worden vervolgens de **sequence van moves** geprint, samen met de tijd die het gekost heeft om de functie uit te voeren.
-- De oplossing wordt ook opgeslagen.
-
----
+- **/code**: bevat alle code van dit project
+  - **/code/algorithms**: bevat de code voor de algoritmes
+  - **/code/classes**: bevat de twee benodigde classes voor deze case
+  - **/code/visualisation**: bevat de code om de visualitaties te maken zoals uit de presentatie
+- **/data**: bevat de verschillende databestanden die wij hebben gegenereerd tijdens het runnen
 
 ## Het programma uitvoeren
 
@@ -61,3 +61,8 @@ Het programma wordt uitgevoerd en:
 
 1. De oplossingen en bijbehorende informatie worden opgeslagen.
 2. In de terminal worden de moves, tijdsduur, en details over het proces weergegeven.
+
+
+## Auteurs
+- Pieter Wassink
+- Kaj Westendorp
