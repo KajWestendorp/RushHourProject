@@ -77,12 +77,12 @@ def visualize_board(grid, moves_csv):
                 car.col += move  
             else:
                 # Move entire car vertically
-                car.row -= move  
+                car.row += move  
 
     # Clear previous state before moving cars
     for index, row in moves_df.iterrows():
         # debug
-        print(f"Move {index + 1}: {row['car']} moves {row['move']} spaces") 
+        print(f"Move {index}: {row['car']} moves {row['move']} spaces") 
         
         draw_grid()
         draw_cars()
@@ -91,7 +91,7 @@ def visualize_board(grid, moves_csv):
         update_board(row['car'], row['move'])
 
         # Pause between each move to visualize each step
-        plt.pause(5)
+        plt.pause(1)
 
     # Show final frame
     plt.show()
