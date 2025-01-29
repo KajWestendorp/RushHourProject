@@ -91,7 +91,7 @@ def visualize_board(grid, moves_csv):
         update_board(row['car'], row['move'])
 
         # Pause between each move to visualize each step
-        plt.pause(10)
+        plt.pause(5)
 
     # Show final frame
     plt.show()

@@ -92,7 +92,7 @@ for trial in range(num_trials):
 
         # Needed for the run method in algorithm
         algorithm_type = 0 if algorithm == "5" else 1
-        solution_grid, solution_df = solver.run(algorithm_type)
+        solution_df = solver.run(algorithm_type)
 
         end_time = time.time()
         runtime = end_time - start_time
@@ -109,7 +109,7 @@ for trial in range(num_trials):
 
         # Save move count and runtime
         results.append([moves_made, runtime])
-        visualize_board(solution_grid, solution_filename)
+        visualize_board(grid, solution_filename)
 
         
 
