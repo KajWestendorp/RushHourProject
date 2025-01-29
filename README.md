@@ -17,8 +17,8 @@ De hierop volgende lijst beschrijft de belangrijkste mappen en files in het proj
 
 ### Werking van algoritmes
 
-- **BFS**: 
-- **DFS**: 
+- **BFS**: BFS (Breadth-First Search) verkent alle mogelijke zetten in Rush Hour niveau voor niveau, beginnend bij de initiële opstelling. Het gebruikt een queue om staten te onderzoeken en controleert of de rode auto de uitgang bereikt. Dit garandeert de kortste oplossing. Het gebruikt namelijk een FIFO methode.
+- **DFS**: DFS (Depth-First Search) verkent Rush Hour door zo diep mogelijk één pad van zetten te volgen tot het einde of een doodlopend spoor, en keert dan terug om andere paden te proberen. Het gebruikt een stack om staten bij te houden en vindt niet per se de kortste oplossing omdat het LIFO volgorde gebruikt. DFS is minder efficiënt voor Rush Hour dan BFS, maar kan wel een oplossing vinden.
 - **Hillclimber**: 
 - **Random_algorithm**:  
 - **Rando_heuristic**: 
