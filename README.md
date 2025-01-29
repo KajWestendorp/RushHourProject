@@ -13,6 +13,17 @@ De hierop volgende lijst beschrijft de belangrijkste mappen en files in het proj
   - **/code/visualisation**: bevat de code om de visualitaties te maken zoals uit de presentatie
 - **/data**: bevat de verschillende databestanden die wij hebben gegenereerd tijdens het runnen
 
+- **main.py**: Dit is de file die je moet runnen om het programma uit te voeren en de algoritmes en andere parameters te kunnen kiezen
+
+### Werking van algoritmes
+
+- **BFS**: 
+- **DFS**: 
+- **Hillclimber**: 
+- **Random_algorithm**:  
+- **Rando_heuristic**: 
+- **SA**:
+
 ## Het programma uitvoeren
 
 Om het programma uit te voeren, voer je het volgende commando uit in de terminal terwijl je in de `RushHourProject` directory bent:
