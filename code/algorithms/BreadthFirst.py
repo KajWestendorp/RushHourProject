@@ -84,9 +84,9 @@ class RushHourBFS:
 
     def run(self, choice):
         """ 
-            Implementation of bfs for rush hour problem
+            Implementation of bfs and dfs for rush hour problem
 
-            Args: The grid object
+            Args: The grid object and a choice (1 for DFS and 0 for BFS)
 
             Returns: The final solved grid and the df of moves
 

@@ -16,6 +16,7 @@ boardposition1 = pd.read_csv(board_file, sep=',', encoding='utf-8')
 class Grid():
 
     """ This class is a current grid which we want to have as the nodes for our graph"""
+    
     def __init__(self, boardsize):
 
         #Initializing Grid attributes

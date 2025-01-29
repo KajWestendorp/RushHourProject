@@ -9,7 +9,7 @@ from code.algorithms.sa import SimulatedAnnealing
 from code.algorithms.BreadthFirst import RushHourBFS
 from code.algorithms.hillclimber2 import HillClimber2
 from code.classes.grid import Grid
-from code.visualization.initBoard import visualize_board
+from code.visualization.animationRushHour import visualize_board
 
 # https://stackoverflow.com/questions/12229064/mapping-over-values-in-a-python-dictionary
 # Load board files in dictionary to be more dynamic
@@ -165,9 +165,13 @@ columns_mapping = {
     "7": ["random_moves", "optimized_hillclimber_moves", "runtime"]
 }
 
+# Create results DF
 df_results = pd.DataFrame(results, columns=columns_mapping[algorithm])
+
 # Replace spaces in map with lowercase
 output_filename = f"{num_trials}trials_{iterations}iterations_{algorithms[algorithm][0].replace(' ', '_')}_board{board_choice}.csv"
 df_results.to_csv(output_filename, index=False)
 
+
+# Terminaloutput to show completion
 print(f"\nAlgorithm finished! Results saved to {output_filename}.")
