@@ -9,6 +9,7 @@ from code.algorithms.sa import SimulatedAnnealing
 from code.algorithms.BreadthFirst import RushHourBFS
 from code.algorithms.hillclimber2 import HillClimber2
 from code.classes.grid import Grid
+from code.visualization.initBoard import visualize_board
 
 # https://stackoverflow.com/questions/12229064/mapping-over-values-in-a-python-dictionary
 # Load board files in dictionary to be more dynamic
@@ -91,7 +92,7 @@ for trial in range(num_trials):
 
         # Needed for the run method in algorithm
         algorithm_type = 0 if algorithm == "5" else 1
-        solution_df = solver.run(algorithm_type)  
+        solution_grid, solution_df = solver.run(algorithm_type)
 
         end_time = time.time()
         runtime = end_time - start_time
@@ -108,6 +109,9 @@ for trial in range(num_trials):
 
         # Save move count and runtime
         results.append([moves_made, runtime])
+        visualize_board(solution_grid, solution_filename)
+
+        
 
     # Random or Random Heuristic
     elif algorithm in ["1", "2"]:  
