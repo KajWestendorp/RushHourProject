@@ -70,22 +70,33 @@ plt.title("Boxplot: Random vs. HillClimber (100 trials - 500 iteraties)")
 plt.xlabel("Boardgrootte")
 plt.ylabel("Aantal Moves")
 plt.legend(title='Algorithm', labels=['Random', 'Hill Climber'])
+plt.xticks(fontsize=15)
+plt.yticks(fontsize=15)
 plt.show()
 
 # Histogram van het aantal moves per boardgrootte
 plt.figure(figsize=(12, 6))
 sns.histplot(data=hillclimber_df, x="improvement", hue="size", bins=30, kde=True, palette="Set1", hue_order=order)
 plt.title("Hill Climber Verbetering Over Random Algorithm (100 trials - 500 iteraties)")
-plt.xlabel("Verbetering in Moves")
-plt.ylabel("Frequentie")
+plt.xlabel("Verbetering in Moves", fontsize=15)
+plt.ylabel("Frequentie", fontsize=15)
+plt.xticks(fontsize=15)
+plt.yticks(fontsize=15)
 plt.show()
+
+# Voor ordenen van bord posities
+hillclimber_df["board"] = pd.Categorical(hillclimber_df["board"], 
+                                         categories=["Board 1", "Board 2", "Board 3", "Board 4", "Board 5", "Board 6", "Board 7"], 
+                                         ordered=True)
 
 # Gemiddeld aantal moves per boardgrootte
 plt.figure(figsize=(10, 6))
-sns.lineplot(data=hillclimber_df, x="board", y="improvement", marker="o", hue="size", palette="Set3", hue_order=order)
+sns.lineplot(data=hillclimber_df, x="board", y="improvement", marker="o", hue="size", palette="Set1", hue_order=order)
 plt.title("Gemiddelde verbetering per Bord (Random vs. Hill Climber) (100 trials - 500 iteraties)")
-plt.xlabel("Board Position")
-plt.ylabel("Moves Saved by Hill Climber")
+plt.xlabel("Bord Positie")
+plt.ylabel("Moves verminderd door Hill Climber", fontsize=15)
+plt.xticks(fontsize=15)
+plt.yticks(fontsize=15)
 plt.show()
 
 # Heatmap met alleen basisstatistieken

@@ -47,6 +47,8 @@ class Random_Algorithm:
     def random_move(self):
         valid_moves = self.get_valid_moves()
         if valid_moves:
+
+            # Chose and make a random move
             car_to_move, direction = random.choice(valid_moves)
             self.grid.move_car(car_to_move, direction)
 
@@ -61,6 +63,8 @@ class Random_Algorithm:
     def run(self, iterations=100000, verbose=True):
         """Runs the random algorithm for a given number of iterations."""
         for i in range(iterations):
+
+            # Check if a solution is reached
             if self.is_solution():
                 print(f"\nDe puzzel is opgelost in {len(self.moves)} moves!")
                 return self.moves

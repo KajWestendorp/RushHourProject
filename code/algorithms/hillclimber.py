@@ -79,17 +79,21 @@ class HillClimber:
         current_moves = copy.deepcopy(self.best_moves)
 
         for iteration in range(iterations):
+
+            # Try new move sequence
             new_moves = self.mutate_moves(current_moves)
             new_grid = self.apply_moves(new_moves)
 
+            # Check if a solution is reached
             if new_grid.grid_solved():
                 new_value = self.calculate_value(new_moves)
 
+                # Update attributes if value is increased or the same
                 if new_value < self.best_value:
                     self.best_value = new_value
                     self.best_moves = new_moves
 
-                    # Accept better solution
+                    # Update move sequence
                     current_moves = new_moves
 
                     if verbose:

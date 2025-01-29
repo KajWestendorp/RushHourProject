@@ -55,16 +55,19 @@ class Random_Heuristic(Random_Algorithm):
         random.shuffle(valid_moves) 
 
         for car, direction in valid_moves:
+
+            # Test a random move and save  state
             test_grid = copy.deepcopy(self.grid)
             test_grid.move_car(car, direction)
             new_state = self.hash_grid(test_grid)
 
+            # Check if state is already seen before
             if new_state in self.state_index:
                 # Debug print (turned off for experimental purposes)
                 #print(f"State already seen! Rolling back to index {self.state_index[new_state]}")
                 self.revert_to_state(self.state_index[new_state])
 
-            # Actually make the move
+            # Store state if move is made
             if super().random_move():
                 self.state_history.append(new_state)
 
