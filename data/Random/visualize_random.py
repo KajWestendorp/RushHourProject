@@ -49,28 +49,34 @@ full_df = pd.concat(df_list, ignore_index=True)
 stats = full_df.groupby("size")["moves"].describe()
 print("\nStatistieken per boardgrootte:\n", stats)
 
+order = ["6x6", "9x9", "12x12"]
+
 # Boxplot per boardgrootte
 plt.figure(figsize=(10, 6))
-sns.boxplot(x="size", y="moves", data=full_df, palette="Set2")
+sns.boxplot(x="size", y="moves", data=full_df, palette="Set2", hue_order=order)
 plt.title("Boxplot: Moves per boardgrootte (100 trials - 200.000 iteraties)")
-plt.xlabel("Boardgrootte")
-plt.ylabel("Aantal Moves")
+plt.xlabel("Boardgrootte", fontsize=20)
+plt.ylabel("Aantal Moves", fontsize=20)
 plt.show()
 
 # Histogram van het aantal moves per boardgrootte
 plt.figure(figsize=(12, 6))
-sns.histplot(data=full_df, x="moves", hue="size", bins=30, kde=True, palette="Set1")
+sns.histplot(data=full_df, x="moves", hue="size", bins=30, kde=True, palette="Set1", hue_order=order)
 plt.title("Histogram van het aantal moves per boardgrootte (100 trials - 200.000 iteraties)")
-plt.xlabel("Aantal Moves")
-plt.ylabel("Frequentie")
+plt.xlabel("Aantal Moves", fontsize=20)
+plt.ylabel("Frequentie", fontsize=20)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
 plt.show()
 
 # Gemiddeld aantal moves per boardgrootte
 plt.figure(figsize=(10, 6))
-sns.barplot(x="size", y="moves", data=full_df, estimator=lambda x: sum(x)/len(x), palette="Set3")
+sns.barplot(x="size", y="moves", data=full_df, estimator=lambda x: sum(x)/len(x), palette="Set3", order=order)
 plt.title("Gemiddeld aantal moves per boardgrootte (100 trials - 200.000 iteraties)")
-plt.xlabel("Boardgrootte")
-plt.ylabel("Gemiddeld aantal moves")
+plt.xlabel("Boardgrootte", fontsize=20)
+plt.ylabel("Gemiddeld aantal moves", fontsize=20)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
 plt.show()
 
 plt.figure(figsize=(10, 4))
