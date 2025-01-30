@@ -1,37 +1,51 @@
+# Re-import necessary libraries after execution reset
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import glob
 import re
 
-# Zoek alle CSV-bestanden in de map met SA resultaten
-csv_files = glob.glob("100trials_15iterations_sa_board*.csv")
+# Re-uploaded CSV files paths
+csv_files = [
+    "100trials_15iterations_Simulated_Annealing_board1.csv",
+    "100trials_15iterations_Simulated_Annealing_board2.csv",
+    "100trials_15iterations_Simulated_Annealing_board3.csv",
+    "100trials_15iterations_Simulated_Annealing_board4.csv",
+    "100trials_15iterations_Simulated_Annealing_board5.csv",
+    "100trials_15iterations_Simulated_Annealing_board6.csv"
+]
 
-# Dataframe maken voor alle bestanden
+# Dataframe list to store all data
 df_list = []
 
+# Elke file 
 for file in csv_files:
     try:
         df = pd.read_csv(file)
         
-        # Extract board position using regex
+        # Regex voor bestandsnaam
         match = re.search(r"board(\d+)", file)
         if match:
             board_position = int(match.group(1))
         else:
             continue
         
-        # Voeg metadata toe
+        # Omzetten naar numerieke waardes
+        df["random_moves"] = pd.to_numeric(df["random_moves"], errors="coerce")
+        df["sa_moves"] = pd.to_numeric(df["sa_moves"], errors="coerce")
+        df["runtime"] = pd.to_numeric(df["runtime"], errors="coerce")
+
+        # Info toevoegen
         df["board"] = f"Board {board_position}"
         df["improvement"] = df["random_moves"] - df["sa_moves"]
         df_list.append(df)
     except Exception as e:
         print(f"Error reading {file}: {e}")
 
-# Combineer alle data
+# Combineer data
 full_df = pd.concat(df_list, ignore_index=True)
 
-# Boxplot random vs sa
+# Boxplot random vs SA
 plt.figure(figsize=(12, 6))
 sns.boxplot(data=full_df.melt(id_vars=["board"], value_vars=["random_moves", "sa_moves"]),
             x="board", y="value", hue="variable", palette="Set2")
@@ -43,7 +57,7 @@ plt.show()
 
 # Barplot gemiddelde verbetering
 plt.figure(figsize=(10, 6))
-sns.barplot(data=full_df, x="board", y="improvement", palette="Set3")
+sns.barplot(data=full_df, x="board", y="improvement", palette="Set2")
 plt.title("Gemiddelde verbetering door SA (100 trials, 15 iterations)")
 plt.xlabel("Board")
 plt.ylabel("Verminderde Moves")
@@ -59,24 +73,8 @@ plt.ylabel("Frequentie")
 plt.legend()
 plt.show()
 
-# Scatterplot vergelijking
-plt.figure(figsize=(10, 6))
-sns.scatterplot(data=full_df, x="random_moves", y="sa_moves", hue="board", palette="Set1")
-plt.plot([full_df["random_moves"].min(), full_df["random_moves"].max()],
-         [full_df["random_moves"].min(), full_df["random_moves"].max()], 'k--')  # Referentielijn
-plt.title("Vergelijking Random Moves vs. SA Moves")
-plt.xlabel("Random Moves")
-plt.ylabel("SA Moves")
-plt.show()
 
-# Boxplot runtime
-plt.figure(figsize=(10, 6))
-sns.boxplot(data=full_df, x="board", y="runtime", palette="Set2")
-plt.title("Runtime van SA per Board (100 trials, 15 iterations)")
-plt.xlabel("Board")
-plt.ylabel("Runtime (seconden)")
-plt.show()
+# Save naar CSV
+output_file = "sa_algorithm_results.csv"
+full_df.to_csv(output_file, index=False)
 
-# Opslaan naar Csv
-full_df.to_csv("sa_algorithm_results.csv", index=False)
-print("Data opgeslagen als sa_algorithm_results.csv")
